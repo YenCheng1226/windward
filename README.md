@@ -20,6 +20,8 @@ npm run build    # 產生 dist/
 | **長期展望** | 35 天次季節系集，對照 ERA5 十年氣候平均的距平，逐週摘要 |
 | **資料表** | 圖表背後的原始數值，可下載 CSV |
 
+外加一個 **行程評估** 分頁：把預報翻譯成「這幾天能不能下水」。
+
 ## 為什麼這比一般天氣 App 有用
 
 一般 App 給你「9/3 會下雨」。10 天以外沒有任何單一模式能回答這個問題。這個儀表板改成回答三件事：
@@ -27,6 +29,42 @@ npm run build    # 產生 dist/
 1. **各家模式同不同意？**（多模式分頁）— 線條分岔的時間點就是這個地點的可預報度界線。
 2. **同一個模式自己有多少把握？**（系集分頁）— 51 個成員的分布寬度，比任何單一數字誠實。
 3. **這幾週相對常年是偏暖還是偏冷？**（長期展望）— 35 天尺度只剩趨勢，所以一律用週為單位並對照氣候值。
+
+## 行程評估與可分享報告
+
+`行程評估` 分頁針對水上活動（自由潛水、水肺潛水、浮潛、SUP、衝浪）逐時段評分，
+並獨立呈現船班停航風險——離島行程真正的成敗關鍵。
+
+門檻寫在 `src/lib/activities.ts` 的 `ACTIVITIES`，是業界經驗法則而非官方標準，
+刻意寫成資料以便檢視與修改。兩個設計決定比數字本身更重要：
+
+1. **最差的因素決定成敗。** 水上活動是被限制而非被平均的：無浪但 12 m/s 的風對
+   SUP 不是「七成好」，是不能玩。任一項觸及否決門檻整格歸零，其餘以加權幾何平均
+   結合，讓單一弱項確實拖累。
+2. **輸出的重點是限制因素。** 單一分數對規劃幾乎沒用；知道週四卡在湧浪、週五卡在
+   風，才知道要盯哪個預報、備案是什麼。
+
+### 網址即分析
+
+整個儀表板的狀態編碼在 URL hash，連結打開就是同一份分析：
+
+```
+#tab=trip&name=綠島&lat=22.6600&lon=121.4890&from=2026-09-09&to=2026-09-12&act=freedive
+```
+
+### 產生離線報告
+
+`npm run report` 會抓即時資料、跑同一套評分邏輯，產生一份完全自包含的 HTML
+（`report/index.html`，約 53 KB，除 Google Fonts 外無任何外部請求）。這份檔案可以
+直接傳給別人或發布成網頁，不需要伺服器。
+
+```bash
+npm run report          # 預設綠島 9/9–9/12
+npm run snapshot -- --name 蘭嶼 --lat 22.057 --lon 121.558 --from 2026-09-20 --to 2026-09-23 --out report/data.json
+npm run render
+```
+
+報告是**快照**，不會自動更新——十天以外的預報一定會變，出發前 4 天與前 1 天各重跑一次。
 
 ## 資料來源
 
@@ -36,6 +74,10 @@ npm run build    # 產生 dist/
 | 系集 | `ensemble-api.open-meteo.com/v1/ensemble` | ECMWF ENS 51 成員 15d、GEFS 31 成員、GEM 21 成員（後兩者到 35d） |
 | 氣候基準 | `archive-api.open-meteo.com/v1/archive` | ERA5 再分析，十年逐日資料算 day-of-year 常年值（±7 天平滑） |
 | 地點搜尋 | `geocoding-api.open-meteo.com/v1/search` | 僅作為台灣內建清單以外的備援 |
+| 海象 | `marine-api.open-meteo.com/v1/marine` | 浪高、週期、湧浪、海溫。`ncep_gfswave025` 16 天、`ecmwf_wam025` 14.8 天；預設 `best_match` 只到 9 天，不夠涵蓋兩週後的行程 |
+
+波浪**沒有**公開系集，所以浪高的不確定性只能用兩家模式的差異估計；風速則有真正的
+系集機率。行程超出 ECMWF ENS 時距時自動改用 GEFS 0.5°（35 天）。
 
 `models.ts` 裡的 `maxDays` 是實際打 API 量到的最後一筆非空值（以台北為測點），不是官方宣稱值。
 
@@ -50,9 +92,16 @@ src/
     weather.ts     WMO 天氣碼、單位格式化、分位數／超越機率／信心度
     palette.ts     設計 token（淺色與深色各自選色，非自動反轉）
     hooks.ts       async 資料 hook（含快取與重試）、主題 hook
+    activities.ts  水上活動適宜度模型：門檻、評分、船班風險、旅遊舒適度
+    trip.ts        把大氣／海象／系集三個來源併到同一時間軸並彙整
+    urlState.ts    網址 hash 編解碼（視為不可信輸入）
   components/
     TimeChart.tsx  uPlot 包裝層（分位帶、義大利麵、十字游標 tooltip、日條紋）
-    *Panel.tsx     六個分頁
+    *Panel.tsx     七個分頁
+scripts/
+  snapshot.ts      抓即時資料、跑評分、輸出 report/data.json
+  page.ts          離線報告的 HTML 樣板（海圖配色）
+  render.ts        data.json -> 自包含的 report/index.html
 ```
 
 ### 兩個容易踩的地雷
