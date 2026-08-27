@@ -6,17 +6,21 @@ import ModelPanel, { modelColor } from './components/ModelPanel'
 import EnsemblePanel from './components/EnsemblePanel'
 import LongRangePanel from './components/LongRangePanel'
 import TablePanel from './components/TablePanel'
+import TripPanel, { type TripRange } from './components/TripPanel'
 import { ErrorBox, Segmented, Spinner } from './components/ui'
 import { DEFAULT_PLACE, type Place } from './lib/locations'
 import { DEFAULT_MODELS, DETERMINISTIC, modelById } from './lib/models'
 import { cssVars } from './lib/palette'
 import { useForecast, useTheme, type ThemeChoice } from './lib/hooks'
+import { decodeState, encodeState, type AppState } from './lib/urlState'
+import { ACTIVITIES } from './lib/activities'
 import './styles.css'
 
-type Tab = 'overview' | 'hourly' | 'models' | 'ensemble' | 'long' | 'table'
+type Tab = 'overview' | 'trip' | 'hourly' | 'models' | 'ensemble' | 'long' | 'table'
 
 const TABS: { value: Tab; label: string; hint: string }[] = [
   { value: 'overview', label: '總覽', hint: '目前天氣與 16 天逐日預報' },
+  { value: 'trip', label: '行程評估', hint: '水上活動適宜度、船班風險與不確定性' },
   { value: 'hourly', label: '逐時', hint: '單一模式的逐時氣象圖' },
   { value: 'models', label: '多模式', hint: '各國模式疊圖與分歧分析' },
   { value: 'ensemble', label: '系集', hint: '成員分布與信心度' },
@@ -55,12 +59,34 @@ const isModelList = (v: unknown) => Array.isArray(v) && v.length > 0 && v.every(
 
 const isWindUnit = (v: unknown) => v === 'ms' || v === 'kmh' || v === 'kn'
 
+const DAY_MS = 86400000
+const dayOf = (ms: number) => Math.floor(ms / DAY_MS) * DAY_MS
+
 export default function App() {
   const [palette, themeChoice, setTheme] = useTheme()
-  const [place, setPlace] = useState<Place>(() => persisted('place', DEFAULT_PLACE, isPlace))
-  const [tab, setTab] = useState<Tab>('overview')
-  const [models, setModels] = useState<string[]>(() => persisted('models', DEFAULT_MODELS, isModelList))
-  const [windUnit, setWindUnit] = useState<'ms' | 'kmh' | 'kn'>(() => persisted('windUnit', 'ms' as const, isWindUnit))
+
+  // The URL hash wins over stored settings: a shared link must reproduce what the
+  // sender saw, not what this browser happened to be looking at last time.
+  const initial = useMemo<AppState>(() => {
+    const now = Date.now() + new Date().getTimezoneOffset() * -60000
+    const base: AppState = {
+      tab: 'overview',
+      place: persisted('place', DEFAULT_PLACE, isPlace),
+      models: persisted('models', DEFAULT_MODELS, isModelList),
+      windUnit: persisted('windUnit', 'ms' as const, isWindUnit),
+      tripFrom: dayOf(now) + 2 * DAY_MS,
+      tripTo: dayOf(now) + 5 * DAY_MS,
+      activity: ACTIVITIES[0].id,
+    }
+    return decodeState(window.location.hash, base)
+  }, [])
+
+  const [place, setPlace] = useState<Place>(initial.place)
+  const [tab, setTab] = useState<Tab>(initial.tab as Tab)
+  const [models, setModels] = useState<string[]>(initial.models)
+  const [windUnit, setWindUnit] = useState<'ms' | 'kmh' | 'kn'>(initial.windUnit)
+  const [trip, setTrip] = useState<TripRange>({ from: initial.tripFrom, to: initial.tripTo, activity: initial.activity })
+  const [copied, setCopied] = useState(false)
 
   // The "now" line is per-session, not per-render, so charts don't jitter on every update.
   const [nowMs] = useState(() => {
@@ -78,6 +104,28 @@ export default function App() {
       /* settings just don't persist */
     }
   }, [place, models, windUnit])
+
+  const shareHash = useMemo(
+    () => encodeState({ tab, place, models, windUnit, tripFrom: trip.from, tripTo: trip.to, activity: trip.activity }),
+    [tab, place, models, windUnit, trip],
+  )
+
+  useEffect(() => {
+    // replaceState, not assignment: a hash change per interaction would fill the
+    // back button with dozens of near-identical entries.
+    window.history.replaceState(null, '', `#${shareHash}`)
+  }, [shareHash])
+
+  const share = async () => {
+    const url = `${window.location.origin}${window.location.pathname}#${shareHash}`
+    try {
+      await navigator.clipboard.writeText(url)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      window.prompt('複製這個網址分享目前的分析：', url)
+    }
+  }
 
   const query = useMemo(
     () => (models.length ? { lat: place.lat, lon: place.lon, models, days: 16, windUnit } : null),
@@ -103,6 +151,9 @@ export default function App() {
         <div className="topbar-controls">
           <LocationPicker place={place} onPick={setPlace} />
           <Segmented ariaLabel="風速單位" value={windUnit} onChange={setWindUnit} options={WIND_UNITS} />
+          <button className="btn" onClick={share} title="複製連結，對方打開就是同一份分析">
+            {copied ? '已複製 ✓' : '分享連結'}
+          </button>
           <Segmented
             ariaLabel="外觀"
             value={themeChoice}
@@ -124,7 +175,7 @@ export default function App() {
         ))}
       </nav>
 
-      {tab !== 'ensemble' && tab !== 'long' && (
+      {tab !== 'ensemble' && tab !== 'long' && tab !== 'trip' && (
         <div className="modelbar">
           <span className="modelbar-label">納入的模式</span>
           {DETERMINISTIC.map((m) => {
@@ -151,6 +202,9 @@ export default function App() {
         {loading && !forecast && <Spinner label="向 Open-Meteo 取得多模式預報…" />}
 
         {forecast && tab === 'overview' && <OverviewPanel forecast={forecast} palette={palette} nowMs={nowMs} />}
+        {forecast && tab === 'trip' && (
+          <TripPanel place={place} forecast={forecast} palette={palette} nowMs={nowMs} windUnit={windUnit} range={trip} onRangeChange={setTrip} />
+        )}
         {forecast && tab === 'hourly' && <MeteogramPanel forecast={forecast} palette={palette} nowMs={nowMs} />}
         {forecast && tab === 'models' && <ModelPanel forecast={forecast} palette={palette} nowMs={nowMs} />}
         {tab === 'ensemble' && <EnsemblePanel place={place} palette={palette} nowMs={nowMs} windUnit={windUnit} />}

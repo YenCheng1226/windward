@@ -311,3 +311,60 @@ export function dayOfYear(ms: number): number {
   const d = new Date(ms)
   return Math.floor((Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()) - Date.UTC(d.getUTCFullYear(), 0, 0)) / 86400000)
 }
+
+// ------------------------------------------------------------------ marine
+
+const MARINE_URL = 'https://marine-api.open-meteo.com/v1/marine'
+
+export const MARINE_HOURLY = ['wave_height', 'wave_period', 'wave_direction', 'swell_wave_height', 'swell_wave_period', 'wind_wave_height'] as const
+export const MARINE_DAILY = ['wave_height_max', 'wave_period_max', 'wave_direction_dominant', 'swell_wave_height_max'] as const
+
+export interface Marine {
+  lat: number
+  lon: number
+  models: string[]
+  hourly: Block
+  daily: Block
+  /** Sea surface temperature, from the default model — the wave models don't carry it. */
+  sst: (number | null)[]
+  sstTime: number[]
+}
+
+/**
+ * Wave conditions for a coastal point.
+ *
+ * Two requests: the wave models supply sea state but return a placeholder for
+ * sea-surface temperature, so SST comes from a second call on the default model
+ * (shorter horizon, which is fine — SST barely moves day to day).
+ * The response shape matches the forecast endpoint, so `parseBlock` is reused.
+ *
+ * The grid snaps to the nearest ocean cell, which for an island is offshore by a few
+ * km; `lat`/`lon` in the result are the cell actually used, not the point requested.
+ */
+export async function fetchMarine(lat: number, lon: number, models: string[], days: number, signal?: AbortSignal): Promise<Marine> {
+  const base = { latitude: lat.toFixed(4), longitude: lon.toFixed(4), timezone: 'Asia/Taipei' }
+  const waveParams = new URLSearchParams({
+    ...base,
+    hourly: MARINE_HOURLY.join(','),
+    daily: MARINE_DAILY.join(','),
+    models: models.join(','),
+    forecast_days: String(days),
+  })
+  const sstParams = new URLSearchParams({ ...base, hourly: 'sea_surface_temperature', forecast_days: String(days) })
+
+  const [wave, sst] = await Promise.all([
+    getJson(`${MARINE_URL}?${waveParams}`, signal),
+    getJson(`${MARINE_URL}?${sstParams}`, signal).catch(() => null),
+  ])
+
+  const sstBlock = sst ? parseBlock(sst.hourly, sst.hourly_units, ['best_match']) : null
+  return {
+    lat: wave.latitude,
+    lon: wave.longitude,
+    models,
+    hourly: parseBlock(wave.hourly, wave.hourly_units, models),
+    daily: parseBlock(wave.daily, wave.daily_units, models),
+    sst: sstBlock?.vars.sea_surface_temperature?.best_match ?? [],
+    sstTime: sstBlock?.time ?? [],
+  }
+}

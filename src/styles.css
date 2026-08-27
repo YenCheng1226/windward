@@ -455,3 +455,70 @@ a { color: var(--series-1); }
   .card { padding: 13px 13px 11px; }
   .app { padding: 14px 10px 32px; }
 }
+
+/* ------------------------------------------------------- trip assessment */
+
+.trip-toolbar { margin-bottom: 12px; }
+
+.field { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--text-secondary); }
+.field input {
+  padding: 5px 9px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-1);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+.field input:focus { outline: 2px solid var(--series-1); outline-offset: -1px; }
+
+.hint.warn { color: var(--text-primary); }
+
+.trip-matrix td,
+.trip-matrix th { padding: 6px 10px; }
+.trip-matrix .row-daystart td { border-top: 1px solid var(--axis); }
+
+/* The score is the mark; colour is doubled by the number itself, never alone. */
+.score-chip {
+  display: inline-block;
+  min-width: 34px;
+  padding: 2px 7px;
+  border-radius: 7px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  border: 1px solid transparent;
+}
+.score-chip.tone-good { color: var(--good); border-color: color-mix(in srgb, var(--good) 40%, transparent); }
+.score-chip.tone-warning { color: var(--text-primary); border-color: color-mix(in srgb, var(--warning) 60%, transparent); }
+.score-chip.tone-critical { color: var(--critical); border-color: color-mix(in srgb, var(--critical) 40%, transparent); }
+.score-chip.tone-muted { color: var(--text-muted); border-color: var(--border); }
+
+.detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; }
+
+.detail-card {
+  padding: 13px 15px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-2);
+}
+.detail-head { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; }
+.detail-head em { font-style: normal; font-weight: 400; color: var(--text-secondary); font-size: 12px; }
+.detail-limit { margin: 9px 0 0; font-size: 12px; line-height: 1.6; color: var(--text-secondary); }
+
+.detail-parts { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+.detail-parts li { display: grid; grid-template-columns: 5.5em 1fr 6em; align-items: center; gap: 9px; font-size: 11.5px; color: var(--text-secondary); }
+.detail-bar { height: 6px; border-radius: 3px; background: var(--grid); overflow: hidden; }
+.detail-bar span { display: block; height: 100%; border-radius: 3px; }
+.detail-val { text-align: right; font-variant-numeric: tabular-nums; }
+
+.detail-prob { margin: 10px 0 0; font-size: 11.5px; line-height: 1.6; color: var(--text-secondary); }
+.detail-prob em { display: block; font-style: normal; color: var(--text-muted); font-size: 11px; }
+
+.detail-notes { margin: 9px 0 0; padding-left: 16px; font-size: 11.5px; line-height: 1.65; color: var(--text-muted); }
+
+.caveats { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.75; color: var(--text-secondary); }
+.caveats li { margin-bottom: 7px; }
+.caveats strong { color: var(--text-primary); }
+
+.out-of-range { color: var(--text-muted); font-size: 12px; white-space: normal; }

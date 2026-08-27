@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { fetchClimatology, fetchEnsemble, fetchForecast, type Climatology, type EnsembleData, type EnsembleQuery, type Forecast, type ForecastQuery } from './openmeteo'
+import { fetchClimatology, fetchEnsemble, fetchForecast, fetchMarine, type Climatology, type EnsembleData, type EnsembleQuery, type Forecast, type ForecastQuery, type Marine } from './openmeteo'
 import { DARK, LIGHT, type Palette } from './palette'
 
 export interface Async<T> {
@@ -105,4 +105,9 @@ export function useTheme(): [Palette, ThemeChoice, (t: ThemeChoice) => void] {
 export function useClimatology(lat: number | null, lon: number | null): Async<Climatology> {
   const key = lat != null && lon != null ? `c|${lat.toFixed(2)}|${lon.toFixed(2)}` : null
   return useAsync(key, { lat: lat ?? 0, lon: lon ?? 0 }, (q, signal) => fetchClimatology(q.lat, q.lon, 10, signal))
+}
+
+export function useMarine(lat: number | null, lon: number | null, models: string[], days: number): Async<Marine> {
+  const key = lat != null && lon != null ? `m|${lat.toFixed(3)}|${lon.toFixed(3)}|${models.join(',')}|${days}` : null
+  return useAsync(key, { lat: lat ?? 0, lon: lon ?? 0, models, days }, (q, signal) => fetchMarine(q.lat, q.lon, q.models, q.days, signal))
 }

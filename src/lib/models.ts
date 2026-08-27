@@ -48,3 +48,15 @@ export const ENSEMBLES: EnsembleDef[] = [
 
 export const modelById = (id: string) => DETERMINISTIC.find((m) => m.id === id)
 export const ensembleById = (id: string) => ENSEMBLES.find((m) => m.id === id)
+
+/**
+ * Wave models on the marine endpoint. Horizons were probed at 綠島 (22.66N/121.49E);
+ * the default `best_match` only reaches ~9 days there, which is short of a
+ * two-week trip window, so both long-range wave models are named explicitly.
+ */
+export const WAVE_MODELS: ModelDef[] = [
+  { id: 'ncep_gfswave025', name: 'GFS-Wave', centre: 'NOAA / 美國', maxDays: 16, resolution: '0.25°' },
+  { id: 'ecmwf_wam025', name: 'ECMWF WAM', centre: 'ECMWF / 歐洲', maxDays: 14.8, resolution: '0.25°' },
+]
+
+export const waveModelById = (id: string) => WAVE_MODELS.find((m) => m.id === id)
