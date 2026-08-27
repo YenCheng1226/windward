@@ -146,12 +146,12 @@ const tone = (score: number | null) => (score == null ? 'na' : score >= 75 ? 's4
 function matrix(): string {
   const head = `<tr><th scope="col">日期</th><th scope="col">時段</th>${data.activities
     .map((a) => `<th scope="col" class="num">${esc(a.name)}</th>`)
-    .join('')}<th scope="col" class="num">浪高</th><th scope="col" class="num">風速</th><th scope="col" class="num">旅遊<br>舒適度</th></tr>`
+    .join('')}<th scope="col" class="num">浪高</th><th scope="col" class="num">風速</th><th scope="col" class="num">雨量</th><th scope="col" class="num">雲量</th><th scope="col" class="num">舒適度</th></tr>`
 
   const body = data.days
     .map((d) => {
       if (d.outOfRange) {
-        return `<tr class="daystart"><th scope="row" class="daycell">${d.date}<span>週${d.weekday}</span></th><td colspan="${data.activities.length + 4}" class="oor">超出 16 天預報範圍　·　${d.entersRange} 進入預報後才有數字</td></tr>`
+        return `<tr class="daystart"><th scope="row" class="daycell">${d.date}<span>週${d.weekday}</span></th><td colspan="${data.activities.length + 6}" class="oor">超出 16 天預報範圍　·　${d.entersRange} 進入預報後才有數字</td></tr>`
       }
       return d.cells
         .map(
@@ -164,13 +164,47 @@ function matrix(): string {
               const title = s.limiting ? `限制因素：${s.limiting}${s.limitValue ? ' ' + s.limitValue : ''}` : ''
               return `<td class="num"><span class="score ${t}" title="${esc(title)}">${s.score ?? '—'}</span></td>`
             })
-            .join('')}<td class="num mono">${c.wave != null ? c.wave.toFixed(1) : '—'}</td><td class="num mono">${c.wind != null ? c.wind.toFixed(1) : '—'}</td><td class="num mono comfort">${c.comfortScore ?? '—'}</td></tr>`,
+            .join('')}<td class="num mono">${c.wave != null ? c.wave.toFixed(1) : '—'}</td><td class="num mono">${c.wind != null ? c.wind.toFixed(1) : '—'}</td><td class="num mono">${c.rainSum != null ? c.rainSum.toFixed(1) : '—'}${c.rainProbMax != null ? `<em class="sub">${c.rainProbMax.toFixed(0)}%</em>` : ''}</td><td class="num mono">${c.cloudMean != null ? c.cloudMean.toFixed(0) : '—'}</td><td class="num mono comfort">${c.comfortScore ?? '—'}</td></tr>`,
         )
         .join('')
     })
     .join('')
 
   return `<div class="scroll"><table class="matrix"><thead>${head}</thead><tbody>${body}</tbody></table></div>`
+}
+
+/**
+ * Sunshine is reported per day, never per daypart: the hourly sunshine field is
+ * binary at the WMO threshold and reads as "100 %" under 45 % cloud. Cloud cover
+ * carries the within-day shape instead.
+ */
+function sunCards(): string {
+  return data.days
+    .filter((d) => !d.outOfRange)
+    .map(
+      (d) => `<div class="sunday">
+      <div class="sunday-head"><strong>${d.date}</strong><span>週${d.weekday}</span><em class="tag ${d.sunTone}">${esc(d.sunLabel)}</em></div>
+      <div class="sunday-main">
+        <span class="sun-h mono">${d.sunHours != null ? d.sunHours.toFixed(1) : '—'}<em>小時日照</em></span>
+        <span class="sun-track"><i style="width:${((d.sunFrac ?? 0) * 100).toFixed(0)}%"></i></span>
+        <span class="sun-pct mono">${d.sunFrac != null ? (d.sunFrac * 100).toFixed(0) + '% 白天' : '—'}</span>
+      </div>
+      ${d.cells
+        .map(
+          (c) => `<div class="sunday-part"><span>${esc(c.part)}</span><span class="mono">雲量 ${c.cloudMean != null ? c.cloudMean.toFixed(0) + '%' : '—'}</span><span class="mono rain">${
+            c.rainSum != null && c.rainSum >= 1
+              ? `雨 ${c.rainSum.toFixed(1)} mm`
+              : c.rainSum != null && c.rainSum >= 0.2
+                ? `微量 ${c.rainSum.toFixed(1)} mm`
+                : c.rainProbMax != null && c.rainProbMax >= 30
+                  ? `降水機率 ${c.rainProbMax.toFixed(0)}%`
+                  : '無雨'
+          }${c.rainHours ? ` · ${c.rainHours} 小時` : ''}</span></div>`,
+        )
+        .join('')}
+    </div>`,
+    )
+    .join('')
 }
 
 function ferryCards(): string {
@@ -230,6 +264,7 @@ const page = renderPage({
   headline: h,
   matrix: matrix(),
   ferry: ferryCards(),
+  sun: sunCards(),
   details: detailPanels(),
   activities: data.activities.map((a) => ({ id: a.id, name: a.name, icon: a.icon })),
   waveChart: waveChart(),

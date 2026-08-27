@@ -522,3 +522,32 @@ a { color: var(--series-1); }
 .caveats strong { color: var(--text-primary); }
 
 .out-of-range { color: var(--text-muted); font-size: 12px; white-space: normal; }
+
+.data-table .sub { font-style: normal; color: var(--text-muted); font-size: 10.5px; margin-left: 3px; }
+
+.sun-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 12px; }
+.sun-day { border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; background: var(--surface-2); }
+.sun-date { display: flex; align-items: baseline; gap: 7px; margin-bottom: 9px; }
+.sun-date strong { font-size: 14px; font-variant-numeric: tabular-nums; }
+.sun-date span { font-size: 11.5px; color: var(--text-secondary); }
+.sun-date em { font-style: normal; margin-left: auto; font-size: 11px; }
+
+.sun-headline { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; margin: 2px 0 8px; }
+.sun-hours { font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.sun-hours em { font-style: normal; font-size: 11.5px; font-weight: 400; color: var(--text-secondary); }
+.sun-frac { font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+.sun-part { display: grid; grid-template-columns: 2.6em 1fr auto; align-items: center; gap: 10px; padding: 3px 0; font-size: 11.5px; color: var(--text-secondary); border-top: 1px solid var(--grid); }
+.sun-cloud { font-variant-numeric: tabular-nums; }
+.sun-label { color: var(--text-primary); }
+.sun-bar { height: 7px; border-radius: 4px; background: var(--grid); overflow: hidden; }
+.sun-bar span { display: block; height: 100%; border-radius: 4px; }
+.sun-num { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-primary); }
+.sun-num em { font-style: normal; color: var(--text-muted); }
+.sun-rain { text-align: right; font-variant-numeric: tabular-nums; }
+.sun-rain em { font-style: normal; color: var(--text-muted); }
+
+@media (max-width: 520px) {
+  .sun-part { grid-template-columns: 2.4em 1fr; }
+  .sun-rain { grid-column: 2 / -1; text-align: left; }
+}

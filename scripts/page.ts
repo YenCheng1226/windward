@@ -18,6 +18,7 @@ export interface PageParts {
   headline: { lead: string; detail: string; tone: string }
   matrix: string
   ferry: string
+  sun: string
   details: string
   activities: { id: string; name: string; icon: string }[]
   waveChart: string
@@ -192,6 +193,7 @@ table.matrix thead th {
 }
 table.matrix .num { text-align: right; }
 table.matrix thead th br { line-height: 1.3; }
+.sub { font-style: normal; color: var(--ink-3); font-size: 10px; margin-left: 4px; }
 /* Comfort is context, not a go/no-go call — kept visually quieter than the scores. */
 .comfort { color: var(--ink-3); }
 table.matrix tr.daystart th, table.matrix tr.daystart td { border-top: 1px solid var(--rule); }
@@ -279,6 +281,27 @@ figcaption span { display: flex; align-items: center; gap: 6px; }
 figcaption i { width: 18px; height: 3px; border-radius: 2px; display: inline-block; }
 figcaption i.dash { height: 0; border-top: 2px dashed var(--caution); }
 
+/* Sunshine cards — the day's total is the headline, cloud gives the within-day shape. */
+.sundays { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.sunday { border: 1px solid var(--rule); border-radius: 4px; padding: 13px 15px; background: var(--paper-2); }
+.sunday-head { display: flex; align-items: baseline; gap: 8px; font-size: 13.5px; }
+.sunday-head strong { font-family: "IBM Plex Mono", monospace; }
+.sunday-head span { font-size: 11.5px; color: var(--ink-3); }
+.tag { margin-left: auto; font-style: normal; font-size: 11.5px; font-weight: 500; }
+.tag.good { color: var(--good); }
+.tag.warning { color: var(--warn); }
+.tag.critical { color: var(--bad); }
+.tag.muted { color: var(--ink-3); }
+.sunday-main { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; margin: 8px 0 10px; }
+.sun-h { font-size: 21px; font-weight: 600; }
+.sun-h em { font-style: normal; font-size: 11px; font-weight: 400; color: var(--ink-3); margin-left: 4px; }
+.sun-track { height: 7px; border-radius: 4px; background: var(--rule); overflow: hidden; }
+.sun-track i { display: block; height: 100%; background: var(--warn); border-radius: 4px; }
+.sun-pct { font-size: 11px; color: var(--ink-3); }
+.sunday-part { display: grid; grid-template-columns: 2.8em 1fr auto; gap: 10px; font-size: 11.5px; color: var(--ink-2); padding: 4px 0; border-top: 1px solid var(--rule); }
+.sunday-part .rain { text-align: right; color: var(--ink-3); }
+.foot-note { margin: 14px 0 0; font-size: 12px; color: var(--ink-3); line-height: 1.7; }
+
 /* Chart correction notes are printed in magenta on real charts — same job here. */
 .caveats { border-left: 3px solid var(--caution); padding-left: 18px; margin: 0; }
 .caveats h2 { font-family: "Noto Serif TC", serif; font-size: 15px; margin: 0 0 12px; color: var(--caution); }
@@ -351,6 +374,13 @@ export function renderPage(p: PageParts): string {
       <li><i style="background:var(--s2)"></i>35–54　勉強</li>
       <li><i style="background:var(--s1)"></i>34 以下　不建議</li>
     </ul>
+  </section>
+
+  <section>
+    <h2>曬太陽與降雨</h2>
+    <p class="lede">日照時數取自模式的逐日累計值，是直射陽光超過門檻的實際時數，不是雲量的反面。逐時的日照欄位在這裡不可用——它是二元的，雲量 45% 也照樣記整整一小時，所以日是日照最小的誠實單位；時段內的變化改看雲量。</p>
+    <div class="sundays">${p.sun}</div>
+    <p class="foot-note">九月的${p.place} UV 幾乎每天都是過量級——日照越充足，防曬與補水越關鍵。反過來說，雲多時水下光線會變暗，攝影與能見度的體感都會打折。</p>
   </section>
 
   <section>

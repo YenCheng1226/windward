@@ -9,10 +9,10 @@
  *   npm run snapshot -- --name 綠島 --lat 22.66 --lon 121.489 --from 2026-09-09 --to 2026-09-12
  */
 import { writeFileSync } from 'node:fs'
-import { ACTIVITIES, verdict, waveConfidence, type ActivityScore } from '../src/lib/activities'
+import { ACTIVITIES, sunVerdict, verdict, waveConfidence, type ActivityScore } from '../src/lib/activities'
 import { DETERMINISTIC, ENSEMBLES, WAVE_MODELS } from '../src/lib/models'
 import { fetchEnsemble, fetchForecast, fetchMarine } from '../src/lib/openmeteo'
-import { buildHours, summarise, windLimit, DAYPARTS } from '../src/lib/trip'
+import { buildHours, summarise, sunByDay, windLimit, DAYPARTS } from '../src/lib/trip'
 
 const DAY_MS = 86400000
 const dayOf = (ms: number) => Math.floor(ms / DAY_MS) * DAY_MS
@@ -32,6 +32,10 @@ export interface ReportCell {
   windProb: Record<string, number | null>
   wave: number | null
   wind: number | null
+  rainSum: number | null
+  rainProbMax: number | null
+  rainHours: number | null
+  cloudMean: number | null
   comfortScore: number | null
   comfortNotes: string[]
 }
@@ -44,6 +48,11 @@ export interface ReportDay {
   ferry: { level: string; tone: string; reason: string }
   waveMax: number | null
   gustMax: number | null
+  /** Whole-day sunshine from the API's daily aggregate, and its verdict. */
+  sunHours: number | null
+  sunFrac: number | null
+  sunLabel: string
+  sunTone: string
   cells: ReportCell[]
 }
 
@@ -99,7 +108,7 @@ async function main() {
   for (let d = dayOf(from); d <= dayOf(to); d += DAY_MS) days.push(d)
 
   const rows = buildHours({ hourly: forecast.hourly, models, marine, waveModels: waveIds, daily: forecast.daily })
-  const summary = summarise(rows, days, ens)
+  const summary = summarise(rows, days, ens, sunByDay(forecast.daily, models))
 
   let horizon = -1
   for (const m of models) forecast.hourly.vars.wind_speed_10m?.[m]?.forEach((v, i) => { if (v != null) horizon = Math.max(horizon, i) })
@@ -123,6 +132,10 @@ async function main() {
       ferry: { level: d.ferry.level, tone: d.ferry.tone, reason: d.ferry.reason },
       waveMax: d.waveMax,
       gustMax: d.gustMax,
+      sunHours: d.sun.hours,
+      sunFrac: d.sun.frac,
+      sunLabel: sunVerdict(d.sun.frac).label,
+      sunTone: sunVerdict(d.sun.frac).tone,
       cells: d.cells.map((c) => ({
         part: c.part.label,
         hours: `${c.part.from}:00–${c.part.to}:00`,
@@ -130,6 +143,10 @@ async function main() {
         windProb: c.windProb,
         wave: c.conditions.waveHeight,
         wind: c.conditions.windSpeed,
+        rainSum: c.stats.rainSum,
+        rainProbMax: c.stats.rainProbMax,
+        rainHours: c.stats.rainHours,
+        cloudMean: c.stats.cloudMean,
         comfortScore: c.comfort.score,
         comfortNotes: c.comfort.notes,
       })),

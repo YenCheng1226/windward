@@ -160,6 +160,7 @@ table.matrix thead th {
 }
 table.matrix .num { text-align: right; }
 table.matrix thead th br { line-height: 1.3; }
+.sub { font-style: normal; color: var(--ink-3); font-size: 10px; margin-left: 4px; }
 /* Comfort is context, not a go/no-go call — kept visually quieter than the scores. */
 .comfort { color: var(--ink-3); }
 table.matrix tr.daystart th, table.matrix tr.daystart td { border-top: 1px solid var(--rule); }
@@ -247,6 +248,27 @@ figcaption span { display: flex; align-items: center; gap: 6px; }
 figcaption i { width: 18px; height: 3px; border-radius: 2px; display: inline-block; }
 figcaption i.dash { height: 0; border-top: 2px dashed var(--caution); }
 
+/* Sunshine cards — the day's total is the headline, cloud gives the within-day shape. */
+.sundays { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.sunday { border: 1px solid var(--rule); border-radius: 4px; padding: 13px 15px; background: var(--paper-2); }
+.sunday-head { display: flex; align-items: baseline; gap: 8px; font-size: 13.5px; }
+.sunday-head strong { font-family: "IBM Plex Mono", monospace; }
+.sunday-head span { font-size: 11.5px; color: var(--ink-3); }
+.tag { margin-left: auto; font-style: normal; font-size: 11.5px; font-weight: 500; }
+.tag.good { color: var(--good); }
+.tag.warning { color: var(--warn); }
+.tag.critical { color: var(--bad); }
+.tag.muted { color: var(--ink-3); }
+.sunday-main { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; margin: 8px 0 10px; }
+.sun-h { font-size: 21px; font-weight: 600; }
+.sun-h em { font-style: normal; font-size: 11px; font-weight: 400; color: var(--ink-3); margin-left: 4px; }
+.sun-track { height: 7px; border-radius: 4px; background: var(--rule); overflow: hidden; }
+.sun-track i { display: block; height: 100%; background: var(--warn); border-radius: 4px; }
+.sun-pct { font-size: 11px; color: var(--ink-3); }
+.sunday-part { display: grid; grid-template-columns: 2.8em 1fr auto; gap: 10px; font-size: 11.5px; color: var(--ink-2); padding: 4px 0; border-top: 1px solid var(--rule); }
+.sunday-part .rain { text-align: right; color: var(--ink-3); }
+.foot-note { margin: 14px 0 0; font-size: 12px; color: var(--ink-3); line-height: 1.7; }
+
 /* Chart correction notes are printed in magenta on real charts — same job here. */
 .caveats { border-left: 3px solid var(--caution); padding-left: 18px; margin: 0; }
 .caveats h2 { font-family: "Noto Serif TC", serif; font-size: 15px; margin: 0 0 12px; color: var(--caution); }
@@ -271,7 +293,7 @@ footer a { color: var(--depth); }
     <h1>綠島 9/9–9/12　能不能下水</h1>
     <p class="subtitle">自由潛水、水肺潛水、浮潛、SUP、衝浪五項活動的逐時段適宜度，加上船班停航風險與預報不確定性。</p>
     <p class="meta">
-      <span><b>資料時間</b> 2026/8/27 13:00</span>
+      <span><b>資料時間</b> 2026/8/27 14:00</span>
       <span><b>出發前</b> 13 天</span>
       <span><b>大氣模式</b> ECMWF IFS、ECMWF AIFS、GFS、JMA GSM</span>
       <span><b>海象格點</b> 22.75°N 121.50°E</span>
@@ -286,7 +308,7 @@ footer a { color: var(--depth); }
   <section>
     <h2>適宜度總表</h2>
     <p class="lede">每格是該時段的綜合評分（0–100）。水上活動由最差的因素決定，所以任何一項觸及否決門檻，整格即為 0。滑到分數上可以看到該格的限制因素。最右欄的旅遊舒適度看的是岸上：降雨、日照與體感溫度。</p>
-    <div class="scroll"><table class="matrix"><thead><tr><th scope="col">日期</th><th scope="col">時段</th><th scope="col" class="num">自由潛水</th><th scope="col" class="num">水肺潛水</th><th scope="col" class="num">浮潛</th><th scope="col" class="num">SUP 立槳</th><th scope="col" class="num">衝浪</th><th scope="col" class="num">浪高</th><th scope="col" class="num">風速</th><th scope="col" class="num">旅遊<br>舒適度</th></tr></thead><tbody><tr class="daystart"><th scope="row" rowspan="2" class="daycell">9/9<span>週三</span></th><td class="part">上午</td><td class="num"><span class="score s4" title="限制因素：浪高 1.2 m">79</span></td><td class="num"><span class="score s4" title="限制因素：浪高 1.2 m">92</span></td><td class="num"><span class="score s3" title="限制因素：浪高 1.2 m">71</span></td><td class="num"><span class="score s2" title="限制因素：浪高 1.2 m">45</span></td><td class="num"><span class="score s4" title="限制因素：浪高 1.2 m">100</span></td><td class="num mono">1.2</td><td class="num mono">1.7</td><td class="num mono comfort">100</td></tr><tr class=""><td class="part">下午</td><td class="num"><span class="score s4" title="限制因素：浪高 1.1 m">87</span></td><td class="num"><span class="score s4" title="限制因素：浪高 1.1 m">98</span></td><td class="num"><span class="score s4" title="限制因素：浪高 1.1 m">83</span></td><td class="num"><span class="score s3" title="限制因素：浪高 1.1 m">60</span></td><td class="num"><span class="score s4" title="限制因素：浪高 1.1 m">93</span></td><td class="num mono">1.1</td><td class="num mono">4.0</td><td class="num mono comfort">100</td></tr><tr class="daystart"><th scope="row" rowspan="2" class="daycell">9/10<span>週四</span></th><td class="part">上午</td><td class="num"><span class="score s4" title="限制因素：浪高 0.8 m">95</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.8 m">100</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.8 m">92</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.8 m">84</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.8 m">82</span></td><td class="num mono">0.8</td><td class="num mono">2.0</td><td class="num mono comfort">100</td></tr><tr class=""><td class="part">下午</td><td class="num"><span class="score s4" title="限制因素：浪高 0.8 m">97</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.8 m">100</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.8 m">93</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.8 m">86</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.8 m">79</span></td><td class="num mono">0.8</td><td class="num mono">1.1</td><td class="num mono comfort">95</td></tr><tr class="daystart"><th scope="row" rowspan="2" class="daycell">9/11<span>週五</span></th><td class="part">上午</td><td class="num"><span class="score s4" title="限制因素：風速 5.3 m/s">91</span></td><td class="num"><span class="score s4" title="限制因素：風速 5.3 m/s">99</span></td><td class="num"><span class="score s4" title="限制因素：風速 5.3 m/s">90</span></td><td class="num"><span class="score s3" title="限制因素：風速 5.3 m/s">60</span></td><td class="num"><span class="score s3" title="限制因素：浪高 0.8 m">71</span></td><td class="num mono">0.8</td><td class="num mono">5.3</td><td class="num mono comfort">89</td></tr><tr class=""><td class="part">下午</td><td class="num"><span class="score s4" title="限制因素：風速 5.2 m/s">92</span></td><td class="num"><span class="score s4" title="限制因素：風速 5.2 m/s">99</span></td><td class="num"><span class="score s4" title="限制因素：風速 5.2 m/s">91</span></td><td class="num"><span class="score s3" title="限制因素：風速 5.2 m/s">62</span></td><td class="num"><span class="score s3" title="限制因素：浪高 0.8 m">71</span></td><td class="num mono">0.8</td><td class="num mono">5.2</td><td class="num mono comfort">97</td></tr><tr class="daystart"><th scope="row" class="daycell">9/12<span>週六</span></th><td colspan="9" class="oor">超出 16 天預報範圍　·　8/28 進入預報後才有數字</td></tr></tbody></table></div>
+    <div class="scroll"><table class="matrix"><thead><tr><th scope="col">日期</th><th scope="col">時段</th><th scope="col" class="num">自由潛水</th><th scope="col" class="num">水肺潛水</th><th scope="col" class="num">浮潛</th><th scope="col" class="num">SUP 立槳</th><th scope="col" class="num">衝浪</th><th scope="col" class="num">浪高</th><th scope="col" class="num">風速</th><th scope="col" class="num">雨量</th><th scope="col" class="num">雲量</th><th scope="col" class="num">舒適度</th></tr></thead><tbody><tr class="daystart"><th scope="row" rowspan="2" class="daycell">9/9<span>週三</span></th><td class="part">上午</td><td class="num"><span class="score s4" title="限制因素：浪高 0.9 m">93</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.9 m">100</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.9 m">90</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.9 m">80</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.9 m">84</span></td><td class="num mono">0.9</td><td class="num mono">1.7</td><td class="num mono">0.6<em class="sub">41%</em></td><td class="num mono">20</td><td class="num mono comfort">100</td></tr><tr class=""><td class="part">下午</td><td class="num"><span class="score s4" title="限制因素：浪高 0.8 m">96</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.8 m">100</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.8 m">93</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.8 m">75</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.8 m">77</span></td><td class="num mono">0.8</td><td class="num mono">4.0</td><td class="num mono">0.9<em class="sub">33%</em></td><td class="num mono">42</td><td class="num mono comfort">99</td></tr><tr class="daystart"><th scope="row" rowspan="2" class="daycell">9/10<span>週四</span></th><td class="part">上午</td><td class="num"><span class="score s4" title="限制因素：浪高 0.6 m">100</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.6 m">100</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.6 m">99</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.6 m">93</span></td><td class="num"><span class="score s2" title="限制因素：浪高 0.6 m">49</span></td><td class="num mono">0.6</td><td class="num mono">2.0</td><td class="num mono">0.0<em class="sub">44%</em></td><td class="num mono">23</td><td class="num mono comfort">100</td></tr><tr class=""><td class="part">下午</td><td class="num"><span class="score s4" title="限制因素：浪高 0.6 m">100</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.6 m">100</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.6 m">100</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.6 m">94</span></td><td class="num"><span class="score s2" title="限制因素：浪高 0.6 m">42</span></td><td class="num mono">0.6</td><td class="num mono">1.1</td><td class="num mono">0.0<em class="sub">44%</em></td><td class="num mono">24</td><td class="num mono comfort">95</td></tr><tr class="daystart"><th scope="row" rowspan="2" class="daycell">9/11<span>週五</span></th><td class="part">上午</td><td class="num"><span class="score s4" title="限制因素：浪高 0.5 m">100</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.5 m">100</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.5 m">100</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.5 m">96</span></td><td class="num"><span class="score s1" title="限制因素：浪高 0.5 m">0</span></td><td class="num mono">0.5</td><td class="num mono">2.2</td><td class="num mono">0.6<em class="sub">46%</em></td><td class="num mono">29</td><td class="num mono comfort">99</td></tr><tr class=""><td class="part">下午</td><td class="num"><span class="score s4" title="限制因素：風速 4.7 m/s">97</span></td><td class="num"><span class="score s4" title="限制因素：浪高 0.5 m">100</span></td><td class="num"><span class="score s4" title="限制因素：風速 4.7 m/s">98</span></td><td class="num"><span class="score s4" title="限制因素：風速 4.7 m/s">77</span></td><td class="num"><span class="score s1" title="限制因素：浪高 0.5 m">0</span></td><td class="num mono">0.5</td><td class="num mono">4.7</td><td class="num mono">0.0<em class="sub">48%</em></td><td class="num mono">13</td><td class="num mono comfort">100</td></tr><tr class="daystart"><th scope="row" class="daycell">9/12<span>週六</span></th><td colspan="11" class="oor">超出 16 天預報範圍　·　8/28 進入預報後才有數字</td></tr></tbody></table></div>
     <ul class="key">
       <li><i style="background:var(--s4)"></i>75 以上　很適合</li>
       <li><i style="background:var(--s3)"></i>55–74　可以玩</li>
@@ -296,20 +318,51 @@ footer a { color: var(--depth); }
   </section>
 
   <section>
+    <h2>曬太陽與降雨</h2>
+    <p class="lede">日照時數取自模式的逐日累計值，是直射陽光超過門檻的實際時數，不是雲量的反面。逐時的日照欄位在這裡不可用——它是二元的，雲量 45% 也照樣記整整一小時，所以日是日照最小的誠實單位；時段內的變化改看雲量。</p>
+    <div class="sundays"><div class="sunday">
+      <div class="sunday-head"><strong>9/9</strong><span>週三</span><em class="tag good">陽光充足</em></div>
+      <div class="sunday-main">
+        <span class="sun-h mono">9.2<em>小時日照</em></span>
+        <span class="sun-track"><i style="width:74%"></i></span>
+        <span class="sun-pct mono">74% 白天</span>
+      </div>
+      <div class="sunday-part"><span>上午</span><span class="mono">雲量 20%</span><span class="mono rain">微量 0.6 mm</span></div><div class="sunday-part"><span>下午</span><span class="mono">雲量 42%</span><span class="mono rain">微量 0.9 mm · 3 小時</span></div>
+    </div><div class="sunday">
+      <div class="sunday-head"><strong>9/10</strong><span>週四</span><em class="tag good">陽光充足</em></div>
+      <div class="sunday-main">
+        <span class="sun-h mono">9.3<em>小時日照</em></span>
+        <span class="sun-track"><i style="width:75%"></i></span>
+        <span class="sun-pct mono">75% 白天</span>
+      </div>
+      <div class="sunday-part"><span>上午</span><span class="mono">雲量 23%</span><span class="mono rain">降水機率 44%</span></div><div class="sunday-part"><span>下午</span><span class="mono">雲量 24%</span><span class="mono rain">降水機率 44%</span></div>
+    </div><div class="sunday">
+      <div class="sunday-head"><strong>9/11</strong><span>週五</span><em class="tag good">陽光充足</em></div>
+      <div class="sunday-main">
+        <span class="sun-h mono">12.0<em>小時日照</em></span>
+        <span class="sun-track"><i style="width:97%"></i></span>
+        <span class="sun-pct mono">97% 白天</span>
+      </div>
+      <div class="sunday-part"><span>上午</span><span class="mono">雲量 29%</span><span class="mono rain">微量 0.6 mm · 3 小時</span></div><div class="sunday-part"><span>下午</span><span class="mono">雲量 13%</span><span class="mono rain">降水機率 48%</span></div>
+    </div></div>
+    <p class="foot-note">九月的綠島 UV 幾乎每天都是過量級——日照越充足，防曬與補水越關鍵。反過來說，雲多時水下光線會變暗，攝影與能見度的體感都會打折。</p>
+  </section>
+
+  <section>
     <h2>船班停航風險</h2>
     <p class="lede">離島行程真正的成敗關鍵——活動條件再好，船不開就去不了。門檻取自這條航線常見的停航海況，屬經驗法則，實際以當日船公司公告為準。</p>
     <div class="ferries"><div class="ferry good">
       <span class="ferry-date">9/9<em>週三</em></span>
       <strong>低</strong>
-      <span class="ferry-why">浪高 1.4 m，海況平穩</span>
+      <span class="ferry-why">浪高 1.0 m，海況平穩</span>
     </div><div class="ferry good">
       <span class="ferry-date">9/10<em>週四</em></span>
       <strong>低</strong>
-      <span class="ferry-why">浪高 0.9 m，海況平穩</span>
+      <span class="ferry-why">浪高 0.7 m，海況平穩</span>
     </div><div class="ferry good">
       <span class="ferry-date">9/11<em>週五</em></span>
       <strong>低</strong>
-      <span class="ferry-why">浪高 0.8 m，海況平穩</span>
+      <span class="ferry-why">浪高 0.6 m，海況平穩</span>
     </div><div class="ferry muted">
       <span class="ferry-date">9/12<em>週六</em></span>
       <strong>無預報</strong>
@@ -321,185 +374,185 @@ footer a { color: var(--depth); }
     <h2>逐項活動詳解</h2>
     <div class="tabs" role="tablist" aria-label="選擇活動"><button type="button" role="tab" data-act="freedive" aria-selected="true">🤿 自由潛水</button><button type="button" role="tab" data-act="scuba" aria-selected="false">🛟 水肺潛水</button><button type="button" role="tab" data-act="snorkel" aria-selected="false">🥽 浮潛</button><button type="button" role="tab" data-act="sup" aria-selected="false">🏄 SUP 立槳</button><button type="button" role="tab" data-act="surf" aria-selected="false">🌊 衝浪</button></div>
     <div class="detail" data-act="freedive" hidden><p class="blurb">對水面狀況最敏感——沒有氣瓶浮力輔助，湧浪會直接影響下潛與水面休息的安全。</p><div class="panels"><article class="panel">
-              <header><span>9/9 上午<em>6:00–11:00</em></span><span class="score s4">79</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 1.2 m　水面湧浪讓平靜呼吸與繩索定位變困難</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:56%" class="mid"></i></span><span class="pv mono">1.2 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.7 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.9 mm/48h</span></li></ul>
+              <header><span>9/9 上午<em>6:00–11:00</em></span><span class="score s4">93</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.9 m　水面湧浪讓平靜呼吸與繩索定位變困難</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:84%" class="ok"></i></span><span class="pv mono">0.9 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.7 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.9 mm/48h</span></li></ul>
               <p class="prob">系集 <strong class="mono">65%</strong> 的成員風速維持在 6.5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+              <ul class="notes"><li>零星短暫降雨，帶件薄雨衣</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
             </article><article class="panel">
-              <header><span>9/9 下午<em>12:00–17:00</em></span><span class="score s4">87</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 1.1 m　水面湧浪讓平靜呼吸與繩索定位變困難</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:71%" class="ok"></i></span><span class="pv mono">1.1 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:99%" class="ok"></i></span><span class="pv mono">4.0 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.5 mm/48h</span></li></ul>
+              <header><span>9/9 下午<em>12:00–17:00</em></span><span class="score s4">96</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.8 m　水面湧浪讓平靜呼吸與繩索定位變困難</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:92%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:99%" class="ok"></i></span><span class="pv mono">4.0 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.5 mm/48h</span></li></ul>
               <p class="prob">系集 <strong class="mono">74%</strong> 的成員風速維持在 6.5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
-            </article><article class="panel">
-              <header><span>9/10 上午<em>6:00–11:00</em></span><span class="score s4">95</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 0.8 m　水面湧浪讓平靜呼吸與繩索定位變困難</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:89%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.0 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">3.6 mm/48h</span></li></ul>
-              <p class="prob">系集 <strong class="mono">65%</strong> 的成員風速維持在 6.5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
-            </article><article class="panel">
-              <header><span>9/10 下午<em>12:00–17:00</em></span><span class="score s4">97</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 0.8 m　水面湧浪讓平靜呼吸與繩索定位變困難</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:92%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.1 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">3.6 mm/48h</span></li></ul>
-              <p class="prob">系集 <strong class="mono">65%</strong> 的成員風速維持在 6.5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
-            </article><article class="panel">
-              <header><span>9/11 上午<em>6:00–11:00</em></span><span class="score s4">91</span></header>
-              <p class="limit">限制因素 <strong>風速</strong> 5.3 m/s　風生浪打亂水面，也讓船隻定位不穩</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:95%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:79%" class="ok"></i></span><span class="pv mono">5.3 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.7 mm/48h</span></li></ul>
-              <p class="prob">系集 <strong class="mono">55%</strong> 的成員風速維持在 6.5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>少雲、日照強，注意曬傷與中暑</li><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
-            </article><article class="panel">
-              <header><span>9/11 下午<em>12:00–17:00</em></span><span class="score s4">92</span></header>
-              <p class="limit">限制因素 <strong>風速</strong> 5.2 m/s　風生浪打亂水面，也讓船隻定位不穩</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:95%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:81%" class="ok"></i></span><span class="pv mono">5.2 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.1 mm/48h</span></li></ul>
-              <p class="prob">系集 <strong class="mono">42%</strong> 的成員風速維持在 6.5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>少雲、日照強，注意曬傷與中暑</li><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
-            </article></div></div><div class="detail" data-act="scuba" hidden><p class="blurb">比自由潛水耐受度高一些，主要卡在船潛的上下船安全與水下能見度。</p><div class="panels"><article class="panel">
-              <header><span>9/9 上午<em>6:00–11:00</em></span><span class="score s4">92</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 1.2 m　上下船與水面集合的風險隨浪高快速上升</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:81%" class="ok"></i></span><span class="pv mono">1.2 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.7 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.9 mm/48h</span></li></ul>
-              <p class="prob">系集 <strong class="mono">81%</strong> 的成員風速維持在 8 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
-            </article><article class="panel">
-              <header><span>9/9 下午<em>12:00–17:00</em></span><span class="score s4">98</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 1.1 m　上下船與水面集合的風險隨浪高快速上升</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:95%" class="ok"></i></span><span class="pv mono">1.1 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">4.0 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.5 mm/48h</span></li></ul>
-              <p class="prob">系集 <strong class="mono">81%</strong> 的成員風速維持在 8 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+              <ul class="notes"><li>零星短暫降雨，帶件薄雨衣</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
             </article><article class="panel">
               <header><span>9/10 上午<em>6:00–11:00</em></span><span class="score s4">100</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 0.8 m　上下船與水面集合的風險隨浪高快速上升</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.0 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">3.6 mm/48h</span></li></ul>
-              <p class="prob">系集 <strong class="mono">68%</strong> 的成員風速維持在 8 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.6 m　水面湧浪讓平靜呼吸與繩索定位變困難</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">0.6 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.0 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">3.6 mm/48h</span></li></ul>
+              <p class="prob">系集 <strong class="mono">65%</strong> 的成員風速維持在 6.5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
             </article><article class="panel">
               <header><span>9/10 下午<em>12:00–17:00</em></span><span class="score s4">100</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 0.8 m　上下船與水面集合的風險隨浪高快速上升</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.1 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">3.6 mm/48h</span></li></ul>
-              <p class="prob">系集 <strong class="mono">68%</strong> 的成員風速維持在 8 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.6 m　水面湧浪讓平靜呼吸與繩索定位變困難</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">0.6 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.1 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">3.6 mm/48h</span></li></ul>
+              <p class="prob">系集 <strong class="mono">65%</strong> 的成員風速維持在 6.5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
             </article><article class="panel">
-              <header><span>9/11 上午<em>6:00–11:00</em></span><span class="score s4">99</span></header>
-              <p class="limit">限制因素 <strong>風速</strong> 5.3 m/s　風大時船隻難以在潛點上方保持位置</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:96%" class="ok"></i></span><span class="pv mono">5.3 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.7 mm/48h</span></li></ul>
-              <p class="prob">系集 <strong class="mono">68%</strong> 的成員風速維持在 8 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>少雲、日照強，注意曬傷與中暑</li><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+              <header><span>9/11 上午<em>6:00–11:00</em></span><span class="score s4">100</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.5 m　水面湧浪讓平靜呼吸與繩索定位變困難</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">0.5 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.2 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.7 mm/48h</span></li></ul>
+              <p class="prob">系集 <strong class="mono">55%</strong> 的成員風速維持在 6.5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>零星短暫降雨，帶件薄雨衣</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
             </article><article class="panel">
-              <header><span>9/11 下午<em>12:00–17:00</em></span><span class="score s4">99</span></header>
-              <p class="limit">限制因素 <strong>風速</strong> 5.2 m/s　風大時船隻難以在潛點上方保持位置</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:97%" class="ok"></i></span><span class="pv mono">5.2 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.1 mm/48h</span></li></ul>
-              <p class="prob">系集 <strong class="mono">52%</strong> 的成員風速維持在 8 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>少雲、日照強，注意曬傷與中暑</li><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
-            </article></div></div><div class="detail" data-act="snorkel" hidden><p class="blurb">綠島最普及的活動。門檻比潛水低，但同樣被湧浪和濁度決定體驗好壞。</p><div class="panels"><article class="panel">
-              <header><span>9/9 上午<em>6:00–11:00</em></span><span class="score s3">71</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 1.2 m　岸邊礁石區的湧浪會讓入水與回岸變危險</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:43%" class="mid"></i></span><span class="pv mono">1.2 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.7 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.9 mm/48h</span></li></ul>
-              <p class="prob">系集 <strong class="mono">71%</strong> 的成員風速維持在 7 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
-            </article><article class="panel">
-              <header><span>9/9 下午<em>12:00–17:00</em></span><span class="score s4">83</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 1.1 m　岸邊礁石區的湧浪會讓入水與回岸變危險</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:63%" class="ok"></i></span><span class="pv mono">1.1 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:99%" class="ok"></i></span><span class="pv mono">4.0 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.5 mm/48h</span></li></ul>
-              <p class="prob">系集 <strong class="mono">74%</strong> 的成員風速維持在 7 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
-            </article><article class="panel">
-              <header><span>9/10 上午<em>6:00–11:00</em></span><span class="score s4">92</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 0.8 m　岸邊礁石區的湧浪會讓入水與回岸變危險</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:81%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.0 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">3.6 mm/48h</span></li></ul>
-              <p class="prob">系集 <strong class="mono">68%</strong> 的成員風速維持在 7 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
-            </article><article class="panel">
-              <header><span>9/10 下午<em>12:00–17:00</em></span><span class="score s4">93</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 0.8 m　岸邊礁石區的湧浪會讓入水與回岸變危險</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:84%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.1 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">3.6 mm/48h</span></li></ul>
-              <p class="prob">系集 <strong class="mono">68%</strong> 的成員風速維持在 7 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
-            </article><article class="panel">
-              <header><span>9/11 上午<em>6:00–11:00</em></span><span class="score s4">90</span></header>
-              <p class="limit">限制因素 <strong>風速</strong> 5.3 m/s　風浪讓呼吸管容易嗆水</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:87%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:82%" class="ok"></i></span><span class="pv mono">5.3 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.7 mm/48h</span></li></ul>
-              <p class="prob">系集 <strong class="mono">61%</strong> 的成員風速維持在 7 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>少雲、日照強，注意曬傷與中暑</li><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
-            </article><article class="panel">
-              <header><span>9/11 下午<em>12:00–17:00</em></span><span class="score s4">91</span></header>
-              <p class="limit">限制因素 <strong>風速</strong> 5.2 m/s　風浪讓呼吸管容易嗆水</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:87%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:84%" class="ok"></i></span><span class="pv mono">5.2 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.1 mm/48h</span></li></ul>
-              <p class="prob">系集 <strong class="mono">45%</strong> 的成員風速維持在 7 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>少雲、日照強，注意曬傷與中暑</li><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
-            </article></div></div><div class="detail" data-act="sup" hidden><p class="blurb">所有活動中最怕風的一項——站立姿勢等於一面帆，風速比浪高更能決定成敗。</p><div class="panels"><article class="panel">
-              <header><span>9/9 上午<em>6:00–11:00</em></span><span class="score s2">45</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 1.2 m　板身短時湧浪會讓站立平衡難以維持</p>
-              <ul class="parts"><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.7 m/s</span></li><li><span class="pl">浪高</span><span class="pbar"><i style="width:7%" class="mid"></i></span><span class="pv mono">1.2 m</span></li><li><span class="pl">陣風</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">4.4 m/s</span></li></ul>
-              <p class="prob">系集 <strong class="mono">45%</strong> 的成員風速維持在 5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
-            </article><article class="panel">
-              <header><span>9/9 下午<em>12:00–17:00</em></span><span class="score s3">60</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 1.1 m　板身短時湧浪會讓站立平衡難以維持</p>
-              <ul class="parts"><li><span class="pl">風速</span><span class="pbar"><i style="width:79%" class="ok"></i></span><span class="pv mono">4.0 m/s</span></li><li><span class="pl">浪高</span><span class="pbar"><i style="width:29%" class="mid"></i></span><span class="pv mono">1.1 m</span></li><li><span class="pl">陣風</span><span class="pbar"><i style="width:93%" class="ok"></i></span><span class="pv mono">5.5 m/s</span></li></ul>
-              <p class="prob">系集 <strong class="mono">58%</strong> 的成員風速維持在 5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
-            </article><article class="panel">
-              <header><span>9/10 上午<em>6:00–11:00</em></span><span class="score s4">84</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 0.8 m　板身短時湧浪會讓站立平衡難以維持</p>
-              <ul class="parts"><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.0 m/s</span></li><li><span class="pl">浪高</span><span class="pbar"><i style="width:55%" class="mid"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">陣風</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">4.2 m/s</span></li></ul>
-              <p class="prob">系集 <strong class="mono">55%</strong> 的成員風速維持在 5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
-            </article><article class="panel">
-              <header><span>9/10 下午<em>12:00–17:00</em></span><span class="score s4">86</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 0.8 m　板身短時湧浪會讓站立平衡難以維持</p>
-              <ul class="parts"><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.1 m/s</span></li><li><span class="pl">浪高</span><span class="pbar"><i style="width:60%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">陣風</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">3.3 m/s</span></li></ul>
-              <p class="prob">系集 <strong class="mono">52%</strong> 的成員風速維持在 5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
-            </article><article class="panel">
-              <header><span>9/11 上午<em>6:00–11:00</em></span><span class="score s3">60</span></header>
-              <p class="limit">限制因素 <strong>風速</strong> 5.3 m/s　站姿受風面積大，離岸風會把人吹向外海</p>
-              <ul class="parts"><li><span class="pl">風速</span><span class="pbar"><i style="width:50%" class="mid"></i></span><span class="pv mono">5.3 m/s</span></li><li><span class="pl">浪高</span><span class="pbar"><i style="width:64%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">陣風</span><span class="pbar"><i style="width:95%" class="ok"></i></span><span class="pv mono">5.4 m/s</span></li></ul>
-              <p class="prob">系集 <strong class="mono">45%</strong> 的成員風速維持在 5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>少雲、日照強，注意曬傷與中暑</li><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
-            </article><article class="panel">
-              <header><span>9/11 下午<em>12:00–17:00</em></span><span class="score s3">62</span></header>
-              <p class="limit">限制因素 <strong>風速</strong> 5.2 m/s　站姿受風面積大，離岸風會把人吹向外海</p>
-              <ul class="parts"><li><span class="pl">風速</span><span class="pbar"><i style="width:54%" class="mid"></i></span><span class="pv mono">5.2 m/s</span></li><li><span class="pl">浪高</span><span class="pbar"><i style="width:64%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">陣風</span><span class="pbar"><i style="width:97%" class="ok"></i></span><span class="pv mono">5.2 m/s</span></li></ul>
-              <p class="prob">系集 <strong class="mono">19%</strong> 的成員風速維持在 5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>少雲、日照強，注意曬傷與中暑</li><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
-            </article></div></div><div class="detail" data-act="surf" hidden><p class="blurb">唯一「要有浪才成立」的活動，評分邏輯與其他項目相反：沒浪等於不能玩。</p><div class="panels"><article class="panel">
+              <header><span>9/11 下午<em>12:00–17:00</em></span><span class="score s4">97</span></header>
+              <p class="limit">限制因素 <strong>風速</strong> 4.7 m/s　風生浪打亂水面，也讓船隻定位不穩</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">0.5 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:89%" class="ok"></i></span><span class="pv mono">4.7 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.1 mm/48h</span></li></ul>
+              <p class="prob">系集 <strong class="mono">42%</strong> 的成員風速維持在 6.5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>此時段平均雲量僅 13%，曬得很徹底</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+            </article></div></div><div class="detail" data-act="scuba" hidden><p class="blurb">比自由潛水耐受度高一些，主要卡在船潛的上下船安全與水下能見度。</p><div class="panels"><article class="panel">
               <header><span>9/9 上午<em>6:00–11:00</em></span><span class="score s4">100</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 1.2 m　浪太小推不動板，太大超出一般旅遊等級</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.2 m</span></li><li><span class="pl">週期</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">8.0 s</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.7 m/s</span></li></ul>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.9 m　上下船與水面集合的風險隨浪高快速上升</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">0.9 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.7 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.9 mm/48h</span></li></ul>
+              <p class="prob">系集 <strong class="mono">81%</strong> 的成員風速維持在 8 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>零星短暫降雨，帶件薄雨衣</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+            </article><article class="panel">
+              <header><span>9/9 下午<em>12:00–17:00</em></span><span class="score s4">100</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.8 m　上下船與水面集合的風險隨浪高快速上升</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">4.0 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.5 mm/48h</span></li></ul>
+              <p class="prob">系集 <strong class="mono">81%</strong> 的成員風速維持在 8 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>零星短暫降雨，帶件薄雨衣</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+            </article><article class="panel">
+              <header><span>9/10 上午<em>6:00–11:00</em></span><span class="score s4">100</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.6 m　上下船與水面集合的風險隨浪高快速上升</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">0.6 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.0 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">3.6 mm/48h</span></li></ul>
+              <p class="prob">系集 <strong class="mono">68%</strong> 的成員風速維持在 8 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+            </article><article class="panel">
+              <header><span>9/10 下午<em>12:00–17:00</em></span><span class="score s4">100</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.6 m　上下船與水面集合的風險隨浪高快速上升</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">0.6 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.1 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">3.6 mm/48h</span></li></ul>
+              <p class="prob">系集 <strong class="mono">68%</strong> 的成員風速維持在 8 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+            </article><article class="panel">
+              <header><span>9/11 上午<em>6:00–11:00</em></span><span class="score s4">100</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.5 m　上下船與水面集合的風險隨浪高快速上升</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">0.5 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.2 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.7 mm/48h</span></li></ul>
+              <p class="prob">系集 <strong class="mono">68%</strong> 的成員風速維持在 8 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>零星短暫降雨，帶件薄雨衣</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+            </article><article class="panel">
+              <header><span>9/11 下午<em>12:00–17:00</em></span><span class="score s4">100</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.5 m　上下船與水面集合的風險隨浪高快速上升</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">0.5 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">4.7 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.1 mm/48h</span></li></ul>
+              <p class="prob">系集 <strong class="mono">52%</strong> 的成員風速維持在 8 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>此時段平均雲量僅 13%，曬得很徹底</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+            </article></div></div><div class="detail" data-act="snorkel" hidden><p class="blurb">綠島最普及的活動。門檻比潛水低，但同樣被湧浪和濁度決定體驗好壞。</p><div class="panels"><article class="panel">
+              <header><span>9/9 上午<em>6:00–11:00</em></span><span class="score s4">90</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.9 m　岸邊礁石區的湧浪會讓入水與回岸變危險</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:76%" class="ok"></i></span><span class="pv mono">0.9 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.7 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.9 mm/48h</span></li></ul>
               <p class="prob">系集 <strong class="mono">71%</strong> 的成員風速維持在 7 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+              <ul class="notes"><li>零星短暫降雨，帶件薄雨衣</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
             </article><article class="panel">
               <header><span>9/9 下午<em>12:00–17:00</em></span><span class="score s4">93</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 1.1 m　浪太小推不動板，太大超出一般旅遊等級</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:86%" class="ok"></i></span><span class="pv mono">1.1 m</span></li><li><span class="pl">週期</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">8.0 s</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:99%" class="ok"></i></span><span class="pv mono">4.0 m/s</span></li></ul>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.8 m　岸邊礁石區的湧浪會讓入水與回岸變危險</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:84%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:99%" class="ok"></i></span><span class="pv mono">4.0 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.5 mm/48h</span></li></ul>
               <p class="prob">系集 <strong class="mono">74%</strong> 的成員風速維持在 7 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+              <ul class="notes"><li>零星短暫降雨，帶件薄雨衣</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
             </article><article class="panel">
-              <header><span>9/10 上午<em>6:00–11:00</em></span><span class="score s4">82</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 0.8 m　浪太小推不動板，太大超出一般旅遊等級</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:64%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">週期</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">8.3 s</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.0 m/s</span></li></ul>
+              <header><span>9/10 上午<em>6:00–11:00</em></span><span class="score s4">99</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.6 m　岸邊礁石區的湧浪會讓入水與回岸變危險</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:98%" class="ok"></i></span><span class="pv mono">0.6 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.0 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">3.6 mm/48h</span></li></ul>
               <p class="prob">系集 <strong class="mono">68%</strong> 的成員風速維持在 7 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+              <ul class="notes"><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
             </article><article class="panel">
-              <header><span>9/10 下午<em>12:00–17:00</em></span><span class="score s4">79</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 0.8 m　浪太小推不動板，太大超出一般旅遊等級</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:60%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">週期</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">8.4 s</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.1 m/s</span></li></ul>
+              <header><span>9/10 下午<em>12:00–17:00</em></span><span class="score s4">100</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.6 m　岸邊礁石區的湧浪會讓入水與回岸變危險</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">0.6 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.1 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">3.6 mm/48h</span></li></ul>
               <p class="prob">系集 <strong class="mono">68%</strong> 的成員風速維持在 7 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+              <ul class="notes"><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
             </article><article class="panel">
-              <header><span>9/11 上午<em>6:00–11:00</em></span><span class="score s3">71</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 0.8 m　浪太小推不動板，太大超出一般旅遊等級</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:52%" class="mid"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">週期</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">8.1 s</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:82%" class="ok"></i></span><span class="pv mono">5.3 m/s</span></li></ul>
+              <header><span>9/11 上午<em>6:00–11:00</em></span><span class="score s4">100</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.5 m　岸邊礁石區的湧浪會讓入水與回岸變危險</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">0.5 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.2 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.7 mm/48h</span></li></ul>
               <p class="prob">系集 <strong class="mono">61%</strong> 的成員風速維持在 7 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>少雲、日照強，注意曬傷與中暑</li><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+              <ul class="notes"><li>零星短暫降雨，帶件薄雨衣</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
             </article><article class="panel">
-              <header><span>9/11 下午<em>12:00–17:00</em></span><span class="score s3">71</span></header>
-              <p class="limit">限制因素 <strong>浪高</strong> 0.8 m　浪太小推不動板，太大超出一般旅遊等級</p>
-              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:52%" class="mid"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">週期</span><span class="pbar"><i style="width:99%" class="ok"></i></span><span class="pv mono">8.0 s</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:84%" class="ok"></i></span><span class="pv mono">5.2 m/s</span></li></ul>
+              <header><span>9/11 下午<em>12:00–17:00</em></span><span class="score s4">98</span></header>
+              <p class="limit">限制因素 <strong>風速</strong> 4.7 m/s　風浪讓呼吸管容易嗆水</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">0.5 m</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:91%" class="ok"></i></span><span class="pv mono">4.7 m/s</span></li><li><span class="pl">水下能見度</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.1 mm/48h</span></li></ul>
               <p class="prob">系集 <strong class="mono">45%</strong> 的成員風速維持在 7 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
-              <ul class="notes"><li>少雲、日照強，注意曬傷與中暑</li><li>UV 指數 9，屬過量級</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+              <ul class="notes"><li>此時段平均雲量僅 13%，曬得很徹底</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+            </article></div></div><div class="detail" data-act="sup" hidden><p class="blurb">所有活動中最怕風的一項——站立姿勢等於一面帆，風速比浪高更能決定成敗。</p><div class="panels"><article class="panel">
+              <header><span>9/9 上午<em>6:00–11:00</em></span><span class="score s4">80</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.9 m　板身短時湧浪會讓站立平衡難以維持</p>
+              <ul class="parts"><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.7 m/s</span></li><li><span class="pl">浪高</span><span class="pbar"><i style="width:48%" class="mid"></i></span><span class="pv mono">0.9 m</span></li><li><span class="pl">陣風</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">4.4 m/s</span></li></ul>
+              <p class="prob">系集 <strong class="mono">45%</strong> 的成員風速維持在 5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>零星短暫降雨，帶件薄雨衣</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+            </article><article class="panel">
+              <header><span>9/9 下午<em>12:00–17:00</em></span><span class="score s4">75</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.8 m　板身短時湧浪會讓站立平衡難以維持</p>
+              <ul class="parts"><li><span class="pl">風速</span><span class="pbar"><i style="width:79%" class="ok"></i></span><span class="pv mono">4.0 m/s</span></li><li><span class="pl">浪高</span><span class="pbar"><i style="width:60%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">陣風</span><span class="pbar"><i style="width:93%" class="ok"></i></span><span class="pv mono">5.5 m/s</span></li></ul>
+              <p class="prob">系集 <strong class="mono">58%</strong> 的成員風速維持在 5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>零星短暫降雨，帶件薄雨衣</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+            </article><article class="panel">
+              <header><span>9/10 上午<em>6:00–11:00</em></span><span class="score s4">93</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.6 m　板身短時湧浪會讓站立平衡難以維持</p>
+              <ul class="parts"><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.0 m/s</span></li><li><span class="pl">浪高</span><span class="pbar"><i style="width:78%" class="ok"></i></span><span class="pv mono">0.6 m</span></li><li><span class="pl">陣風</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">4.2 m/s</span></li></ul>
+              <p class="prob">系集 <strong class="mono">55%</strong> 的成員風速維持在 5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+            </article><article class="panel">
+              <header><span>9/10 下午<em>12:00–17:00</em></span><span class="score s4">94</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.6 m　板身短時湧浪會讓站立平衡難以維持</p>
+              <ul class="parts"><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.1 m/s</span></li><li><span class="pl">浪高</span><span class="pbar"><i style="width:82%" class="ok"></i></span><span class="pv mono">0.6 m</span></li><li><span class="pl">陣風</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">3.3 m/s</span></li></ul>
+              <p class="prob">系集 <strong class="mono">52%</strong> 的成員風速維持在 5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+            </article><article class="panel">
+              <header><span>9/11 上午<em>6:00–11:00</em></span><span class="score s4">96</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.5 m　板身短時湧浪會讓站立平衡難以維持</p>
+              <ul class="parts"><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.2 m/s</span></li><li><span class="pl">浪高</span><span class="pbar"><i style="width:90%" class="ok"></i></span><span class="pv mono">0.5 m</span></li><li><span class="pl">陣風</span><span class="pbar"><i style="width:95%" class="ok"></i></span><span class="pv mono">5.4 m/s</span></li></ul>
+              <p class="prob">系集 <strong class="mono">45%</strong> 的成員風速維持在 5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>零星短暫降雨，帶件薄雨衣</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+            </article><article class="panel">
+              <header><span>9/11 下午<em>12:00–17:00</em></span><span class="score s4">77</span></header>
+              <p class="limit">限制因素 <strong>風速</strong> 4.7 m/s　站姿受風面積大，離岸風會把人吹向外海</p>
+              <ul class="parts"><li><span class="pl">風速</span><span class="pbar"><i style="width:66%" class="ok"></i></span><span class="pv mono">4.7 m/s</span></li><li><span class="pl">浪高</span><span class="pbar"><i style="width:90%" class="ok"></i></span><span class="pv mono">0.5 m</span></li><li><span class="pl">陣風</span><span class="pbar"><i style="width:97%" class="ok"></i></span><span class="pv mono">5.2 m/s</span></li></ul>
+              <p class="prob">系集 <strong class="mono">19%</strong> 的成員風速維持在 5 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>此時段平均雲量僅 13%，曬得很徹底</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+            </article></div></div><div class="detail" data-act="surf" hidden><p class="blurb">唯一「要有浪才成立」的活動，評分邏輯與其他項目相反：沒浪等於不能玩。</p><div class="panels"><article class="panel">
+              <header><span>9/9 上午<em>6:00–11:00</em></span><span class="score s4">84</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.9 m　浪太小推不動板，太大超出一般旅遊等級</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:70%" class="ok"></i></span><span class="pv mono">0.9 m</span></li><li><span class="pl">週期</span><span class="pbar"><i style="width:96%" class="ok"></i></span><span class="pv mono">7.8 s</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.7 m/s</span></li></ul>
+              <p class="prob">系集 <strong class="mono">71%</strong> 的成員風速維持在 7 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>零星短暫降雨，帶件薄雨衣</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+            </article><article class="panel">
+              <header><span>9/9 下午<em>12:00–17:00</em></span><span class="score s4">77</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.8 m　浪太小推不動板，太大超出一般旅遊等級</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:60%" class="ok"></i></span><span class="pv mono">0.8 m</span></li><li><span class="pl">週期</span><span class="pbar"><i style="width:91%" class="ok"></i></span><span class="pv mono">7.6 s</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:99%" class="ok"></i></span><span class="pv mono">4.0 m/s</span></li></ul>
+              <p class="prob">系集 <strong class="mono">74%</strong> 的成員風速維持在 7 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>零星短暫降雨，帶件薄雨衣</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+            </article><article class="panel">
+              <header><span>9/10 上午<em>6:00–11:00</em></span><span class="score s2">49</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.6 m　浪太小推不動板，太大超出一般旅遊等級</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:24%" class="mid"></i></span><span class="pv mono">0.6 m</span></li><li><span class="pl">週期</span><span class="pbar"><i style="width:81%" class="ok"></i></span><span class="pv mono">7.0 s</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.0 m/s</span></li></ul>
+              <p class="prob">系集 <strong class="mono">68%</strong> 的成員風速維持在 7 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+            </article><article class="panel">
+              <header><span>9/10 下午<em>12:00–17:00</em></span><span class="score s2">42</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.6 m　浪太小推不動板，太大超出一般旅遊等級</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:16%" class="mid"></i></span><span class="pv mono">0.6 m</span></li><li><span class="pl">週期</span><span class="pbar"><i style="width:85%" class="ok"></i></span><span class="pv mono">7.3 s</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">1.1 m/s</span></li></ul>
+              <p class="prob">系集 <strong class="mono">68%</strong> 的成員風速維持在 7 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+            </article><article class="panel">
+              <header><span>9/11 上午<em>6:00–11:00</em></span><span class="score s1">0</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.5 m　浪太小推不動板，太大超出一般旅遊等級</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:2%" class="bad"></i></span><span class="pv mono">0.5 m</span></li><li><span class="pl">週期</span><span class="pbar"><i style="width:99%" class="ok"></i></span><span class="pv mono">8.0 s</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">2.2 m/s</span></li></ul>
+              <p class="prob">系集 <strong class="mono">61%</strong> 的成員風速維持在 7 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>零星短暫降雨，帶件薄雨衣</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
+            </article><article class="panel">
+              <header><span>9/11 下午<em>12:00–17:00</em></span><span class="score s1">0</span></header>
+              <p class="limit">限制因素 <strong>浪高</strong> 0.5 m　浪太小推不動板，太大超出一般旅遊等級</p>
+              <ul class="parts"><li><span class="pl">浪高</span><span class="pbar"><i style="width:2%" class="bad"></i></span><span class="pv mono">0.5 m</span></li><li><span class="pl">週期</span><span class="pbar"><i style="width:100%" class="ok"></i></span><span class="pv mono">9.5 s</span></li><li><span class="pl">風速</span><span class="pbar"><i style="width:91%" class="ok"></i></span><span class="pv mono">4.7 m/s</span></li></ul>
+              <p class="prob">系集 <strong class="mono">45%</strong> 的成員風速維持在 7 m/s 可行上限內<em>GEFS 0.5°・31 成員；僅風速有系集</em></p>
+              <ul class="notes"><li>此時段平均雲量僅 13%，曬得很徹底</li><li>UV 指數 9，屬過量級，防曬要補</li><li>海溫 29 °C，3 mm 防寒衣即可</li></ul>
             </article></div></div>
   </section>
 
@@ -507,7 +560,7 @@ footer a { color: var(--depth); }
     <h2>行程期間浪高</h2>
     <p class="lede">兩家獨立波浪模式。它們分岔的幅度就是浪高預報的不確定性——這個海域沒有公開的波浪系集，模式間差異是目前最好的替代指標。</p>
     <figure>
-      <svg viewBox="0 0 720 200" role="img" aria-label="行程期間浪高，兩家波浪模式"><line x1="38" x2="708" y1="122.8" y2="122.8" stroke="var(--rule)" stroke-width="1" /><text x="31" y="126.3" class="ax" text-anchor="end">0.5</text><line x1="38" x2="708" y1="71.7" y2="71.7" stroke="var(--rule)" stroke-width="1" /><text x="31" y="75.2" class="ax" text-anchor="end">1</text><line x1="38" x2="708" y1="20.5" y2="20.5" stroke="var(--rule)" stroke-width="1" /><text x="31" y="24.0" class="ax" text-anchor="end">1.5</text><line x1="38.0" x2="38.0" y1="14" y2="174" stroke="var(--rule)" stroke-width="1" /><text x="38.0" y="189" class="ax" text-anchor="middle">9/9</text><line x1="264.5" x2="264.5" y1="14" y2="174" stroke="var(--rule)" stroke-width="1" /><text x="264.5" y="189" class="ax" text-anchor="middle">9/10</text><line x1="491.0" x2="491.0" y1="14" y2="174" stroke="var(--rule)" stroke-width="1" /><text x="491.0" y="189" class="ax" text-anchor="middle">9/11</text><path d="M38.0 36.9 L47.4 36.9 L56.9 34.9 L66.3 36.9 L75.7 41.0 L85.2 43.1 L94.6 47.1 L104.1 51.2 L113.5 55.3 L122.9 57.4 L132.4 61.5 L141.8 63.5 L151.2 65.6 L160.7 69.7 L170.1 71.7 L179.5 73.7 L189.0 75.8 L198.4 77.8 L207.9 79.9 L217.3 79.9 L226.7 81.9 L236.2 81.9 L245.6 84.0 L255.0 84.0 L264.5 84.0 L273.9 86.0 L283.4 86.0 L292.8 86.0 L302.2 88.1 L311.7 88.1 L321.1 88.1 L330.5 90.1 L340.0 90.1 L349.4 90.1 L358.8 92.2 L368.3 92.2 L377.7 92.2 L387.2 94.2 L396.6 94.2 L406.0 94.2 L415.5 96.3 L424.9 96.3 L434.3 96.3 L443.8 94.2 L453.2 94.2 L462.6 92.2 L472.1 92.2 L481.5 90.1 L491.0 92.2 L500.4 92.2 L509.8 94.2 L519.3 96.3 L528.7 98.3 L538.1 100.3 L547.6 100.3 L557.0 98.3 L566.5 98.3 L575.9 98.3 L585.3 96.3 L594.8 96.3 L604.2 96.3 L613.6 98.3 L623.1 98.3 L632.5 98.3 L641.9 98.3 L651.4 98.3 L660.8 98.3 L670.3 100.3 L679.7 100.3 L689.1 100.3 L698.6 102.4 L708.0 102.4 L708.0 174 L38.0 174 Z" fill="var(--depth-fill)" /><path d="M38.0 36.9 L47.4 36.9 L56.9 34.9 L66.3 36.9 L75.7 41.0 L85.2 43.1 L94.6 47.1 L104.1 51.2 L113.5 55.3 L122.9 57.4 L132.4 61.5 L141.8 63.5 L151.2 65.6 L160.7 69.7 L170.1 71.7 L179.5 73.7 L189.0 75.8 L198.4 77.8 L207.9 79.9 L217.3 79.9 L226.7 81.9 L236.2 81.9 L245.6 84.0 L255.0 84.0 L264.5 84.0 L273.9 86.0 L283.4 86.0 L292.8 86.0 L302.2 88.1 L311.7 88.1 L321.1 88.1 L330.5 90.1 L340.0 90.1 L349.4 90.1 L358.8 92.2 L368.3 92.2 L377.7 92.2 L387.2 94.2 L396.6 94.2 L406.0 94.2 L415.5 96.3 L424.9 96.3 L434.3 96.3 L443.8 94.2 L453.2 94.2 L462.6 92.2 L472.1 92.2 L481.5 90.1 L491.0 92.2 L500.4 92.2 L509.8 94.2 L519.3 96.3 L528.7 98.3 L538.1 100.3 L547.6 100.3 L557.0 98.3 L566.5 98.3 L575.9 98.3 L585.3 96.3 L594.8 96.3 L604.2 96.3 L613.6 98.3 L623.1 98.3 L632.5 98.3 L641.9 98.3 L651.4 98.3 L660.8 98.3 L670.3 100.3 L679.7 100.3 L689.1 100.3 L698.6 102.4 L708.0 102.4" fill="none" stroke="var(--depth)" stroke-width="2" stroke-linejoin="round" /><path d="M38.0 71.7 L47.4 71.7 L56.9 73.7 L66.3 73.7 L75.7 75.8 L85.2 75.8 L94.6 77.8 L104.1 77.8 L113.5 79.9 L122.9 81.9 L132.4 81.9 L141.8 84.0 L151.2 86.0 L160.7 88.1 L170.1 90.1 L179.5 90.1 L189.0 90.1 L198.4 90.1 L207.9 90.1 L217.3 90.1 L226.7 90.1 L236.2 88.1 L245.6 88.1 L255.0 86.0 L264.5 84.0 L273.9 84.0 L283.4 81.9 L292.8 81.9 L302.2 84.0 L311.7 84.0 L321.1 84.0 L330.5 86.0 L340.0 86.0 L349.4 86.0 L358.8 88.1 L368.3 88.1 L377.7 88.1 L387.2 90.1 L396.6 90.1 L406.0 90.1 L415.5 92.2 L424.9 92.2 L434.3 92.2 L443.8 94.2" fill="none" stroke="var(--depth-2)" stroke-width="2" stroke-linejoin="round" /></svg>
+      <svg viewBox="0 0 720 200" role="img" aria-label="行程期間浪高，兩家波浪模式"><line x1="38" x2="708" y1="104.4" y2="104.4" stroke="var(--rule)" stroke-width="1" /><text x="31" y="107.9" class="ax" text-anchor="end">0.5</text><line x1="38" x2="708" y1="34.9" y2="34.9" stroke="var(--rule)" stroke-width="1" /><text x="31" y="38.4" class="ax" text-anchor="end">1</text><line x1="38.0" x2="38.0" y1="14" y2="174" stroke="var(--rule)" stroke-width="1" /><text x="38.0" y="189" class="ax" text-anchor="middle">9/9</text><line x1="264.5" x2="264.5" y1="14" y2="174" stroke="var(--rule)" stroke-width="1" /><text x="264.5" y="189" class="ax" text-anchor="middle">9/10</text><line x1="491.0" x2="491.0" y1="14" y2="174" stroke="var(--rule)" stroke-width="1" /><text x="491.0" y="189" class="ax" text-anchor="middle">9/11</text><path d="M38.0 40.4 L47.4 40.4 L56.9 43.2 L66.3 43.2 L75.7 46.0 L85.2 46.0 L94.6 48.8 L104.1 51.6 L113.5 54.3 L122.9 57.1 L132.4 57.1 L141.8 59.9 L151.2 62.7 L160.7 62.7 L170.1 65.5 L179.5 68.3 L189.0 68.3 L198.4 71.0 L207.9 71.0 L217.3 71.0 L226.7 71.0 L236.2 71.0 L245.6 73.8 L255.0 73.8 L264.5 76.6 L273.9 79.4 L283.4 82.2 L292.8 82.2 L302.2 85.0 L311.7 85.0 L321.1 87.7 L330.5 87.7 L340.0 90.5 L349.4 90.5 L358.8 93.3 L368.3 93.3 L377.7 93.3 L387.2 96.1 L396.6 96.1 L406.0 96.1 L415.5 96.1 L424.9 96.1 L434.3 96.1 L443.8 93.3 L453.2 93.3 L462.6 90.5 L472.1 87.7 L481.5 85.0 L491.0 87.7 L500.4 90.5 L509.8 93.3 L519.3 96.1 L528.7 98.9 L538.1 101.7 L547.6 104.4 L557.0 104.4 L566.5 107.2 L575.9 107.2 L585.3 107.2 L594.8 107.2 L604.2 107.2 L613.6 107.2 L623.1 107.2 L632.5 107.2 L641.9 104.4 L651.4 104.4 L660.8 101.7 L670.3 98.9 L679.7 96.1 L689.1 93.3 L698.6 87.7 L708.0 85.0 L708.0 174 L38.0 174 Z" fill="var(--depth-fill)" /><path d="M38.0 40.4 L47.4 40.4 L56.9 43.2 L66.3 43.2 L75.7 46.0 L85.2 46.0 L94.6 48.8 L104.1 51.6 L113.5 54.3 L122.9 57.1 L132.4 57.1 L141.8 59.9 L151.2 62.7 L160.7 62.7 L170.1 65.5 L179.5 68.3 L189.0 68.3 L198.4 71.0 L207.9 71.0 L217.3 71.0 L226.7 71.0 L236.2 71.0 L245.6 73.8 L255.0 73.8 L264.5 76.6 L273.9 79.4 L283.4 82.2 L292.8 82.2 L302.2 85.0 L311.7 85.0 L321.1 87.7 L330.5 87.7 L340.0 90.5 L349.4 90.5 L358.8 93.3 L368.3 93.3 L377.7 93.3 L387.2 96.1 L396.6 96.1 L406.0 96.1 L415.5 96.1 L424.9 96.1 L434.3 96.1 L443.8 93.3 L453.2 93.3 L462.6 90.5 L472.1 87.7 L481.5 85.0 L491.0 87.7 L500.4 90.5 L509.8 93.3 L519.3 96.1 L528.7 98.9 L538.1 101.7 L547.6 104.4 L557.0 104.4 L566.5 107.2 L575.9 107.2 L585.3 107.2 L594.8 107.2 L604.2 107.2 L613.6 107.2 L623.1 107.2 L632.5 107.2 L641.9 104.4 L651.4 104.4 L660.8 101.7 L670.3 98.9 L679.7 96.1 L689.1 93.3 L698.6 87.7 L708.0 85.0" fill="none" stroke="var(--depth)" stroke-width="2" stroke-linejoin="round" /><path d="M38.0 34.9 L47.4 34.9 L56.9 37.7 L66.3 37.7 L75.7 40.4 L85.2 40.4 L94.6 43.2 L104.1 43.2 L113.5 46.0 L122.9 48.8 L132.4 48.8 L141.8 51.6 L151.2 54.3 L160.7 57.1 L170.1 59.9 L179.5 59.9 L189.0 59.9 L198.4 59.9 L207.9 59.9 L217.3 59.9 L226.7 59.9 L236.2 57.1 L245.6 57.1 L255.0 54.3 L264.5 51.6 L273.9 51.6 L283.4 48.8 L292.8 48.8 L302.2 51.6 L311.7 51.6 L321.1 51.6 L330.5 54.3 L340.0 54.3 L349.4 54.3 L358.8 57.1 L368.3 57.1 L377.7 57.1 L387.2 59.9 L396.6 59.9 L406.0 59.9 L415.5 62.7 L424.9 62.7 L434.3 62.7 L443.8 65.5" fill="none" stroke="var(--depth-2)" stroke-width="2" stroke-linejoin="round" /></svg>
       <figcaption>
         <span><i style="background:var(--depth)"></i>GFS-Wave（16 天）</span>
         <span><i style="background:var(--depth-2)"></i>ECMWF WAM（14.8 天）</span>
@@ -534,7 +587,7 @@ footer a { color: var(--depth); }
     <h2>這份評估的限制</h2>
     <ul>
       <li><strong>門檻是經驗法則。</strong>各活動的浪高、風速界線來自潛店與水上活動業者的通用說法，未針對綠島任何一個特定點位校正。實際能不能下水，當地教練的判斷永遠優先。</li>
-      <li><strong>只有風速有系集。</strong>公開資料沒有這個海域的波浪系集，浪高的不確定性只能用兩家模式的差異估計（目前最大差 0.30 m，一致性中），這會低估真實的不確定範圍。</li>
+      <li><strong>只有風速有系集。</strong>公開資料沒有這個海域的波浪系集，浪高的不確定性只能用兩家模式的差異估計（目前最大差 0.26 m，一致性高），這會低估真實的不確定範圍。</li>
       <li><strong>能見度是推估值。</strong>用前 48 小時累積雨量當濁度代理，抓得到大雨後的濁流，但抓不到湧浪攪底、藻華或潮流帶來的變化。</li>
       <li><strong>格點不是潛點。</strong>浪高取自 0.25°（約 25 km）的海洋格點，代表外海整體海況，不是某個特定潛點背風面的實際狀況；同一天島嶼東西岸可以差很多。</li>
       <li><strong>這是一份快照。</strong>資料停在上方標示的時間，不會自動更新。十天以外的預報一定會變——建議在 9/5（出發前 4 天）與出發前一天各重新產生一次。</li>

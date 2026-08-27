@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react'
-import { ACTIVITIES, verdict, waveConfidence } from '../lib/activities'
+import { ACTIVITIES, sunVerdict, verdict, waveConfidence } from '../lib/activities'
 import { useEnsemble, useMarine } from '../lib/hooks'
 import type { Place } from '../lib/locations'
 import { WAVE_MODELS, ensembleById } from '../lib/models'
 import type { Forecast } from '../lib/openmeteo'
 import { alpha, type Palette } from '../lib/palette'
-import { buildHours, summarise, windLimit, type DaySummary } from '../lib/trip'
+import { buildHours, summarise, sunByDay, windLimit, type DaySummary } from '../lib/trip'
 import { dayLabel, weekdayLabel } from '../lib/weather'
 import TimeChart, { type ChartBand, type ChartSeries } from './TimeChart'
 import { Card, ErrorBox, Legend, Segmented, Spinner, StatTile } from './ui'
@@ -63,7 +63,7 @@ export default function TripPanel({
 
   const summary: DaySummary[] = useMemo(() => {
     const rows = buildHours({ hourly: forecast.hourly, models: forecast.models, marine: marine.data, waveModels: WAVE_IDS, daily: forecast.daily })
-    return summarise(rows, days, ens.data)
+    return summarise(rows, days, ens.data, sunByDay(forecast.daily, forecast.models))
   }, [forecast, marine.data, ens.data, days])
 
   const activity = ACTIVITIES.find((a) => a.id === range.activity) ?? ACTIVITIES[0]
@@ -199,7 +199,9 @@ export default function TripPanel({
                 ))}
                 <th className="num">浪高</th>
                 <th className="num">風速</th>
-                <th>旅遊舒適度</th>
+                <th className="num">雨量</th>
+                <th className="num">雲量</th>
+                <th className="num">舒適度</th>
               </tr>
             </thead>
             <tbody>
@@ -209,7 +211,7 @@ export default function TripPanel({
                     <td className="nowrap">
                       <strong>{dayLabel(d.day)}</strong> <span className="muted">週{weekdayLabel(d.day)}</span>
                     </td>
-                    <td colSpan={ACTIVITIES.length + 4} className="out-of-range">
+                    <td colSpan={ACTIVITIES.length + 6} className="out-of-range">
                       超出目前預報範圍（全球模式最長 16 天）——這天會在 {entersRange(d.day).getUTCMonth() + 1}/{entersRange(d.day).getUTCDate()} 進入預報，屆時再看
                     </td>
                   </tr>
@@ -235,7 +237,12 @@ export default function TripPanel({
                     })}
                     <td className="num">{c.conditions.waveHeight != null ? `${c.conditions.waveHeight.toFixed(1)} m` : '—'}</td>
                     <td className="num">{c.conditions.windSpeed != null ? `${c.conditions.windSpeed.toFixed(1)} m/s` : '—'}</td>
-                    <td className="num">{c.comfort.score != null ? `${c.comfort.score}` : '—'}</td>
+                    <td className="num">
+                      {c.stats.rainSum != null ? `${c.stats.rainSum.toFixed(1)} mm` : '—'}
+                      {c.stats.rainProbMax != null && <em className="sub"> {c.stats.rainProbMax.toFixed(0)}%</em>}
+                    </td>
+                    <td className="num">{c.stats.cloudMean != null ? `${c.stats.cloudMean.toFixed(0)} %` : '—'}</td>
+                    <td className="num muted">{c.comfort.score != null ? `${c.comfort.score}` : '—'}</td>
                   </tr>
                 ))
                 ),
@@ -250,6 +257,59 @@ export default function TripPanel({
             { label: '不建議 34 以下', color: palette.critical, swatch: 'band', note: '0 分代表有項目觸及否決門檻' },
           ]}
         />
+      </Card>
+
+      <Card
+        title="曬太陽與降雨"
+        subtitle="日照時數取自模式的逐日累計值，是「直射陽光超過門檻」的實際時數，不是雲量的反面。逐時的日照欄位在這裡不可用——它是二元的，雲量 45% 也照樣記整整一小時，所以日是日照最小的誠實單位；時段內的變化改看雲量。"
+      >
+        <div className="sun-grid">
+          {summary
+            .filter((d) => !outOfRange(d.day))
+            .map((d) => {
+              const sv = sunVerdict(d.sun.frac)
+              return (
+                <div key={d.day} className="sun-day">
+                  <div className="sun-date">
+                    <strong>{dayLabel(d.day)}</strong>
+                    <span>週{weekdayLabel(d.day)}</span>
+                    <em className={`chip tone-${sv.tone}`}>{sv.label}</em>
+                  </div>
+                  <div className="sun-headline">
+                    <span className="sun-hours">
+                      {d.sun.hours != null ? d.sun.hours.toFixed(1) : '—'}
+                      <em> 小時日照</em>
+                    </span>
+                    <span className="sun-bar" title={`日照佔白天 ${d.sun.frac != null ? (d.sun.frac * 100).toFixed(0) : '—'}%`}>
+                      <span style={{ width: `${(d.sun.frac ?? 0) * 100}%`, background: palette.warning }} />
+                    </span>
+                    <span className="sun-frac">{d.sun.frac != null ? `${(d.sun.frac * 100).toFixed(0)}% 白天` : '—'}</span>
+                  </div>
+                  {d.cells.map((c) => (
+                    <div key={c.part.id} className="sun-part">
+                      <span className="sun-label">{c.part.label}</span>
+                      <span className="sun-cloud">
+                        雲量 {c.stats.cloudMean != null ? `${c.stats.cloudMean.toFixed(0)}%` : '—'}
+                      </span>
+                      <span className="sun-rain">
+                        {c.stats.rainSum != null && c.stats.rainSum >= 1
+                          ? `雨 ${c.stats.rainSum.toFixed(1)} mm`
+                          : c.stats.rainSum != null && c.stats.rainSum >= 0.2
+                            ? `微量降雨 ${c.stats.rainSum.toFixed(1)} mm`
+                            : c.stats.rainProbMax != null && c.stats.rainProbMax >= 30
+                              ? `降水機率 ${c.stats.rainProbMax.toFixed(0)}%`
+                              : '無雨'}
+                        {c.stats.rainHours != null && c.stats.rainHours > 0 && <em> · {c.stats.rainHours} 小時有雨</em>}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )
+            })}
+        </div>
+        <p className="hint">
+          九月的綠島 UV 幾乎每天都是過量級——日照越充足，防曬與補水越關鍵。反過來說，雲多時水下光線會變暗，攝影與能見度的體感都會打折。
+        </p>
       </Card>
 
       <Card title="船班停航風險" subtitle="離島行程真正的成敗關鍵——活動條件再好，船不開就去不了。門檻取自這條航線常見的停航海況，是經驗法則，實際以當日船公司公告為準。">

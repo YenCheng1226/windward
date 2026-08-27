@@ -33,6 +33,41 @@ export interface Conditions {
   cloud: number | null
   precip: number | null
   uv: number | null
+  /** Chance of precipitation in this hour, %. Not every model provides it. */
+  rainProb: number | null
+}
+
+/**
+ * Quantities that only mean something over a window, never for a single hour:
+ * rain accumulates, sunshine accumulates, and a probability is taken at its worst.
+ * Kept apart from `Conditions` so the activity criteria can never accidentally
+ * score a sum as if it were an instantaneous value.
+ */
+export interface WindowStats {
+  /** Total rainfall over the window, mm. */
+  rainSum: number | null
+  /** Highest hourly chance of precipitation in the window, %. */
+  rainProbMax: number | null
+  /** Hours with meaningful rain (≥0.2 mm). The models emit a 0.1 mm/h drizzle floor
+   *  that would otherwise report "6 小時有雨" for a total of 0.6 mm. */
+  rainHours: number | null
+  /** Mean cloud cover over the window, %. */
+  cloudMean: number | null
+}
+
+/**
+ * Whole-day sunshine, taken from the API's own daily aggregate.
+ *
+ * The *hourly* `sunshine_duration` field cannot be used for this: it follows the WMO
+ * definition (direct irradiance above 120 W/m²) and is effectively binary, reporting a
+ * full 3600 s for an hour under 45 % cloud. Summing it produced "100 % 日照" on a day
+ * the daily aggregate scores at 74 %. The daily value is the finer calculation, so the
+ * day is the smallest honest unit for sunshine — cloud cover carries the within-day shape.
+ */
+export interface SunDay {
+  hours: number | null
+  /** Share of the day's daylight that is sunshine, 0–1. */
+  frac: number | null
 }
 
 type Key = keyof Conditions
@@ -259,27 +294,46 @@ export interface Comfort {
  * score because they trade off differently — an overcast day is pleasant for diving
  * and poor for a beach afternoon.
  */
-export function comfort(c: Conditions): Comfort {
+/**
+ * How good the day is *out of the water*: rain, sun, heat and UV.
+ *
+ * Kept separate from the activity score because these trade off in the opposite
+ * direction — an overcast afternoon is pleasant for a dive surface interval and
+ * disappointing for lying on the beach, and one number can't say both.
+ */
+export function comfort(c: Conditions, w?: WindowStats, sun?: SunDay): Comfort {
   const notes: string[] = []
   const parts: number[] = []
 
-  if (c.precip != null) {
-    const s = scoreMax(c.precip, 0.5, 5, 25)
-    parts.push(s)
-    if (c.precip >= 10) notes.push(`日雨量 ${c.precip.toFixed(0)} mm，戶外行程會受影響`)
-    else if (c.precip >= 2) notes.push('有零星降雨，帶件薄雨衣')
+  const rain = w?.rainSum ?? c.precip
+  if (rain != null) {
+    parts.push(scoreMax(rain, 0.5, 5, 25))
+    if (rain >= 15) notes.push(`累積雨量 ${rain.toFixed(0)} mm，戶外行程會被打斷`)
+    else if (rain >= 3) notes.push(`累積雨量 ${rain.toFixed(1)} mm，有明顯降雨`)
+    else if (rain >= 0.5) notes.push('零星短暫降雨，帶件薄雨衣')
+    else if (rain >= 0.2) notes.push('僅微量降雨，影響不大')
   }
-  if (c.cloud != null) {
-    // Neither overcast nor cloudless is ideal — some cloud keeps the heat down.
-    parts.push(scoreRange(c.cloud, [-1, 0, 10, 55, 85, 101]))
-    if (c.cloud >= 85) notes.push('整天陰天，水下光線會偏暗')
-    else if (c.cloud <= 15) notes.push('少雲、日照強，注意曬傷與中暑')
+  if (w?.rainProbMax != null && w.rainProbMax >= 50 && (rain ?? 0) < 3) {
+    notes.push(`降水機率一度達 ${w.rainProbMax.toFixed(0)}%，雨下不下得成還不確定`)
   }
+
+  if (sun?.frac != null) {
+    // Sunshine is what people mean by "會不會出太陽" — score the day's own figure.
+    parts.push(scoreRange(sun.frac * 100, [-1, 5, 35, 90, 101, 102]))
+    notes.push(`全日 ${sun.hours!.toFixed(1)} 小時日照，佔白天 ${(sun.frac * 100).toFixed(0)}%——${sunVerdict(sun.frac).label}`)
+  }
+  const cloud = w?.cloudMean ?? c.cloud
+  if (cloud != null) {
+    parts.push(scoreRange(cloud, [-1, 0, 10, 55, 85, 101]))
+    if (cloud >= 85) notes.push(`此時段平均雲量 ${cloud.toFixed(0)}%，幾乎全陰，水下光線會偏暗`)
+    else if (cloud <= 20) notes.push(`此時段平均雲量僅 ${cloud.toFixed(0)}%，曬得很徹底`)
+  }
+
   if (c.apparentTemp != null) {
     parts.push(scoreRange(c.apparentTemp, [18, 22, 25, 31, 34, 38]))
     if (c.apparentTemp >= 34) notes.push(`體感 ${c.apparentTemp.toFixed(0)} °C，岸上等待時容易熱衰竭`)
   }
-  if (c.uv != null && c.uv >= 8) notes.push(`UV 指數 ${c.uv.toFixed(0)}，屬過量級`)
+  if (c.uv != null && c.uv >= 8 && (sun?.frac ?? 1) >= 0.25) notes.push(`UV 指數 ${c.uv.toFixed(0)}，屬過量級，防曬要補`)
   if (c.sst != null) {
     if (c.sst >= 27) notes.push(`海溫 ${c.sst.toFixed(0)} °C，3 mm 防寒衣即可`)
     else if (c.sst >= 24) notes.push(`海溫 ${c.sst.toFixed(0)} °C，長時間浸泡建議 5 mm`)
@@ -288,6 +342,26 @@ export function comfort(c: Conditions): Comfort {
   if (!parts.length) return { score: null, notes }
   return { score: Math.round(100 * (parts.reduce((a, b) => a + b, 0) / parts.length)), notes }
 }
+
+export interface SunVerdict {
+  label: string
+  tone: 'good' | 'warning' | 'critical' | 'muted'
+}
+
+/**
+ * Plain-language answer to "會不會出太陽". Bands are on the share of daylight that
+ * is direct sun, not on cloud cover — 70 % thin high cloud still tans you, 40 % of
+ * thick cumulus at the wrong moment does not.
+ */
+export function sunVerdict(sunFrac: number | null): SunVerdict {
+  if (sunFrac == null) return { label: '無資料', tone: 'muted' }
+  const pct = sunFrac * 100
+  if (pct >= 60) return { label: '陽光充足', tone: 'good' }
+  if (pct >= 35) return { label: '陽光普通', tone: 'good' }
+  if (pct >= 15) return { label: '偶爾露臉', tone: 'warning' }
+  return { label: '幾乎沒太陽', tone: 'critical' }
+}
+
 
 /**
  * Confidence in the wave forecast, from the disagreement between the two wave models.

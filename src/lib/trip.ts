@@ -6,7 +6,7 @@
  * static snapshot report.
  */
 import type { Conditions } from './activities'
-import { ACTIVITIES, comfort, ferryRisk, scoreActivity, type ActivityScore, type Comfort, type FerryRisk } from './activities'
+import { ACTIVITIES, comfort, ferryRisk, scoreActivity, type ActivityScore, type Comfort, type FerryRisk, type SunDay, type WindowStats } from './activities'
 import type { Block, EnsembleData, Marine } from './openmeteo'
 
 /** Daylight windows people actually book activities in. */
@@ -110,6 +110,7 @@ export function buildHours({ hourly, models, marine, waveModels, daily }: BuildI
         cloud: firstOf(hourly.vars.cloud_cover, models, i),
         precip: firstOf(hourly.vars.precipitation, models, i),
         uv: uvByDay.get(dayOf(t)) ?? null,
+        rainProb: firstOf(hourly.vars.precipitation_probability, models, i),
       },
     }
   })
@@ -129,9 +130,24 @@ const worst = (xs: (number | null)[]): number | null => {
 }
 
 /** Representative conditions for one daypart: medians, but the sea state at its worst. */
-export function aggregate(rows: HourRow[]): { conditions: Conditions; waveSpread: number | null } {
+export function aggregate(rows: HourRow[]): { conditions: Conditions; waveSpread: number | null; stats: WindowStats } {
   const col = (f: (c: Conditions) => number | null) => rows.map((r) => f(r.conditions))
+
+  const sum = (xs: (number | null)[]): number | null => {
+    const v = xs.filter((x): x is number => x != null && Number.isFinite(x))
+    return v.length ? v.reduce((a, b) => a + b, 0) : null
+  }
+  const rainCol = col((c) => c.precip)
+  const cloudCol = col((c) => c.cloud).filter((x): x is number => x != null)
+  const stats: WindowStats = {
+    rainSum: sum(rainCol),
+    rainProbMax: worst(col((c) => c.rainProb)),
+    rainHours: rainCol.some((x) => x != null) ? rainCol.filter((x) => (x ?? 0) >= 0.2).length : null,
+    cloudMean: cloudCol.length ? cloudCol.reduce((a, b) => a + b, 0) / cloudCol.length : null,
+  }
+
   return {
+    stats,
     // Wave and gust use the worst hour in the window: an afternoon that turns at 15:00
     // is not an afternoon you book. Everything else is representative.
     conditions: {
@@ -145,6 +161,7 @@ export function aggregate(rows: HourRow[]): { conditions: Conditions; waveSpread
       cloud: median(col((c) => c.cloud)),
       precip: median(col((c) => c.precip)),
       uv: median(col((c) => c.uv)),
+      rainProb: worst(col((c) => c.rainProb)),
     },
     waveSpread: worst(rows.map((r) => r.waveSpread)),
   }
@@ -154,6 +171,7 @@ export interface DaypartCell {
   day: number
   part: (typeof DAYPARTS)[number]
   conditions: Conditions
+  stats: WindowStats
   waveSpread: number | null
   scores: Record<string, ActivityScore>
   comfort: Comfort
@@ -169,6 +187,10 @@ export interface DaySummary {
   waveMax: number | null
   gustMax: number | null
   comfort: Comfort
+  /** Whole-day rain totals and mean cloud. */
+  stats: WindowStats
+  /** Whole-day sunshine, from the API's daily aggregate. */
+  sun: SunDay
 }
 
 /**
@@ -201,7 +223,21 @@ export function windLimit(activityId: string): number {
   return c?.ok ?? 8
 }
 
-export function summarise(rows: HourRow[], days: number[], ens: EnsembleData | null): DaySummary[] {
+/** Day-of -> whole-day sunshine, read straight from the API's daily aggregate. */
+export function sunByDay(daily: Block, models: string[]): Map<number, SunDay> {
+  const out = new Map<number, SunDay>()
+  daily.time.forEach((t, i) => {
+    const sun = firstOf(daily.vars.sunshine_duration, models, i)
+    const light = firstOf(daily.vars.daylight_duration, models, i)
+    out.set(dayOf(t), {
+      hours: sun != null ? sun / 3600 : null,
+      frac: sun != null && light ? Math.min(1, sun / light) : null,
+    })
+  })
+  return out
+}
+
+export function summarise(rows: HourRow[], days: number[], ens: EnsembleData | null, sun?: Map<number, SunDay>): DaySummary[] {
   const byDay = new Map<number, HourRow[]>()
   for (const r of rows) {
     const d = dayOf(r.time)
@@ -213,7 +249,7 @@ export function summarise(rows: HourRow[], days: number[], ens: EnsembleData | n
     const dayRows = byDay.get(day) ?? []
     const cells: DaypartCell[] = DAYPARTS.map((part) => {
       const slice = dayRows.filter((r) => hourOf(r.time) >= part.from && hourOf(r.time) <= part.to)
-      const { conditions, waveSpread } = aggregate(slice)
+      const { conditions, waveSpread, stats } = aggregate(slice)
       const from = day + part.from * 3600000
       const to = day + part.to * 3600000
       const scores: Record<string, ActivityScore> = {}
@@ -222,12 +258,13 @@ export function summarise(rows: HourRow[], days: number[], ens: EnsembleData | n
         scores[a.id] = scoreActivity(a, conditions)
         windProb[a.id] = windProbability(ens, from, to, windLimit(a.id))
       }
-      return { day, part, conditions, waveSpread, scores, comfort: comfort(conditions), windProb }
+      return { day, part, conditions, waveSpread, stats, scores, comfort: comfort(conditions, stats), windProb }
     })
 
     const waveMax = worst(dayRows.map((r) => r.conditions.waveHeight))
     const gustMax = worst(dayRows.map((r) => r.conditions.windGust))
-    const { conditions: dayCond } = aggregate(dayRows)
-    return { day, cells, ferry: ferryRisk(waveMax, gustMax), waveMax, gustMax, comfort: comfort(dayCond) }
+    const { conditions: dayCond, stats: dayStats } = aggregate(dayRows)
+    const daySun = sun?.get(day) ?? { hours: null, frac: null }
+    return { day, cells, ferry: ferryRisk(waveMax, gustMax), waveMax, gustMax, comfort: comfort(dayCond, dayStats, daySun), stats: dayStats, sun: daySun }
   })
 }
