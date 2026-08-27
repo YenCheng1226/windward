@@ -88,7 +88,19 @@ export interface EnsembleData {
 
 class ApiError extends Error {}
 
-const localMs = (iso: string) => Date.parse(iso + 'Z')
+/**
+ * Parse a naive local timestamp into the shifted space described above.
+ *
+ * The daily block returns date-only strings ("2026-08-27") while the hourly block
+ * returns "2026-08-27T09:00". Appending the Z to a date-only value yields
+ * "2026-08-27Z", which V8 tolerates but WebKit rejects as invalid — that made every
+ * daily label and axis tick render as NaN in Safari while Chrome looked fine. Expand
+ * the date-only form to a full timestamp before stamping the zone.
+ */
+function localMs(iso: string): number {
+  const full = iso.length === 10 ? `${iso}T00:00:00` : iso
+  return Date.parse(`${full}Z`)
+}
 
 async function getJson(url: string, signal?: AbortSignal, attempt = 0): Promise<Record<string, any>> {
   const res = await fetch(url, { signal })

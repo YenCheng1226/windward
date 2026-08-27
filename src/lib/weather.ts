@@ -185,13 +185,20 @@ export function modelSpread(byModel: Record<string, (number | null)[]>, length: 
 
 const pad = (n: number) => String(n).padStart(2, '0')
 
-/** These read UTC fields on purpose — see the time note in openmeteo.ts. */
-export const hourLabel = (ms: number) => `${pad(new Date(ms).getUTCHours())}:00`
-export const dayLabel = (ms: number) => `${new Date(ms).getUTCMonth() + 1}/${new Date(ms).getUTCDate()}`
-export const weekdayLabel = (ms: number) => '日一二三四五六'[new Date(ms).getUTCDay()]
-export const dateTimeLabel = (ms: number) => `${dayLabel(ms)}（${weekdayLabel(ms)}）${hourLabel(ms)}`
+const ok = (ms: number) => Number.isFinite(ms)
+
+/**
+ * These read UTC fields on purpose — see the time note in openmeteo.ts.
+ * An unparseable timestamp degrades to an em dash; printing "NaN/NaN" into a date
+ * cell is worse than admitting the value is missing.
+ */
+export const hourLabel = (ms: number) => (ok(ms) ? `${pad(new Date(ms).getUTCHours())}:00` : '—')
+export const dayLabel = (ms: number) => (ok(ms) ? `${new Date(ms).getUTCMonth() + 1}/${new Date(ms).getUTCDate()}` : '—')
+export const weekdayLabel = (ms: number) => (ok(ms) ? '日一二三四五六'[new Date(ms).getUTCDay()] : '—')
+export const dateTimeLabel = (ms: number) => (ok(ms) ? `${dayLabel(ms)}（${weekdayLabel(ms)}）${hourLabel(ms)}` : '—')
 
 export function relativeDay(ms: number, nowMs: number): string {
+  if (!Number.isFinite(ms)) return '—'
   // Calendar-day difference: a 16:00 "now" must still call today's 00:00 row 今天.
   const day = (t: number) => Math.floor(t / 86400000)
   const d = day(ms) - day(nowMs)

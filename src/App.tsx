@@ -30,22 +30,37 @@ const WIND_UNITS = [
   { value: 'kn' as const, label: '節' },
 ]
 
-/** Read a persisted setting, tolerating private-browsing storage failures. */
-function persisted<T>(key: string, fallback: T): T {
+/**
+ * Read a persisted setting, tolerating private-browsing storage failures.
+ *
+ * `valid` is mandatory because a stored value is untrusted input: a stale or
+ * hand-edited entry (a bare `null` is enough) otherwise reaches render and takes the
+ * whole page down with it. Anything that fails the check falls back silently.
+ */
+function persisted<T>(key: string, fallback: T, valid: (v: unknown) => boolean): T {
   try {
     const raw = localStorage.getItem(key)
-    return raw ? (JSON.parse(raw) as T) : fallback
+    if (!raw) return fallback
+    const parsed = JSON.parse(raw) as unknown
+    return valid(parsed) ? (parsed as T) : fallback
   } catch {
     return fallback
   }
 }
 
+const isPlace = (v: unknown): v is Place =>
+  typeof v === 'object' && v !== null && typeof (v as Place).name === 'string' && Number.isFinite((v as Place).lat) && Number.isFinite((v as Place).lon)
+
+const isModelList = (v: unknown) => Array.isArray(v) && v.length > 0 && v.every((m) => DETERMINISTIC.some((d) => d.id === m))
+
+const isWindUnit = (v: unknown) => v === 'ms' || v === 'kmh' || v === 'kn'
+
 export default function App() {
   const [palette, themeChoice, setTheme] = useTheme()
-  const [place, setPlace] = useState<Place>(() => persisted('place', DEFAULT_PLACE))
+  const [place, setPlace] = useState<Place>(() => persisted('place', DEFAULT_PLACE, isPlace))
   const [tab, setTab] = useState<Tab>('overview')
-  const [models, setModels] = useState<string[]>(() => persisted('models', DEFAULT_MODELS))
-  const [windUnit, setWindUnit] = useState<'ms' | 'kmh' | 'kn'>(() => persisted('windUnit', 'ms' as const))
+  const [models, setModels] = useState<string[]>(() => persisted('models', DEFAULT_MODELS, isModelList))
+  const [windUnit, setWindUnit] = useState<'ms' | 'kmh' | 'kn'>(() => persisted('windUnit', 'ms' as const, isWindUnit))
 
   // The "now" line is per-session, not per-render, so charts don't jitter on every update.
   const [nowMs] = useState(() => {
