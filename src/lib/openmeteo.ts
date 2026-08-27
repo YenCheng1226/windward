@@ -128,6 +128,13 @@ function splitKey(key: string, models: string[]): { variable: string; model: str
   return models.length === 1 ? { variable: key, model: models[0] } : null
 }
 
+/**
+ * Reject the placeholder unit the API sends for variables a model doesn't provide.
+ * It arrives as the literal string "undefined", not null, so a `?? ''` fallback never
+ * fires and the word leaks straight into column headers.
+ */
+const cleanUnit = (u: string | undefined): string | undefined => (!u || u === 'undefined' ? undefined : u)
+
 function parseBlock(raw: Record<string, any> | undefined, units: Record<string, string> | undefined, models: string[]): Block {
   const block: Block = { time: [], vars: {}, units: {} }
   if (!raw?.time) return block
@@ -141,7 +148,7 @@ function parseBlock(raw: Record<string, any> | undefined, units: Record<string, 
     const col = raw[key] as (number | string | null)[]
     const values = col.map((v) => (typeof v === 'string' ? localMs(v) : v))
     ;(block.vars[variable] ??= {})[model] = values
-    const u = units?.[key]
+    const u = cleanUnit(units?.[key])
     if (u) block.units[variable] = u
   }
   return block
@@ -213,7 +220,7 @@ export async function fetchEnsemble(q: EnsembleQuery, signal?: AbortSignal): Pro
     lon: json.longitude,
     elevation: json.elevation,
     time: (h.time as string[]).map(localMs),
-    unit: (json.hourly_units as Record<string, string>)[keys[0]] ?? '',
+    unit: cleanUnit((json.hourly_units as Record<string, string>)[keys[0]]) ?? '',
     members: keys.map((k) => h[k] as (number | null)[]),
   }
 }

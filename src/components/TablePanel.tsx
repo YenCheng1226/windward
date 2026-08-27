@@ -33,10 +33,12 @@ export default function TablePanel({ forecast, palette, placeName }: { forecast:
   const label = (v: string) => (grain === 'hourly' ? VAR_LABELS[v] ?? v : DAILY_LABELS[v] ?? v)
 
   const available = forecast.models.filter((m) => block.vars[cols[0]]?.[m]?.some((v) => v != null))
+  // Every model returns temperature, so `available` is never empty in practice — but a
+  // model list that somehow yields nothing must not render `undefined` as a model name.
   const active = available.includes(model) ? model : available[0]
 
   const rows = useMemo(() => {
-    const present = cols.filter((c) => block.vars[c]?.[active])
+    const present = cols.filter((c) => block.vars[c]?.[active]?.some((v) => v != null))
     return { present, n: block.time.length }
   }, [block, cols, active])
 
