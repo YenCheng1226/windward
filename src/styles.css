@@ -618,3 +618,15 @@ a { color: var(--series-1); }
 .actions { margin: 0; padding-left: 20px; font-size: 13.5px; line-height: 1.85; color: var(--text-secondary); }
 .actions li { margin-bottom: 4px; }
 .actions li::marker { color: var(--series-1); font-weight: 600; }
+
+.sun-split {
+  margin: 0 0 8px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.sun-split strong { color: var(--text-primary); }

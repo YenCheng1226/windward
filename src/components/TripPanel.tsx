@@ -272,7 +272,11 @@ export default function TripPanel({
           {summary
             .filter((d) => !outOfRange(d.day))
             .map((d) => {
-              const sv = sunVerdict(d.sun.frac)
+              const spread = d.sun.min != null && d.sun.max != null ? d.sun.max - d.sun.min : null
+              const split = spread != null && spread >= 4
+              // One model is not a consensus; a lone value must not read as confidence.
+              const thin = d.sun.models > 0 && d.sun.models < 2
+              const sv = sunVerdict(d.sun.frac, spread)
               return (
                 <div key={d.day} className="sun-day">
                   <div className="sun-date">
@@ -290,6 +294,17 @@ export default function TripPanel({
                     </span>
                     <span className="sun-frac">{d.sun.frac != null ? `${(d.sun.frac * 100).toFixed(0)}% 白天` : '—'}</span>
                   </div>
+                  {(split || thin) && (
+                    <p className="sun-split">
+                      {split ? (
+                        <>
+                          {d.sun.models} 家模式給出 <strong>{d.sun.min!.toFixed(1)}–{d.sun.max!.toFixed(1)} 小時</strong>，差距 {spread!.toFixed(1)} 小時——這天有沒有太陽現在說不準，上面是中位數。
+                        </>
+                      ) : (
+                        <>這天只有 <strong>1 家模式</strong>有日照資料（其餘模式的預報時距已到），沒有第二個意見可以對照。</>
+                      )}
+                    </p>
+                  )}
                   {d.cells.map((c) => (
                     <div key={c.part.id} className="sun-part">
                       <span className="sun-label">{c.part.label}</span>
@@ -313,7 +328,7 @@ export default function TripPanel({
             })}
         </div>
         <p className="hint">
-          九月的綠島 UV 幾乎每天都是過量級——日照越充足，防曬與補水越關鍵。反過來說，雲多時水下光線會變暗，攝影與能見度的體感都會打折。
+          日照與雲量看起來矛盾是正常的：日照只看直射陽光有沒有超過 120 W/m² 的門檻，薄卷雲蓋滿天也可能達標，所以「雲量 95% 但日照 9 小時」代表天空是白的、太陽照得到。真正遮掉太陽的是厚積雲，那時兩個數字才會一起變差。
         </p>
       </Card>
 

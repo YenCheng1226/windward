@@ -265,9 +265,16 @@ export function sunByDay(daily: Block, models: string[]): Map<number, SunDay> {
   daily.time.forEach((t, i) => {
     const sun = medianOf(daily.vars.sunshine_duration, models, i)
     const light = medianOf(daily.vars.daylight_duration, models, i)
+    const all = models
+      .map((m) => daily.vars.sunshine_duration?.[m]?.[i])
+      .filter((v): v is number => v != null && Number.isFinite(v))
+      .map((v) => v / 3600)
     out.set(dayOf(t), {
       hours: sun != null ? sun / 3600 : null,
       frac: sun != null && light ? Math.min(1, sun / light) : null,
+      min: all.length ? Math.min(...all) : null,
+      max: all.length ? Math.max(...all) : null,
+      models: all.length,
     })
   })
   return out
@@ -300,7 +307,7 @@ export function summarise(rows: HourRow[], days: number[], ens: EnsembleData | n
     const waveMax = worst(dayRows.map((r) => r.conditions.waveHeight))
     const gustMax = worst(dayRows.map((r) => r.conditions.windGust))
     const { conditions: dayCond, stats: dayStats } = aggregate(dayRows)
-    const daySun = sun?.get(day) ?? { hours: null, frac: null }
+    const daySun: SunDay = sun?.get(day) ?? { hours: null, frac: null, min: null, max: null, models: 0 }
     return { day, cells, ferry: ferryRisk(waveMax, gustMax), waveMax, gustMax, comfort: comfort(dayCond, dayStats, daySun), stats: dayStats, sun: daySun }
   })
 }

@@ -65,9 +65,15 @@ export interface WindowStats {
  * day is the smallest honest unit for sunshine — cloud cover carries the within-day shape.
  */
 export interface SunDay {
+  /** Median across models. */
   hours: number | null
   /** Share of the day's daylight that is sunshine, 0–1. */
   frac: number | null
+  /** Range across models, in hours — sunshine is the least agreed-on field there is. */
+  min: number | null
+  max: number | null
+  /** How many models produced a value. */
+  models: number
 }
 
 type Key = keyof Conditions
@@ -320,7 +326,17 @@ export function comfort(c: Conditions, w?: WindowStats, sun?: SunDay): Comfort {
   if (sun?.frac != null) {
     // Sunshine is what people mean by "會不會出太陽" — score the day's own figure.
     parts.push(scoreRange(sun.frac * 100, [-1, 5, 35, 90, 101, 102]))
-    notes.push(`全日 ${sun.hours!.toFixed(1)} 小時日照，佔白天 ${(sun.frac * 100).toFixed(0)}%——${sunVerdict(sun.frac).label}`)
+    const spread = sun.min != null && sun.max != null ? sun.max - sun.min : null
+    notes.push(
+      spread != null && spread >= 4
+        ? `日照時數模式分歧極大：${sun.min!.toFixed(1)}–${sun.max!.toFixed(1)} 小時（中位數 ${sun.hours!.toFixed(1)}），這天有沒有太陽現在說不準`
+        : `全日 ${sun.hours!.toFixed(1)} 小時日照，佔白天 ${(sun.frac * 100).toFixed(0)}%——${sunVerdict(sun.frac, spread).label}`,
+    )
+  }
+  // Cloud and sunshine routinely look contradictory because they measure different
+  // things; say so rather than leaving the reader to assume one of them is broken.
+  if (sun?.frac != null && sun.frac >= 0.5 && (w?.cloudMean ?? 0) >= 80) {
+    notes.push('雲量高但日照仍多，代表以薄雲為主——直射陽光穿得過，但天空看起來是白的')
   }
   const cloud = w?.cloudMean ?? c.cloud
   if (cloud != null) {
@@ -349,12 +365,19 @@ export interface SunVerdict {
 }
 
 /**
- * Plain-language answer to "會不會出太陽". Bands are on the share of daylight that
- * is direct sun, not on cloud cover — 70 % thin high cloud still tans you, 40 % of
- * thick cumulus at the wrong moment does not.
+ * Plain-language answer to "會不會出太陽".
+ *
+ * Bands are on the share of daylight that is direct sun, not on cloud cover — 70 %
+ * thin high cloud still tans you, 40 % of thick cumulus at the wrong moment does not.
+ *
+ * `spreadHours` overrides everything when the models disagree badly, because they do:
+ * for 綠島 on 2026-09-09 the three models gave 0.0 h, 9.0 h and 12.0 h for the same
+ * day. A median of 9 h presented as 「陽光充足」 would be a confident answer to a
+ * question the models have not agreed on, which is worse than admitting the split.
  */
-export function sunVerdict(sunFrac: number | null): SunVerdict {
+export function sunVerdict(sunFrac: number | null, spreadHours?: number | null): SunVerdict {
   if (sunFrac == null) return { label: '無資料', tone: 'muted' }
+  if (spreadHours != null && spreadHours >= 4) return { label: '模式分歧極大', tone: 'warning' }
   const pct = sunFrac * 100
   if (pct >= 60) return { label: '陽光充足', tone: 'good' }
   if (pct >= 35) return { label: '陽光普通', tone: 'good' }
