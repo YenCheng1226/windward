@@ -7,7 +7,8 @@ import { useTripData, type TripWindow } from '../lib/useTrip'
 import { buildHtmlReport, downloadHtml, exportPng } from '../lib/exportReport'
 import { dayLabel, weekdayLabel } from '../lib/weather'
 import { RiskStrip, SituationPlot, statusColor } from './RiskDiagrams'
-import { Card, ErrorBox, Spinner } from './ui'
+import { Card, ErrorBox, Segmented, Spinner } from './ui'
+import { TOLERANCE_LABEL, type Tolerance } from '../lib/activities'
 import LocationPicker from './LocationPicker'
 
 const CONF_TONE: Record<Confidence, 'good' | 'warning' | 'critical'> = { 高: 'good', 中: 'warning', 低: 'critical' }
@@ -125,7 +126,7 @@ export default function RiskPanel({
     <>
       <Card
         title={`${place.name} ${rangeLabel} 行程評估`}
-        subtitle={`資料時間 ${generated}・距出發 ${t.leadDays} 天・${forecast.models.length} 家大氣模式 + 系集 + 兩家波浪模式 + 熱帶系統`}
+        subtitle={`資料時間 ${generated}・距出發 ${t.leadDays} 天・${forecast.models.length} 家大氣模式 + 系集 + 兩家波浪模式 + 熱帶系統・門檻容許度「${TOLERANCE_LABEL[range.tolerance].name}」（${TOLERANCE_LABEL[range.tolerance].blurb}）`}
         actions={
           <div className="toolbar">
             <button className="btn" onClick={savePng} disabled={busy != null}>
@@ -168,6 +169,19 @@ export default function RiskPanel({
             />
           </label>
           <span className="trip-len">{Math.round((dayOfMs(range.to) - dayOfMs(range.from)) / DAY) + 1} 天</span>
+          <label className="field">
+            <span>容許度</span>
+            <Segmented
+              ariaLabel="活動門檻的容許度"
+              value={range.tolerance}
+              onChange={(v) => onRangeChange({ ...range, tolerance: v as Tolerance })}
+              options={(['cautious', 'standard', 'bold'] as Tolerance[]).map((t) => ({
+                value: t,
+                label: TOLERANCE_LABEL[t].name,
+                title: TOLERANCE_LABEL[t].blurb,
+              }))}
+            />
+          </label>
           <span className="trip-nudge">
             <button className="btn tiny" onClick={() => shift(-1)} title="整段行程提前一天">
               ← 前一天

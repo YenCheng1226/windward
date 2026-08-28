@@ -8,7 +8,7 @@
  * defaults, never throw on the way to the first render.
  */
 import { DETERMINISTIC } from './models'
-import { ACTIVITIES } from './activities'
+import { ACTIVITIES, TOLERANCE_SCALE, type Tolerance } from './activities'
 import type { Place } from './locations'
 
 export interface AppState {
@@ -19,6 +19,7 @@ export interface AppState {
   tripFrom: number
   tripTo: number
   activity: string
+  tolerance: Tolerance
 }
 
 const DAY_MS = 86400000
@@ -40,6 +41,7 @@ export function encodeState(s: AppState): string {
     p.set('from', toDate(s.tripFrom))
     p.set('to', toDate(s.tripTo))
     p.set('act', s.activity)
+    p.set('tol', s.tolerance)
   }
   return p.toString()
 }
@@ -77,6 +79,9 @@ export function decodeState(hash: string, base: AppState): AppState {
 
     const act = p.get('act')
     if (act && ACTIVITIES.some((a) => a.id === act)) out.activity = act
+
+    const tol = p.get('tol')
+    if (tol && tol in TOLERANCE_SCALE) out.tolerance = tol as Tolerance
   } catch {
     return base
   }

@@ -6,7 +6,7 @@
  * static snapshot report.
  */
 import type { Conditions } from './activities'
-import { ACTIVITIES, comfort, ferryRisk, scoreActivity, type ActivityScore, type Comfort, type FerryRisk, type SunDay, type WindowStats } from './activities'
+import { ACTIVITIES, comfort, ferryRisk, scoreActivity, shelterFactor, type ActivityScore, type Comfort, type FerryRisk, type SunDay, type Tolerance, type WindowStats } from './activities'
 import type { Block, EnsembleData, Marine } from './openmeteo'
 
 /** Daylight windows people actually book activities in. */
@@ -117,6 +117,7 @@ export function buildHours({ hourly, models, marine, waveModels, daily }: BuildI
     const mi = marineIdx.get(t)
     const wave = mi != null ? medianOf(marine!.hourly.vars.wave_height, waveModels, mi) : null
     const period = mi != null ? medianOf(marine!.hourly.vars.wave_period, waveModels, mi) : null
+    const waveFrom = mi != null ? medianOf(marine!.hourly.vars.wave_direction, waveModels, mi) : null
 
     let spread: number | null = null
     if (mi != null && waveModels.length > 1) {
@@ -140,6 +141,10 @@ export function buildHours({ hourly, models, marine, waveModels, daily }: BuildI
       waveModels: mi != null ? waveModels.filter((m) => marine!.hourly.vars.wave_height?.[m]?.[mi] != null).length : 0,
       conditions: {
         waveHeight: wave,
+        // The lee estimate is what the dive sites see; the offshore value stays
+        // available for the ferry crossing, which has no island to hide behind.
+        waveLee: wave != null ? wave * shelterFactor(period) : null,
+        waveFrom,
         wavePeriod: period,
         windSpeed: medianOf(hourly.vars.wind_speed_10m, models, i),
         windGust: medianOf(hourly.vars.wind_gusts_10m, models, i),
@@ -191,6 +196,8 @@ export function aggregate(rows: HourRow[]): { conditions: Conditions; waveSpread
     // is not an afternoon you book. Everything else is representative.
     conditions: {
       waveHeight: worst(col((c) => c.waveHeight)),
+      waveLee: worst(col((c) => c.waveLee)),
+      waveFrom: median(col((c) => c.waveFrom)),
       wavePeriod: median(col((c) => c.wavePeriod)),
       windSpeed: worst(col((c) => c.windSpeed)),
       windGust: worst(col((c) => c.windGust)),
@@ -299,7 +306,7 @@ export function sunByDay(daily: Block, models: string[]): Map<number, SunDay> {
   return out
 }
 
-export function summarise(rows: HourRow[], days: number[], ens: EnsembleData | null, sun?: Map<number, SunDay>): DaySummary[] {
+export function summarise(rows: HourRow[], days: number[], ens: EnsembleData | null, sun?: Map<number, SunDay>, tolerance: Tolerance = 'standard'): DaySummary[] {
   const byDay = new Map<number, HourRow[]>()
   for (const r of rows) {
     const d = dayOf(r.time)
@@ -317,7 +324,7 @@ export function summarise(rows: HourRow[], days: number[], ens: EnsembleData | n
       const scores: Record<string, ActivityScore> = {}
       const windProb: Record<string, number | null> = {}
       for (const a of ACTIVITIES) {
-        scores[a.id] = scoreActivity(a, conditions)
+        scores[a.id] = scoreActivity(a, conditions, tolerance)
         windProb[a.id] = windProbability(ens, from, to, windLimit(a.id))
       }
       return { day, part, conditions, waveSpread, windSpread, windMin, windMax, windModels, waveModels, stats, scores, comfort: comfort(conditions, stats), windProb }

@@ -20,8 +20,20 @@
  */
 
 export interface Conditions {
-  /** Significant wave height, m. */
+  /**
+   * Offshore significant wave height from the ~25 km ocean grid cell, m.
+   * This is the open-water crossing condition — use it for the ferry, not for a
+   * dive site that sits in the island's lee.
+   */
   waveHeight: number | null
+  /**
+   * Estimated wave height on the sheltered side of the island, m.
+   * Dive and snorkel operators choose the lee shore, so this is what their own
+   * go/no-go thresholds are really about. See `shelterFactor` for the assumption.
+   */
+  waveLee: number | null
+  /** Dominant wave direction, degrees the waves come from. */
+  waveFrom: number | null
   /** Peak wave period, s — separates groundswell from wind chop. */
   wavePeriod: number | null
   windSpeed: number | null
@@ -103,6 +115,55 @@ export interface ActivityDef {
   criteria: Criterion[]
 }
 
+/**
+ * How much a small island knocks down wave height on its lee shore.
+ *
+ * Strongly period-dependent, and that dependence is the whole point: short wind waves
+ * are blocked cleanly, while long-period groundswell refracts and diffracts around a
+ * 4 km island and arrives on the "sheltered" side with much of its height intact. A
+ * flat 50 % rule would call an 18-second typhoon swell as harmless as an 8-second
+ * chop, which is exactly backwards.
+ *
+ * These are order-of-magnitude figures for a small island, not a wave model. The
+ * offshore value is always shown alongside so the estimate can be second-guessed.
+ */
+export function shelterFactor(periodS: number | null): number {
+  if (periodS == null) return 0.6
+  if (periodS <= 8) return 0.35
+  if (periodS >= 16) return 0.8
+  // Linear between the two anchors.
+  return 0.35 + ((periodS - 8) / 8) * 0.45
+}
+
+/** Compass sector, from the direction waves arrive from. */
+const SECTORS = ['北', '東北', '東', '東南', '南', '西南', '西', '西北']
+export function exposedShore(waveFromDeg: number | null): { exposed: string; lee: string } | null {
+  if (waveFromDeg == null) return null
+  const i = Math.round(waveFromDeg / 45) % 8
+  return { exposed: SECTORS[i], lee: SECTORS[(i + 4) % 8] }
+}
+
+/**
+ * How much slack to allow against every threshold.
+ *
+ * The defaults describe a cautious recreational diver. Someone experienced, or a
+ * group willing to accept a rougher entry, is not wrong to want more room — so the
+ * tolerance is a setting rather than a judgement baked into the numbers.
+ */
+export type Tolerance = 'cautious' | 'standard' | 'bold'
+
+export const TOLERANCE_SCALE: Record<Tolerance, number> = {
+  cautious: 0.8,
+  standard: 1,
+  bold: 1.3,
+}
+
+export const TOLERANCE_LABEL: Record<Tolerance, { name: string; blurb: string }> = {
+  cautious: { name: '保守', blurb: '新手、帶小孩、或不想勉強：門檻收緊兩成' },
+  standard: { name: '標準', blurb: '一般休閒潛水與水上活動的通用界線' },
+  bold: { name: '進階', blurb: '有經驗、能接受較差的入水條件：門檻放寬三成' },
+}
+
 const VIS: Omit<Criterion, 'weight'> = {
   key: 'rain48',
   label: '水下能見度',
@@ -121,7 +182,7 @@ export const ACTIVITIES: ActivityDef[] = [
     icon: '🤿',
     blurb: '對水面狀況最敏感——沒有氣瓶浮力輔助，湧浪會直接影響下潛與水面休息的安全。',
     criteria: [
-      { key: 'waveHeight', label: '浪高', unit: 'm', kind: 'max', ideal: 0.7, ok: 1.2, veto: 1.8, weight: 0.4, why: '水面湧浪讓平靜呼吸與繩索定位變困難' },
+      { key: 'waveLee', label: '潛點浪高', unit: 'm', kind: 'max', ideal: 0.7, ok: 1.3, veto: 2.0, weight: 0.4, why: '水面湧浪讓平靜呼吸與繩索定位變困難' },
       { key: 'windSpeed', label: '風速', unit: 'm/s', kind: 'max', ideal: 4, ok: 6.5, veto: 9, weight: 0.3, why: '風生浪打亂水面，也讓船隻定位不穩' },
       { ...VIS, weight: 0.3 },
     ],
@@ -132,7 +193,7 @@ export const ACTIVITIES: ActivityDef[] = [
     icon: '🛟',
     blurb: '比自由潛水耐受度高一些，主要卡在船潛的上下船安全與水下能見度。',
     criteria: [
-      { key: 'waveHeight', label: '浪高', unit: 'm', kind: 'max', ideal: 1.0, ok: 1.5, veto: 2.2, weight: 0.4, why: '上下船與水面集合的風險隨浪高快速上升' },
+      { key: 'waveLee', label: '潛點浪高', unit: 'm', kind: 'max', ideal: 1.0, ok: 1.7, veto: 2.5, weight: 0.4, why: '上下船與水面集合的風險隨浪高快速上升' },
       { key: 'windSpeed', label: '風速', unit: 'm/s', kind: 'max', ideal: 5, ok: 8, veto: 11, weight: 0.3, why: '風大時船隻難以在潛點上方保持位置' },
       { ...VIS, weight: 0.3 },
     ],
@@ -143,7 +204,7 @@ export const ACTIVITIES: ActivityDef[] = [
     icon: '🥽',
     blurb: '綠島最普及的活動。門檻比潛水低，但同樣被湧浪和濁度決定體驗好壞。',
     criteria: [
-      { key: 'waveHeight', label: '浪高', unit: 'm', kind: 'max', ideal: 0.6, ok: 1.1, veto: 1.6, weight: 0.4, why: '岸邊礁石區的湧浪會讓入水與回岸變危險' },
+      { key: 'waveLee', label: '潛點浪高', unit: 'm', kind: 'max', ideal: 0.6, ok: 1.2, veto: 1.8, weight: 0.4, why: '岸邊礁石區的湧浪會讓入水與回岸變危險' },
       { key: 'windSpeed', label: '風速', unit: 'm/s', kind: 'max', ideal: 4, ok: 7, veto: 10, weight: 0.25, why: '風浪讓呼吸管容易嗆水' },
       { ...VIS, weight: 0.35 },
     ],
@@ -155,7 +216,7 @@ export const ACTIVITIES: ActivityDef[] = [
     blurb: '所有活動中最怕風的一項——站立姿勢等於一面帆，風速比浪高更能決定成敗。',
     criteria: [
       { key: 'windSpeed', label: '風速', unit: 'm/s', kind: 'max', ideal: 3, ok: 5, veto: 7, weight: 0.55, why: '站姿受風面積大，離岸風會把人吹向外海' },
-      { key: 'waveHeight', label: '浪高', unit: 'm', kind: 'max', ideal: 0.4, ok: 0.8, veto: 1.3, weight: 0.3, why: '板身短時湧浪會讓站立平衡難以維持' },
+      { key: 'waveLee', label: '水域浪高', unit: 'm', kind: 'max', ideal: 0.4, ok: 0.9, veto: 1.5, weight: 0.3, why: '板身短時湧浪會讓站立平衡難以維持' },
       { key: 'windGust', label: '陣風', unit: 'm/s', kind: 'max', ideal: 5, ok: 8, veto: 12, weight: 0.15, why: '突發陣風是落水與失控漂流的主因' },
     ],
   },
@@ -214,7 +275,11 @@ export interface ActivityScore {
   missing: number
 }
 
-export function scoreActivity(activity: ActivityDef, c: Conditions): ActivityScore {
+export function scoreActivity(activity: ActivityDef, c: Conditions, tolerance: Tolerance = 'standard'): ActivityScore {
+  // Wider tolerance moves every "lower is better" limit outward; a band criterion
+  // (surf) widens on both sides instead, since more slack there means accepting both
+  // smaller and larger surf.
+  const k = TOLERANCE_SCALE[tolerance]
   const parts: Part[] = []
   let missing = 0
   for (const cr of activity.criteria) {
@@ -224,7 +289,10 @@ export function scoreActivity(activity: ActivityDef, c: Conditions): ActivitySco
       parts.push({ label: cr.label, unit: cr.unit, value: null, score: NaN, why: cr.why })
       continue
     }
-    const s = cr.kind === 'range' ? scoreRange(v, cr.band!) : scoreMax(v, cr.ideal!, cr.ok!, cr.veto!)
+    const s =
+      cr.kind === 'range'
+        ? scoreRange(v, cr.band!.map((b, i) => (i < 3 ? b / k : b * k)) as [number, number, number, number, number, number])
+        : scoreMax(v, cr.ideal! * k, cr.ok! * k, cr.veto! * k)
     parts.push({ label: cr.label, unit: cr.unit, value: v, score: s, why: cr.why })
   }
 
@@ -284,9 +352,13 @@ export function ferryRisk(waveMax: number | null, gustMax: number | null): Ferry
   if (waveMax == null && gustMax == null) return { level: '無預報', tone: 'muted', reason: '此日期尚未進入預報範圍' }
   const w = waveMax ?? 0
   const g = gustMax ?? 0
-  if (w >= 3.2 || g >= 20.8) return { level: '極高', tone: 'critical', reason: `浪高 ${w.toFixed(1)} m、陣風 ${g.toFixed(0)} m/s，此海況下航班通常停駛` }
-  if (w >= 2.5 || g >= 17.2) return { level: '高', tone: 'critical', reason: `浪高 ${w.toFixed(1)} m、陣風 ${g.toFixed(0)} m/s，接近停航門檻，暈船機率也高` }
-  if (w >= 1.8 || g >= 13.9) return { level: '中', tone: 'warning', reason: `浪高 ${w.toFixed(1)} m，船會晃，容易暈船但通常照開` }
+  // Recalibrated upward: the earlier bands were strict for this crossing. The
+  // 富岡–綠島 route runs through the Kuroshio and is habitually rough; boats sail in
+  // seas that would stop a sheltered-water ferry, and the summer cancellations that
+  // matter are typhoon swell rather than an ordinary 2 m sea.
+  if (w >= 4.0 || g >= 20.8) return { level: '極高', tone: 'critical', reason: `浪高 ${w.toFixed(1)} m、陣風 ${g.toFixed(0)} m/s，此海況下航班幾乎確定停駛` }
+  if (w >= 3.0 || g >= 17.2) return { level: '高', tone: 'critical', reason: `浪高 ${w.toFixed(1)} m、陣風 ${g.toFixed(0)} m/s，接近停航門檻，暈船機率也高` }
+  if (w >= 2.0 || g >= 13.9) return { level: '中', tone: 'warning', reason: `浪高 ${w.toFixed(1)} m，船會明顯搖晃，容易暈船但通常照開` }
   return { level: '低', tone: 'good', reason: `浪高 ${w.toFixed(1)} m，海況平穩` }
 }
 

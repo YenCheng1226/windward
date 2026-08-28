@@ -10,6 +10,7 @@ import type { Place } from './locations'
 import { WAVE_MODELS, ensembleById } from './models'
 import type { Forecast } from './openmeteo'
 import { buildHours, summarise, sunByDay, type DaySummary } from './trip'
+import type { Tolerance } from './activities'
 
 const DAY_MS = 86400000
 export const dayOf = (ms: number) => Math.floor(ms / DAY_MS) * DAY_MS
@@ -19,6 +20,7 @@ export interface TripWindow {
   from: number
   to: number
   activity: string
+  tolerance: Tolerance
 }
 
 export function useTripData(place: Place, forecast: Forecast, windUnit: 'ms' | 'kmh' | 'kn', range: TripWindow, nowMs: number) {
@@ -42,8 +44,8 @@ export function useTripData(place: Place, forecast: Forecast, windUnit: 'ms' | '
 
   const summary: DaySummary[] = useMemo(() => {
     const rows = buildHours({ hourly: forecast.hourly, models: forecast.models, marine: marine.data, waveModels: WAVE_IDS, daily: forecast.daily })
-    return summarise(rows, days, ens.data, sunByDay(forecast.daily, forecast.models))
-  }, [forecast, marine.data, ens.data, days])
+    return summarise(rows, days, ens.data, sunByDay(forecast.daily, forecast.models), range.tolerance)
+  }, [forecast, marine.data, ens.data, days, range.tolerance])
 
   /** Last hour the atmospheric models cover; days past it have no forecast at all. */
   const forecastHorizon = useMemo(() => {

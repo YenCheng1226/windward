@@ -81,6 +81,7 @@ export default function App() {
       tripFrom: dayOf(now) + 2 * DAY_MS,
       tripTo: dayOf(now) + 5 * DAY_MS,
       activity: ACTIVITIES[0].id,
+      tolerance: 'standard' as const,
     }
     return decodeState(window.location.hash, base)
   }, [])
@@ -89,7 +90,7 @@ export default function App() {
   const [tab, setTab] = useState<Tab>(initial.tab as Tab)
   const [models, setModels] = useState<string[]>(initial.models)
   const [windUnit, setWindUnit] = useState<'ms' | 'kmh' | 'kn'>(initial.windUnit)
-  const [trip, setTrip] = useState<TripRange>({ from: initial.tripFrom, to: initial.tripTo, activity: initial.activity })
+  const [trip, setTrip] = useState<TripRange>({ from: initial.tripFrom, to: initial.tripTo, activity: initial.activity, tolerance: initial.tolerance })
   const [copied, setCopied] = useState(false)
 
   // The "now" line is per-session, not per-render, so charts don't jitter on every update.
@@ -110,7 +111,7 @@ export default function App() {
   }, [place, models, windUnit])
 
   const shareHash = useMemo(
-    () => encodeState({ tab, place, models, windUnit, tripFrom: trip.from, tripTo: trip.to, activity: trip.activity }),
+    () => encodeState({ tab, place, models, windUnit, tripFrom: trip.from, tripTo: trip.to, activity: trip.activity, tolerance: trip.tolerance }),
     [tab, place, models, windUnit, trip],
   )
 
@@ -123,7 +124,7 @@ export default function App() {
   // Current state, for the hashchange listener to diff against without re-subscribing
   // on every keystroke (a stale closure would resurrect old settings).
   const stateRef = useRef<AppState>(initial)
-  stateRef.current = { tab, place, models, windUnit, tripFrom: trip.from, tripTo: trip.to, activity: trip.activity }
+  stateRef.current = { tab, place, models, windUnit, tripFrom: trip.from, tripTo: trip.to, activity: trip.activity, tolerance: trip.tolerance }
 
   useEffect(() => {
     // Someone already on the page clicking a shared link only changes the hash — no
@@ -136,7 +137,7 @@ export default function App() {
       setPlace(next.place)
       setModels(next.models)
       setWindUnit(next.windUnit)
-      setTrip({ from: next.tripFrom, to: next.tripTo, activity: next.activity })
+      setTrip({ from: next.tripFrom, to: next.tripTo, activity: next.activity, tolerance: next.tolerance })
     }
     window.addEventListener('hashchange', onHashChange)
     return () => window.removeEventListener('hashchange', onHashChange)

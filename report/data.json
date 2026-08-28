@@ -4,7 +4,7 @@
   "lon": 121.489,
   "marineLat": 22.75,
   "marineLon": 121.5,
-  "generatedAt": "2026-08-28T07:04:13.797Z",
+  "generatedAt": "2026-08-28T07:18:09.579Z",
   "leadDays": 12,
   "from": "9/9",
   "to": "9/12",
@@ -17,7 +17,7 @@
       "ferry": {
         "level": "中",
         "tone": "warning",
-        "reason": "浪高 2.4 m，船會晃，容易暈船但通常照開"
+        "reason": "浪高 2.4 m，船會明顯搖晃，容易暈船但通常照開"
       },
       "waveMax": 2.3600000000000003,
       "gustMax": 11.8,
@@ -32,15 +32,15 @@
           "scores": {
             "freedive": {
               "score": 0,
-              "limiting": "浪高",
-              "limitValue": "2.4 m",
-              "why": "水面湧浪讓平靜呼吸與繩索定位變困難",
+              "limiting": "風速",
+              "limitValue": "10.1 m/s",
+              "why": "風生浪打亂水面，也讓船隻定位不穩",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 2.3600000000000003,
+                  "label": "潛點浪高",
+                  "value": 1.0284437499999999,
                   "unit": "m",
-                  "score": 0
+                  "score": 0.7810375
                 },
                 {
                   "label": "風速",
@@ -57,16 +57,16 @@
               ]
             },
             "scuba": {
-              "score": 0,
-              "limiting": "浪高",
-              "limitValue": "2.4 m",
-              "why": "上下船與水面集合的風險隨浪高快速上升",
+              "score": 53,
+              "limiting": "風速",
+              "limitValue": "10.1 m/s",
+              "why": "風大時船隻難以在潛點上方保持位置",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 2.3600000000000003,
+                  "label": "潛點浪高",
+                  "value": 1.0284437499999999,
                   "unit": "m",
-                  "score": 0
+                  "score": 0.9837464285714287
                 },
                 {
                   "label": "風速",
@@ -84,15 +84,15 @@
             },
             "snorkel": {
               "score": 0,
-              "limiting": "浪高",
-              "limitValue": "2.4 m",
-              "why": "岸邊礁石區的湧浪會讓入水與回岸變危險",
+              "limiting": "風速",
+              "limitValue": "10.1 m/s",
+              "why": "風浪讓呼吸管容易嗆水",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 2.3600000000000003,
+                  "label": "潛點浪高",
+                  "value": 1.0284437499999999,
                   "unit": "m",
-                  "score": 0
+                  "score": 0.7143708333333334
                 },
                 {
                   "label": "風速",
@@ -121,10 +121,10 @@
                   "score": 0
                 },
                 {
-                  "label": "浪高",
-                  "value": 2.3600000000000003,
+                  "label": "水域浪高",
+                  "value": 1.0284437499999999,
                   "unit": "m",
-                  "score": 0
+                  "score": 0.4715562500000001
                 },
                 {
                   "label": "陣風",
@@ -188,15 +188,15 @@
           "scores": {
             "freedive": {
               "score": 0,
-              "limiting": "浪高",
-              "limitValue": "2.4 m",
-              "why": "水面湧浪讓平靜呼吸與繩索定位變困難",
+              "limiting": "風速",
+              "limitValue": "10.7 m/s",
+              "why": "風生浪打亂水面，也讓船隻定位不穩",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 2.35,
+                  "label": "潛點浪高",
+                  "value": 1.027390625,
                   "unit": "m",
-                  "score": 0
+                  "score": 0.7817395833333334
                 },
                 {
                   "label": "風速",
@@ -213,16 +213,16 @@
               ]
             },
             "scuba": {
-              "score": 0,
-              "limiting": "浪高",
-              "limitValue": "2.4 m",
-              "why": "上下船與水面集合的風險隨浪高快速上升",
+              "score": 40,
+              "limiting": "風速",
+              "limitValue": "10.7 m/s",
+              "why": "風大時船隻難以在潛點上方保持位置",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 2.35,
+                  "label": "潛點浪高",
+                  "value": 1.027390625,
                   "unit": "m",
-                  "score": 0
+                  "score": 0.9843482142857143
                 },
                 {
                   "label": "風速",
@@ -240,15 +240,15 @@
             },
             "snorkel": {
               "score": 0,
-              "limiting": "浪高",
-              "limitValue": "2.4 m",
-              "why": "岸邊礁石區的湧浪會讓入水與回岸變危險",
+              "limiting": "風速",
+              "limitValue": "10.7 m/s",
+              "why": "風浪讓呼吸管容易嗆水",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 2.35,
+                  "label": "潛點浪高",
+                  "value": 1.027390625,
                   "unit": "m",
-                  "score": 0
+                  "score": 0.7150729166666666
                 },
                 {
                   "label": "風速",
@@ -277,10 +277,10 @@
                   "score": 0
                 },
                 {
-                  "label": "浪高",
-                  "value": 2.35,
+                  "label": "水域浪高",
+                  "value": 1.027390625,
                   "unit": "m",
-                  "score": 0
+                  "score": 0.472609375
                 },
                 {
                   "label": "陣風",
@@ -346,9 +346,9 @@
       "outOfRange": false,
       "entersRange": null,
       "ferry": {
-        "level": "中",
-        "tone": "warning",
-        "reason": "浪高 2.0 m，船會晃，容易暈船但通常照開"
+        "level": "低",
+        "tone": "good",
+        "reason": "浪高 2.0 m，海況平穩"
       },
       "waveMax": 1.98,
       "gustMax": 9,
@@ -363,15 +363,15 @@
           "scores": {
             "freedive": {
               "score": 0,
-              "limiting": "浪高",
-              "limitValue": "1.9 m",
-              "why": "水面湧浪讓平靜呼吸與繩索定位變困難",
+              "limiting": "風速",
+              "limitValue": "9.0 m/s",
+              "why": "風生浪打亂水面，也讓船隻定位不穩",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 1.87,
+                  "label": "潛點浪高",
+                  "value": 0.796503125,
                   "unit": "m",
-                  "score": 0
+                  "score": 0.9356645833333334
                 },
                 {
                   "label": "風速",
@@ -388,16 +388,16 @@
               ]
             },
             "scuba": {
-              "score": 44,
-              "limiting": "浪高",
-              "limitValue": "1.9 m",
-              "why": "上下船與水面集合的風險隨浪高快速上升",
+              "score": 73,
+              "limiting": "風速",
+              "limitValue": "9.0 m/s",
+              "why": "風大時船隻難以在潛點上方保持位置",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 1.87,
+                  "label": "潛點浪高",
+                  "value": 0.796503125,
                   "unit": "m",
-                  "score": 0.28285714285714286
+                  "score": 1
                 },
                 {
                   "label": "風速",
@@ -414,16 +414,16 @@
               ]
             },
             "snorkel": {
-              "score": 0,
-              "limiting": "浪高",
-              "limitValue": "1.9 m",
-              "why": "岸邊礁石區的湧浪會讓入水與回岸變危險",
+              "score": 60,
+              "limiting": "風速",
+              "limitValue": "9.0 m/s",
+              "why": "風浪讓呼吸管容易嗆水",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 1.87,
+                  "label": "潛點浪高",
+                  "value": 0.796503125,
                   "unit": "m",
-                  "score": 0
+                  "score": 0.8689979166666666
                 },
                 {
                   "label": "風速",
@@ -452,10 +452,10 @@
                   "score": 0
                 },
                 {
-                  "label": "浪高",
-                  "value": 1.87,
+                  "label": "水域浪高",
+                  "value": 0.796503125,
                   "unit": "m",
-                  "score": 0
+                  "score": 0.6827975
                 },
                 {
                   "label": "陣風",
@@ -517,16 +517,16 @@
           "hours": "12:00–17:00",
           "scores": {
             "freedive": {
-              "score": 18,
-              "limiting": "浪高",
-              "limitValue": "1.7 m",
-              "why": "水面湧浪讓平靜呼吸與繩索定位變困難",
+              "score": 51,
+              "limiting": "風速",
+              "limitValue": "8.5 m/s",
+              "why": "風生浪打亂水面，也讓船隻定位不穩",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 1.73,
+                  "label": "潛點浪高",
+                  "value": 0.727140625,
                   "unit": "m",
-                  "score": 0.07000000000000008
+                  "score": 0.98190625
                 },
                 {
                   "label": "風速",
@@ -543,16 +543,16 @@
               ]
             },
             "scuba": {
-              "score": 56,
-              "limiting": "浪高",
-              "limitValue": "1.7 m",
-              "why": "上下船與水面集合的風險隨浪高快速上升",
+              "score": 81,
+              "limiting": "風速",
+              "limitValue": "8.5 m/s",
+              "why": "風大時船隻難以在潛點上方保持位置",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 1.73,
+                  "label": "潛點浪高",
+                  "value": 0.727140625,
                   "unit": "m",
-                  "score": 0.40285714285714286
+                  "score": 1
                 },
                 {
                   "label": "風速",
@@ -569,16 +569,16 @@
               ]
             },
             "snorkel": {
-              "score": 0,
-              "limiting": "浪高",
-              "limitValue": "1.7 m",
-              "why": "岸邊礁石區的湧浪會讓入水與回岸變危險",
+              "score": 71,
+              "limiting": "風速",
+              "limitValue": "8.5 m/s",
+              "why": "風浪讓呼吸管容易嗆水",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 1.73,
+                  "label": "潛點浪高",
+                  "value": 0.727140625,
                   "unit": "m",
-                  "score": 0
+                  "score": 0.9152395833333333
                 },
                 {
                   "label": "風速",
@@ -607,10 +607,10 @@
                   "score": 0
                 },
                 {
-                  "label": "浪高",
-                  "value": 1.73,
+                  "label": "水域浪高",
+                  "value": 0.727140625,
                   "unit": "m",
-                  "score": 0
+                  "score": 0.7382875
                 },
                 {
                   "label": "陣風",
@@ -675,9 +675,9 @@
       "outOfRange": false,
       "entersRange": null,
       "ferry": {
-        "level": "極高",
+        "level": "高",
         "tone": "critical",
-        "reason": "浪高 3.3 m、陣風 16 m/s，此海況下航班通常停駛"
+        "reason": "浪高 3.3 m、陣風 16 m/s，接近停航門檻，暈船機率也高"
       },
       "waveMax": 3.26,
       "gustMax": 15.5,
@@ -691,16 +691,16 @@
           "hours": "6:00–11:00",
           "scores": {
             "freedive": {
-              "score": 0,
-              "limiting": "浪高",
-              "limitValue": "2.0 m",
-              "why": "水面湧浪讓平靜呼吸與繩索定位變困難",
+              "score": 54,
+              "limiting": "風速",
+              "limitValue": "8.1 m/s",
+              "why": "風生浪打亂水面，也讓船隻定位不穩",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 2.01,
+                  "label": "潛點浪高",
+                  "value": 1.1896687499999998,
                   "unit": "m",
-                  "score": 0
+                  "score": 0.6735541666666668
                 },
                 {
                   "label": "風速",
@@ -717,16 +717,16 @@
               ]
             },
             "scuba": {
-              "score": 41,
-              "limiting": "浪高",
-              "limitValue": "2.0 m",
-              "why": "上下船與水面集合的風險隨浪高快速上升",
+              "score": 81,
+              "limiting": "風速",
+              "limitValue": "8.1 m/s",
+              "why": "風大時船隻難以在潛點上方保持位置",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 2.01,
+                  "label": "潛點浪高",
+                  "value": 1.1896687499999998,
                   "unit": "m",
-                  "score": 0.16285714285714314
+                  "score": 0.8916178571428572
                 },
                 {
                   "label": "風速",
@@ -743,16 +743,16 @@
               ]
             },
             "snorkel": {
-              "score": 0,
-              "limiting": "浪高",
-              "limitValue": "2.0 m",
-              "why": "岸邊礁石區的湧浪會讓入水與回岸變危險",
+              "score": 64,
+              "limiting": "風速",
+              "limitValue": "8.1 m/s",
+              "why": "風浪讓呼吸管容易嗆水",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 2.01,
+                  "label": "潛點浪高",
+                  "value": 1.1896687499999998,
                   "unit": "m",
-                  "score": 0
+                  "score": 0.6068875
                 },
                 {
                   "label": "風速",
@@ -781,10 +781,10 @@
                   "score": 0
                 },
                 {
-                  "label": "浪高",
-                  "value": 2.01,
+                  "label": "水域浪高",
+                  "value": 1.1896687499999998,
                   "unit": "m",
-                  "score": 0
+                  "score": 0.31033125000000017
                 },
                 {
                   "label": "陣風",
@@ -848,15 +848,15 @@
           "scores": {
             "freedive": {
               "score": 0,
-              "limiting": "浪高",
-              "limitValue": "2.8 m",
-              "why": "水面湧浪讓平靜呼吸與繩索定位變困難",
+              "limiting": "風速",
+              "limitValue": "9.9 m/s",
+              "why": "風生浪打亂水面，也讓船隻定位不穩",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 2.7800000000000002,
+                  "label": "潛點浪高",
+                  "value": 1.5281312500000002,
                   "unit": "m",
-                  "score": 0
+                  "score": 0.40445892857142846
                 },
                 {
                   "label": "風速",
@@ -873,16 +873,16 @@
               ]
             },
             "scuba": {
-              "score": 0,
-              "limiting": "浪高",
-              "limitValue": "2.8 m",
-              "why": "上下船與水面集合的風險隨浪高快速上升",
+              "score": 55,
+              "limiting": "風速",
+              "limitValue": "9.9 m/s",
+              "why": "風大時船隻難以在潛點上方保持位置",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 2.7800000000000002,
+                  "label": "潛點浪高",
+                  "value": 1.5281312500000002,
                   "unit": "m",
-                  "score": 0
+                  "score": 0.6982107142857141
                 },
                 {
                   "label": "風速",
@@ -899,16 +899,16 @@
               ]
             },
             "snorkel": {
-              "score": 0,
-              "limiting": "浪高",
-              "limitValue": "2.8 m",
-              "why": "岸邊礁石區的湧浪會讓入水與回岸變危險",
+              "score": 22,
+              "limiting": "風速",
+              "limitValue": "9.9 m/s",
+              "why": "風浪讓呼吸管容易嗆水",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 2.7800000000000002,
+                  "label": "潛點浪高",
+                  "value": 1.5281312500000002,
                   "unit": "m",
-                  "score": 0
+                  "score": 0.2718687499999998
                 },
                 {
                   "label": "風速",
@@ -937,8 +937,8 @@
                   "score": 0
                 },
                 {
-                  "label": "浪高",
-                  "value": 2.7800000000000002,
+                  "label": "水域浪高",
+                  "value": 1.5281312500000002,
                   "unit": "m",
                   "score": 0
                 },
@@ -1007,7 +1007,7 @@
       "ferry": {
         "level": "極高",
         "tone": "critical",
-        "reason": "浪高 5.8 m、陣風 14 m/s，此海況下航班通常停駛"
+        "reason": "浪高 5.8 m、陣風 14 m/s，此海況下航班幾乎確定停駛"
       },
       "waveMax": 5.82,
       "gustMax": 14.3,
@@ -1022,13 +1022,13 @@
           "scores": {
             "freedive": {
               "score": 0,
-              "limiting": "浪高",
-              "limitValue": "4.6 m",
+              "limiting": "潛點浪高",
+              "limitValue": "3.7 m",
               "why": "水面湧浪讓平靜呼吸與繩索定位變困難",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 4.64,
+                  "label": "潛點浪高",
+                  "value": 3.7119999999999997,
                   "unit": "m",
                   "score": 0
                 },
@@ -1048,13 +1048,13 @@
             },
             "scuba": {
               "score": 0,
-              "limiting": "浪高",
-              "limitValue": "4.6 m",
+              "limiting": "潛點浪高",
+              "limitValue": "3.7 m",
               "why": "上下船與水面集合的風險隨浪高快速上升",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 4.64,
+                  "label": "潛點浪高",
+                  "value": 3.7119999999999997,
                   "unit": "m",
                   "score": 0
                 },
@@ -1074,13 +1074,13 @@
             },
             "snorkel": {
               "score": 0,
-              "limiting": "浪高",
-              "limitValue": "4.6 m",
+              "limiting": "潛點浪高",
+              "limitValue": "3.7 m",
               "why": "岸邊礁石區的湧浪會讓入水與回岸變危險",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 4.64,
+                  "label": "潛點浪高",
+                  "value": 3.7119999999999997,
                   "unit": "m",
                   "score": 0
                 },
@@ -1100,8 +1100,8 @@
             },
             "sup": {
               "score": 0,
-              "limiting": "浪高",
-              "limitValue": "4.6 m",
+              "limiting": "水域浪高",
+              "limitValue": "3.7 m",
               "why": "板身短時湧浪會讓站立平衡難以維持",
               "parts": [
                 {
@@ -1111,8 +1111,8 @@
                   "score": 0.44250000000000017
                 },
                 {
-                  "label": "浪高",
-                  "value": 4.64,
+                  "label": "水域浪高",
+                  "value": 3.7119999999999997,
                   "unit": "m",
                   "score": 0
                 },
@@ -1177,13 +1177,13 @@
           "scores": {
             "freedive": {
               "score": 0,
-              "limiting": "浪高",
-              "limitValue": "5.8 m",
+              "limiting": "潛點浪高",
+              "limitValue": "4.6 m",
               "why": "水面湧浪讓平靜呼吸與繩索定位變困難",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 5.78,
+                  "label": "潛點浪高",
+                  "value": 4.6240000000000006,
                   "unit": "m",
                   "score": 0
                 },
@@ -1203,13 +1203,13 @@
             },
             "scuba": {
               "score": 0,
-              "limiting": "浪高",
-              "limitValue": "5.8 m",
+              "limiting": "潛點浪高",
+              "limitValue": "4.6 m",
               "why": "上下船與水面集合的風險隨浪高快速上升",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 5.78,
+                  "label": "潛點浪高",
+                  "value": 4.6240000000000006,
                   "unit": "m",
                   "score": 0
                 },
@@ -1229,13 +1229,13 @@
             },
             "snorkel": {
               "score": 0,
-              "limiting": "浪高",
-              "limitValue": "5.8 m",
+              "limiting": "潛點浪高",
+              "limitValue": "4.6 m",
               "why": "岸邊礁石區的湧浪會讓入水與回岸變危險",
               "parts": [
                 {
-                  "label": "浪高",
-                  "value": 5.78,
+                  "label": "潛點浪高",
+                  "value": 4.6240000000000006,
                   "unit": "m",
                   "score": 0
                 },
@@ -1266,8 +1266,8 @@
                   "score": 0
                 },
                 {
-                  "label": "浪高",
-                  "value": 5.78,
+                  "label": "水域浪高",
+                  "value": 4.6240000000000006,
                   "unit": "m",
                   "score": 0
                 },

@@ -10,7 +10,7 @@
  * Severity still exists internally, to rank and order — it is simply never the answer.
  */
 import type { DaySummary } from './trip'
-import { ACTIVITIES } from './activities'
+import { ACTIVITIES, exposedShore } from './activities'
 import type { Cyclone } from './tropical'
 
 /** Categorical, not numeric — the reader is meant to think in these terms. */
@@ -80,9 +80,9 @@ export interface TripAssessment {
 }
 
 /** Thresholds quoted in the evidence, so the reader can disagree with them. */
-const FERRY_SUSPEND_WAVE = 2.5
-const FERRY_ROUGH_WAVE = 1.8
-const DIVE_LIMIT_WAVE = 1.5
+const FERRY_SUSPEND_WAVE = 3.0
+const FERRY_ROUGH_WAVE = 2.0
+const DIVE_LIMIT_WAVE = 1.7
 
 const dayLabel = (ms: number) => `${new Date(ms).getUTCMonth() + 1}/${new Date(ms).getUTCDate()}`
 
@@ -103,8 +103,14 @@ function assessDay(d: DaySummary, cyclones: Cyclone[], outOfRange: boolean, ente
   }
 
   const reasons: Reason[] = []
+  // Offshore height governs the crossing; the lee-shore estimate governs the sites.
   const waves = d.cells.map((c) => c.conditions.waveHeight).filter((v): v is number => v != null)
   const waveMax = waves.length ? Math.max(...waves) : null
+  const lees = d.cells.map((c) => c.conditions.waveLee).filter((v): v is number => v != null)
+  const leeMax = lees.length ? Math.max(...lees) : null
+  const periods = d.cells.map((c) => c.conditions.wavePeriod).filter((v): v is number => v != null)
+  const periodMax = periods.length ? Math.max(...periods) : null
+  const shore = exposedShore(d.cells.map((c) => c.conditions.waveFrom).find((v) => v != null) ?? null)
   const winds = d.cells.map((c) => c.conditions.windSpeed).filter((v): v is number => v != null)
   const windMax = winds.length ? Math.max(...winds) : null
   const waveSpread = Math.max(0, ...d.cells.map((c) => c.waveSpread ?? 0))
@@ -121,7 +127,7 @@ function assessDay(d: DaySummary, cyclones: Cyclone[], outOfRange: boolean, ente
     if (waveMax >= FERRY_SUSPEND_WAVE) {
       reasons.push({
         claim: '船班可能停航',
-        evidence: `全日最大浪高 ${waveMax.toFixed(1)} m，超過這條航線常見的停航海況（約 ${FERRY_SUSPEND_WAVE} m）${d.gustMax != null ? `；最大陣風 ${d.gustMax.toFixed(0)} m/s` : ''}`,
+        evidence: `外海最大浪高 ${waveMax.toFixed(1)} m，超過這條航線常見的停航海況（約 ${FERRY_SUSPEND_WAVE} m）${d.gustMax != null ? `；最大陣風 ${d.gustMax.toFixed(0)} m/s` : ''}。航線橫越黑潮、無島嶼屏蔽，看的是外海浪高`,
         confidence: waveModels < 2 ? '低' : waveSpread <= 0.4 ? '中' : '低',
         basis:
           waveModels < 2
@@ -131,7 +137,7 @@ function assessDay(d: DaySummary, cyclones: Cyclone[], outOfRange: boolean, ente
     } else if (waveMax >= FERRY_ROUGH_WAVE) {
       reasons.push({
         claim: '船會晃，容易暈船但通常照開',
-        evidence: `全日最大浪高 ${waveMax.toFixed(1)} m，介於「明顯搖晃」（${FERRY_ROUGH_WAVE} m）與「常見停航」（${FERRY_SUSPEND_WAVE} m）之間`,
+        evidence: `外海最大浪高 ${waveMax.toFixed(1)} m，介於「明顯搖晃」（${FERRY_ROUGH_WAVE} m）與「常見停航」（${FERRY_SUSPEND_WAVE} m）之間`,
         confidence: waveModels < 2 ? '低' : waveSpread <= 0.4 ? '中' : '低',
         basis: waveModels < 2 ? '這天只有一家波浪模式有資料' : `兩家波浪模式相差 ${waveSpread.toFixed(2)} m`,
       })
@@ -146,21 +152,35 @@ function assessDay(d: DaySummary, cyclones: Cyclone[], outOfRange: boolean, ente
   const viable = scored.filter((x) => x.s >= 55)
   const bestDive = [...scored].sort((x, y) => y.s - x.s)[0]
 
-  if (waveMax != null && bestDive) {
+  const shelterNote =
+    shore && waveMax != null && leeMax != null
+      ? `浪從${shore.exposed}方來，${shore.lee}岸是背風側；外海 ${waveMax.toFixed(1)} m 到背風潛點估計剩 ${leeMax.toFixed(1)} m${
+          periodMax != null && periodMax >= 15 ? `，但週期 ${periodMax.toFixed(0)} 秒的長浪會繞射進背風側，屏蔽效果有限` : ''
+        }`
+      : null
+
+  if (leeMax != null && bestDive) {
     if (viable.length === 0) {
       reasons.push({
         claim: '潛水與浮潛整天都不可行',
-        evidence: `全日最大浪高 ${waveMax.toFixed(1)} m，已超過水肺潛水的可行上限（${DIVE_LIMIT_WAVE} m）；表現最好的是${bestDive.part}的${bestDive.a.name}，也只有 ${bestDive.s} 分`,
-        confidence: waveModels < 2 ? '低' : waveSpread <= 0.4 ? '中' : '低',
-        basis: `門檻取自潛店與業者的通用說法，未針對特定潛點校正；${waveModels < 2 ? '且這天只有一家波浪模式有資料' : `波浪模式間相差 ${waveSpread.toFixed(2)} m`}`,
+        evidence: `背風潛點估計浪高 ${leeMax.toFixed(1)} m，仍超過水肺潛水的可行上限（${DIVE_LIMIT_WAVE} m）；表現最好的是${bestDive.part}的${bestDive.a.name}，也只有 ${bestDive.s} 分`,
+        confidence: waveModels < 2 ? '低' : '低',
+        basis: `${shelterNote ?? '無法判斷背風側'}。背風遮蔽是依週期估算的概略值，不是波浪模式算出來的；門檻也未針對特定潛點校正`,
       })
     } else if (viable.length < diveScores.length / 2) {
       const best = [...viable].sort((x, y) => y.s - x.s)[0]
       reasons.push({
         claim: '只有部分時段適合下水',
-        evidence: `全日最大浪高 ${waveMax.toFixed(1)} m；${best.part}的${best.a.name}有 ${best.s} 分，其餘時段偏低`,
+        evidence: `背風潛點估計浪高 ${leeMax.toFixed(1)} m；${best.part}的${best.a.name}有 ${best.s} 分，其餘時段偏低`,
         confidence: '中',
-        basis: `浪高在門檻附近，模式相差 ${waveSpread.toFixed(2)} m 就足以改變結論`,
+        basis: `${shelterNote ?? ''}。浪高在門檻附近，模式相差 ${waveSpread.toFixed(2)} m 就足以改變結論`,
+      })
+    } else if (shore) {
+      reasons.push({
+        claim: `潛水請往${shore.lee}岸`,
+        evidence: `浪從${shore.exposed}方來，${shore.exposed}岸迎浪、${shore.lee}岸背風；外海 ${waveMax?.toFixed(1) ?? '—'} m 到背風側估計剩 ${leeMax.toFixed(1)} m`,
+        confidence: '中',
+        basis: '背風遮蔽依週期估算——短浪擋得住，長浪會繞進來；實際選點以當地潛店判斷為準',
       })
     }
   }
@@ -249,9 +269,9 @@ function assessDay(d: DaySummary, cyclones: Cyclone[], outOfRange: boolean, ente
         : null
 
   const wouldChange = blocked
-    ? `浪高降到 ${FERRY_SUSPEND_WAVE} m 以下，船班就恢復正常機率`
+    ? `外海浪高降到 ${FERRY_SUSPEND_WAVE} m 以下，船班就恢復正常機率`
     : poor
-      ? `浪高降到 ${DIVE_LIMIT_WAVE} m 以下，水肺潛水就重新可行`
+      ? `背風側浪高降到 ${DIVE_LIMIT_WAVE} m 以下，水肺潛水就重新可行`
       : caution
         ? '風或浪再降一級，多數時段就會回到舒適區間'
         : '除非預報大幅改變，否則維持'
@@ -296,6 +316,11 @@ export function assessTrip(
     factors.push({ label: '海象涵蓋', detail: '行程尾端超出波浪模式時距，那幾天的浪高沒有資料——不是「沒浪」，是還沒有預報。', weight: '低' })
   }
   factors.push({
+    label: '背風遮蔽',
+    detail: '潛點浪高是用外海浪高乘上一個依週期估算的屏蔽係數得到的概略值，不是波浪模式算出來的。短週期風浪擋得住，15 秒以上的長浪會繞射進背風側，屏蔽效果差很多。',
+    weight: '低',
+  })
+  factors.push({
     label: '門檻本身',
     detail: '停航與活動門檻都是業界經驗法則，不是船公司或潛店的正式標準。當地教練與當日船班公告永遠優先。',
     weight: '中',
@@ -336,10 +361,10 @@ export function assessTrip(
       reasoning.push(`行程期間最大浪高來到 ${worstWave.toFixed(1)} m。這是整個評估的源頭——它同時決定船開不開、以及能不能下水。`)
     }
     if (blocked.length) {
-      reasoning.push(`浪高超過 ${FERRY_SUSPEND_WAVE} m 時，台東富岡往綠島的航班常會停駛。這是離島行程真正的關卡：活動條件再好，船不開就沒有行程。`)
+      reasoning.push(`外海浪高超過 ${FERRY_SUSPEND_WAVE} m 時，台東富岡往綠島的航班常會停駛。這條航線橫越黑潮、沒有島嶼屏蔽，看的是外海浪高，不是潛點的浪高。`)
     }
     if (poor.length || blocked.length) {
-      reasoning.push(`即使順利登島，浪高超過 ${DIVE_LIMIT_WAVE} m 之後船潛的上下船風險就明顯升高，浮潛與自由潛水的門檻更低。`)
+      reasoning.push(`潛點的浪高則另外算：潛店會挑背風岸，所以判斷依據是外海浪高扣掉島嶼屏蔽後的估計值，超過 ${DIVE_LIMIT_WAVE} m 之後船潛的上下船風險才明顯升高。`)
     }
     const anySurf = usable.some((a) => a.stillWorks?.includes('衝浪'))
     if (anySurf) reasoning.push('唯一逆勢的是衝浪——它需要浪，所以其他活動被擋掉的日子，反而是它的條件。')

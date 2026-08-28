@@ -6,6 +6,7 @@ import { WAVE_MODELS, ensembleById } from '../lib/models'
 import type { Forecast } from '../lib/openmeteo'
 import { alpha, type Palette } from '../lib/palette'
 import { buildHours, summarise, sunByDay, windLimit, type DaySummary } from '../lib/trip'
+import type { TripWindow } from '../lib/useTrip'
 import { dayLabel, weekdayLabel } from '../lib/weather'
 import TimeChart, { type ChartBand, type ChartSeries } from './TimeChart'
 import { Card, ErrorBox, Legend, Segmented, Spinner, StatTile } from './ui'
@@ -19,11 +20,7 @@ const fromInput = (s: string) => Date.parse(s + 'T00:00:00Z')
 
 const WAVE_IDS = WAVE_MODELS.map((m) => m.id)
 
-export interface TripRange {
-  from: number
-  to: number
-  activity: string
-}
+export type TripRange = TripWindow
 
 export default function TripPanel({
   place,
@@ -63,8 +60,8 @@ export default function TripPanel({
 
   const summary: DaySummary[] = useMemo(() => {
     const rows = buildHours({ hourly: forecast.hourly, models: forecast.models, marine: marine.data, waveModels: WAVE_IDS, daily: forecast.daily })
-    return summarise(rows, days, ens.data, sunByDay(forecast.daily, forecast.models))
-  }, [forecast, marine.data, ens.data, days])
+    return summarise(rows, days, ens.data, sunByDay(forecast.daily, forecast.models), range.tolerance)
+  }, [forecast, marine.data, ens.data, days, range.tolerance])
 
   const activity = ACTIVITIES.find((a) => a.id === range.activity) ?? ACTIVITIES[0]
 
