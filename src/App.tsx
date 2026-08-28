@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import LocationPicker from './components/LocationPicker'
 import OverviewPanel from './components/OverviewPanel'
 import MeteogramPanel from './components/MeteogramPanel'
@@ -115,6 +115,28 @@ export default function App() {
     // back button with dozens of near-identical entries.
     window.history.replaceState(null, '', `#${shareHash}`)
   }, [shareHash])
+
+  // Current state, for the hashchange listener to diff against without re-subscribing
+  // on every keystroke (a stale closure would resurrect old settings).
+  const stateRef = useRef<AppState>(initial)
+  stateRef.current = { tab, place, models, windUnit, tripFrom: trip.from, tripTo: trip.to, activity: trip.activity }
+
+  useEffect(() => {
+    // Someone already on the page clicking a shared link only changes the hash — no
+    // reload, so the initial parse never runs again and the page appears to ignore
+    // the link. This also restores the back and forward buttons.
+    // `replaceState` above never fires hashchange, so this cannot loop.
+    const onHashChange = () => {
+      const next = decodeState(window.location.hash, stateRef.current)
+      setTab(next.tab as Tab)
+      setPlace(next.place)
+      setModels(next.models)
+      setWindUnit(next.windUnit)
+      setTrip({ from: next.tripFrom, to: next.tripTo, activity: next.activity })
+    }
+    window.addEventListener('hashchange', onHashChange)
+    return () => window.removeEventListener('hashchange', onHashChange)
+  }, [])
 
   const share = async () => {
     const url = `${window.location.origin}${window.location.pathname}#${shareHash}`
