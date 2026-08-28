@@ -78,47 +78,74 @@ export async function exportPng(nodes: SVGSVGElement[], filename: string, backgr
   download(blob, filename)
 }
 
+export interface ReportReason {
+  claim: string
+  evidence: string
+  confidence: string
+  basis: string
+}
+
+export interface ReportDay {
+  date: string
+  weekday: string
+  status: string
+  tone: string
+  verdict: string
+  reasons: ReportReason[]
+  wouldChange: string
+  stillWorks: string | null
+}
+
 export interface HtmlReportInput {
   title: string
   place: string
   range: string
   generated: string
-  level: string
-  score: number
-  headline: string
-  summary: string
+  conclusion: string
+  reasoning: string[]
+  uncertainty: { level: string; statement: string; factors: { label: string; detail: string }[] }
+  days: ReportDay[]
   actions: string[]
-  rows: { date: string; weekday: string; level: string; score: number | null; driver: string; detail: string; best: string }[]
   svgs: SVGSVGElement[]
-  caveats: string[]
   sourceNote: string
   dark: boolean
 }
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)
 
-/** A complete, offline HTML file — no scripts, no external requests beyond none at all. */
+/** A complete, offline HTML file — no scripts, no external requests at all. */
 export function buildHtmlReport(input: HtmlReportInput): Blob {
   const ink = input.dark ? '#e9f0f1' : '#14201f'
   const muted = input.dark ? '#98aab0' : '#5d6d72'
   const ground = input.dark ? '#0d1618' : '#f4f6f5'
-  const paper = input.dark ? '#16232699' : '#ffffff'
+  const paper = input.dark ? '#162326' : '#ffffff'
   const rule = input.dark ? '#26383d' : '#dbe3e1'
-
-  const tone = (lv: string) => (lv === '極高' || lv === '高' ? '#b3453f' : lv === '中' ? '#9c6b12' : '#2c7a4d')
+  const toneColor = (t: string) => (t === 'critical' ? '#b3453f' : t === 'warning' ? '#9c6b12' : t === 'muted' ? muted : '#2c7a4d')
 
   const svgs = input.svgs.map((n) => `<figure>${serializeSvg(n).xml}</figure>`).join('')
 
-  const rows = input.rows
+  const days = input.days
     .map(
-      (r) => `<tr>
-      <td><strong>${esc(r.date)}</strong> <span class="m">週${esc(r.weekday)}</span></td>
-      <td><span class="lv" style="color:${tone(r.level)}">${esc(r.level)}</span></td>
-      <td class="n">${r.score ?? '—'}</td>
-      <td>${esc(r.driver)}</td>
-      <td class="m">${esc(r.detail)}</td>
-      <td class="m">${esc(r.best)}</td>
-    </tr>`,
+      (d) => `<article class="day">
+      <header><strong>${esc(d.date)}</strong><span class="m">週${esc(d.weekday)}</span>
+        <span class="st" style="color:${toneColor(d.tone)}">${esc(d.status)}</span></header>
+      <p class="vd">${esc(d.verdict)}</p>
+      ${
+        d.reasons.length
+          ? `<ul class="rs">${d.reasons
+              .map(
+                (r) => `<li>
+            <div class="cl">${esc(r.claim)}<span class="cf">把握 ${esc(r.confidence)}</span></div>
+            <p class="ev">${esc(r.evidence)}</p>
+            <p class="bs">為什麼只有這樣的把握：${esc(r.basis)}</p>
+          </li>`,
+              )
+              .join('')}</ul>`
+          : ''
+      }
+      ${d.stillWorks ? `<p class="wk">仍然可行：${esc(d.stillWorks)}</p>` : ''}
+      ${d.wouldChange ? `<p class="ch">會翻盤的條件：${esc(d.wouldChange)}</p>` : ''}
+    </article>`,
     )
     .join('')
 
@@ -129,62 +156,66 @@ export function buildHtmlReport(input: HtmlReportInput): Blob {
 <style>
   :root { color-scheme: ${input.dark ? 'dark' : 'light'}; }
   * { box-sizing: border-box; }
-  body { margin:0; background:${ground}; color:${ink};
-    font-family:${SANS}; font-size:15px; line-height:1.75; }
-  .wrap { max-width:860px; margin:0 auto; padding:36px 20px 64px; display:flex; flex-direction:column; gap:22px; }
-  header { border-top:3px solid ${ink}; padding-top:14px; }
-  h1 { margin:0; font-size:27px; letter-spacing:-.01em; }
-  .meta { margin:10px 0 0; font-size:12px; color:${muted}; display:flex; flex-wrap:wrap; gap:4px 22px; }
-  .hero { background:${paper}; border:1px solid ${rule}; border-left:5px solid ${tone(input.level)};
-    border-radius:5px; padding:18px 22px; }
-  .hero .lvl { font-size:13px; letter-spacing:.1em; color:${tone(input.level)}; font-weight:700; }
-  .hero h2 { margin:4px 0 6px; font-size:23px; }
-  .hero p { margin:0; color:${muted}; font-size:14px; }
+  body { margin:0; background:${ground}; color:${ink}; font-family:${SANS}; font-size:15px; line-height:1.8; }
+  .wrap { max-width:820px; margin:0 auto; padding:36px 20px 64px; display:flex; flex-direction:column; gap:20px; }
+  header.top { border-top:3px solid ${ink}; padding-top:14px; }
+  h1 { margin:0; font-size:26px; letter-spacing:-.01em; }
+  .meta { margin:8px 0 0; font-size:12px; color:${muted}; }
   section { background:${paper}; border:1px solid ${rule}; border-radius:5px; padding:18px 22px; }
-  section h3 { margin:0 0 12px; font-size:15px; }
-  figure { margin:0 0 14px; }
-  figure svg { width:100%; height:auto; }
-  table { width:100%; border-collapse:collapse; font-size:13px; }
-  th,td { text-align:left; padding:7px 9px; border-bottom:1px solid ${rule}; vertical-align:top; }
-  th { font-size:11px; color:${muted}; font-weight:500; }
-  .n { text-align:right; font-variant-numeric:tabular-nums; }
+  section h2 { margin:0 0 10px; font-size:15px; }
+  .concl { border-left:5px solid ${toneColor('warning')}; }
+  .concl .tag { font-size:11px; letter-spacing:.14em; color:${muted}; font-weight:700; }
+  .concl p { margin:6px 0 0; font-size:17px; line-height:1.75; }
+  ol.why { margin:0; padding-left:20px; font-size:14px; line-height:1.85; }
+  ol.why li { margin-bottom:6px; }
+  .unc { border-left:5px solid ${toneColor('warning')}; }
+  .unc .lv { font-size:13px; font-weight:700; color:${toneColor('warning')}; }
+  .unc p { margin:6px 0 12px; font-size:14px; color:${ink}; }
+  .unc ul { margin:0; padding-left:18px; font-size:12.5px; color:${muted}; line-height:1.75; }
+  .unc strong { color:${ink}; display:block; }
+  figure { margin:0 0 14px; } figure svg { width:100%; height:auto; }
+  .day { border:1px solid ${rule}; border-radius:5px; padding:14px 16px; margin-bottom:12px; }
+  .day header { display:flex; align-items:baseline; gap:8px; font-size:14px; }
+  .day .st { margin-left:auto; font-weight:700; }
   .m { color:${muted}; font-size:12px; }
-  .lv { font-weight:700; }
-  ol { margin:0; padding-left:20px; font-size:13.5px; line-height:1.8; }
-  ul.cav { margin:0; padding-left:20px; font-size:12.5px; line-height:1.8; color:${muted}; }
+  .vd { margin:6px 0 10px; font-size:14px; }
+  ul.rs { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  ul.rs li { border-left:2px solid ${rule}; padding-left:12px; }
+  .cl { font-weight:600; font-size:13.5px; display:flex; gap:10px; align-items:baseline; }
+  .cf { font-size:11px; color:${muted}; font-weight:400; }
+  .ev { margin:3px 0 0; font-size:12.5px; color:${ink}; }
+  .bs { margin:3px 0 0; font-size:11.5px; color:${muted}; }
+  .wk,.ch { margin:10px 0 0; font-size:12px; color:${muted}; }
+  ol.act { margin:0; padding-left:20px; font-size:14px; line-height:1.85; }
   footer { font-size:11.5px; color:${muted}; border-top:1px solid ${rule}; padding-top:14px; line-height:1.7; }
-  @media print { body { background:#fff; } section,.hero { break-inside:avoid; } }
+  @media print { body { background:#fff; } section,.day { break-inside:avoid; } }
 </style></head>
 <body><div class="wrap">
-  <header>
-    <h1>${esc(input.place)} ${esc(input.range)} 行程風險報告</h1>
-    <p class="meta"><span>資料時間 ${esc(input.generated)}</span><span>風險分數 ${input.score}/100</span></p>
+  <header class="top">
+    <h1>${esc(input.place)} ${esc(input.range)} 行程評估</h1>
+    <p class="meta">資料時間 ${esc(input.generated)}</p>
   </header>
 
-  <div class="hero">
-    <div class="lvl">整體風險　${esc(input.level)}</div>
-    <h2>${esc(input.headline)}</h2>
-    <p>${esc(input.summary)}</p>
-  </div>
+  <section class="concl"><div class="tag">結論</div><p>${esc(input.conclusion)}</p></section>
 
-  <section><h3>示意圖</h3>${svgs}</section>
+  ${input.reasoning.length ? `<section><h2>為什麼</h2><ol class="why">${input.reasoning.map((r) => `<li>${esc(r)}</li>`).join('')}</ol></section>` : ''}
 
-  <section>
-    <h3>逐日風險</h3>
-    <table>
-      <thead><tr><th>日期</th><th>風險</th><th class="n">分數</th><th>主要因素</th><th>說明</th><th>最佳活動</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table>
+  <section class="unc">
+    <h2>這份評估有多可信　<span class="lv">${esc(input.uncertainty.level)}</span></h2>
+    <p>${esc(input.uncertainty.statement)}</p>
+    <ul>${input.uncertainty.factors.map((f) => `<li><strong>${esc(f.label)}</strong>${esc(f.detail)}</li>`).join('')}</ul>
   </section>
 
-  <section><h3>建議行動</h3><ol>${input.actions.map((a) => `<li>${esc(a)}</li>`).join('')}</ol></section>
+  <section><h2>示意圖</h2>${svgs}</section>
 
-  <section><h3>這份報告的限制</h3><ul class="cav">${input.caveats.map((c) => `<li>${esc(c)}</li>`).join('')}</ul></section>
+  <section><h2>逐日理由</h2>${days}</section>
+
+  <section><h2>建議行動</h2><ol class="act">${input.actions.map((x) => `<li>${esc(x)}</li>`).join('')}</ol></section>
 
   <footer>${esc(input.sourceNote)}</footer>
 </div></body></html>`
 
-  return new Blob(['﻿' + html], { type: 'text/html;charset=utf-8' })
+  return new Blob(['\ufeff' + html], { type: 'text/html;charset=utf-8' })
 }
 
 export function downloadHtml(blob: Blob, filename: string) {

@@ -34,7 +34,9 @@ export function encodeState(s: AppState): string {
     models: s.models.join(','),
     u: s.windUnit,
   })
-  if (s.tab === 'trip') {
+  // Both the risk page and the detail page are trip-scoped and let the dates be
+  // edited, so a shared link from either must carry the window it was showing.
+  if (s.tab === 'risk' || s.tab === 'trip') {
     p.set('from', toDate(s.tripFrom))
     p.set('to', toDate(s.tripTo))
     p.set('act', s.activity)

@@ -229,7 +229,17 @@ export default function App() {
 
         {forecast && tab === 'overview' && <OverviewPanel forecast={forecast} palette={palette} nowMs={nowMs} />}
         {forecast && tab === 'risk' && (
-          <RiskPanel place={place} forecast={forecast} palette={palette} nowMs={nowMs} windUnit={windUnit} range={trip} onOpenDetail={() => setTab('trip')} />
+          <RiskPanel
+            place={place}
+            forecast={forecast}
+            palette={palette}
+            nowMs={nowMs}
+            windUnit={windUnit}
+            range={trip}
+            onRangeChange={setTrip}
+            onPlaceChange={setPlace}
+            onOpenDetail={() => setTab('trip')}
+          />
         )}
         {forecast && tab === 'trip' && (
           <TripPanel place={place} forecast={forecast} palette={palette} nowMs={nowMs} windUnit={windUnit} range={trip} onRangeChange={setTrip} />

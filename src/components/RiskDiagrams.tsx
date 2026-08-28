@@ -8,105 +8,104 @@
  */
 import type { Ref } from 'react'
 import type { Palette } from '../lib/palette'
-import type { DayRisk, RiskLevel } from '../lib/risk'
+import { STATUS_LABEL, type DayAssessment, type Status } from '../lib/risk'
 import type { Cyclone } from '../lib/tropical'
 
 const SANS = 'system-ui, -apple-system, "Noto Sans TC", sans-serif'
 
-export function riskColor(level: RiskLevel, p: Palette): string {
-  return level === '極高' ? p.critical : level === '高' ? p.critical : level === '中' ? p.warning : p.good
+export function statusColor(status: Status, p: Palette): string {
+  return status === 'blocked' || status === 'poor' ? p.critical : status === 'caution' ? p.warning : p.good
 }
 
 const dayLabel = (ms: number) => `${new Date(ms).getUTCMonth() + 1}/${new Date(ms).getUTCDate()}`
 const weekday = (ms: number) => '日一二三四五六'[new Date(ms).getUTCDay()]
 
-// ------------------------------------------------------------ risk timeline
+// ------------------------------------------------------------ status strip
 
-export interface TimelineProps {
-  days: DayRisk[]
+export interface StripProps {
+  days: DayAssessment[]
   palette: Palette
   width?: number
-  /** React 19 passes ref as a plain prop; the export path needs the live node. */
   ref?: Ref<SVGSVGElement>
 }
 
+/** Break a string into lines of at most `max` characters, counting CJK as one. */
+function wrap(text: string, max: number, limit: number): string[] {
+  const out: string[] = []
+  let line = ''
+  for (const ch of text) {
+    if (line.length >= max) {
+      out.push(line)
+      line = ''
+      if (out.length === limit) return out
+    }
+    line += ch
+  }
+  if (line && out.length < limit) out.push(line)
+  return out
+}
+
 /**
- * Risk across the trip, one column per day. Height encodes the score and colour
- * encodes the band, so the shape reads before any number does; the dominant driver
- * is printed under each column because "which day" without "why" isn't actionable.
+ * One column per day: status, what happens, and what still works.
+ *
+ * Deliberately carries no score. A 0–100 figure ranked the days but told the reader
+ * nothing about why or what to do, and invited precision the inputs cannot support;
+ * the words are the content, and the colour is only there to let the shape of the
+ * trip register before the text is read.
  */
-export function RiskTimeline({ days, palette: p, width = 760, ref }: TimelineProps) {
+export function RiskStrip({ days, palette: p, width = 780, ref }: StripProps) {
   const H = 210
-  const padL = 8
-  const padR = 8
-  const top = 30
-  const baseY = 150
-  const plotH = baseY - top
+  const padL = 10
+  const padR = 10
   const n = Math.max(1, days.length)
   const colW = (width - padL - padR) / n
-  const barW = Math.min(88, colW - 14)
+  const blockW = Math.min(168, colW - 12)
+  const blockY = 44
+  const blockH = 44
 
   return (
-    <svg ref={ref} viewBox={`0 0 ${width} ${H}`} width="100%" role="img" aria-label="逐日行程風險" style={{ display: 'block' }}>
+    <svg ref={ref} viewBox={`0 0 ${width} ${H}`} width="100%" role="img" aria-label="逐日行程狀態" style={{ display: 'block' }}>
       <rect x="0" y="0" width={width} height={H} fill={p.surface1} />
-      {[0, 25, 50, 75, 100].map((v) => {
-        const y = baseY - (v / 100) * plotH
-        return (
-          <g key={v}>
-            <line x1={padL} x2={width - padR} y1={y} y2={y} stroke={p.grid} strokeWidth="1" />
-            <text x={padL + 2} y={y - 3} fontSize="9" fill={p.textMuted} fontFamily={SANS}>{v}</text>
-          </g>
-        )
-      })}
       {days.map((d, i) => {
         const cx = padL + colW * i + colW / 2
-        const h = d.outOfRange ? 0 : Math.max(3, (d.score / 100) * plotH)
-        const color = d.outOfRange ? p.textMuted : riskColor(d.level, p)
+        const color = d.outOfRange ? p.textMuted : statusColor(d.status, p)
+        const label = d.outOfRange ? '無預報' : STATUS_LABEL[d.status]
+        const verdict = d.outOfRange ? (d.entersRange ? `${d.entersRange} 起有資料` : '') : d.verdict
         return (
           <g key={d.day}>
-            <text x={cx} y={16} fontSize="12" fontWeight="600" textAnchor="middle" fill={p.textPrimary} fontFamily={SANS}>
+            <text x={cx} y={20} fontSize="14" fontWeight="700" textAnchor="middle" fill={p.textPrimary} fontFamily={SANS}>
               {dayLabel(d.day)}
             </text>
-            <text x={cx} y={27} fontSize="9" textAnchor="middle" fill={p.textMuted} fontFamily={SANS}>
+            <text x={cx} y={34} fontSize="10" textAnchor="middle" fill={p.textMuted} fontFamily={SANS}>
               週{weekday(d.day)}
             </text>
-            {d.outOfRange ? (
-              <text x={cx} y={baseY - 6} fontSize="10" textAnchor="middle" fill={p.textMuted} fontFamily={SANS}>無預報</text>
-            ) : (
-              <>
-                <rect x={cx - barW / 2} y={baseY - h} width={barW} height={h} rx="4" fill={color} opacity="0.85" />
-                {/* A tall bar leaves no room above it — the label moves inside rather
-                    than colliding with the date heading. */}
-                {h > plotH - 22 ? (
-                  <text x={cx} y={baseY - h + 15} fontSize="12" fontWeight="700" textAnchor="middle" fill={p.surface1} fontFamily={SANS}>
-                    {d.score}
-                  </text>
-                ) : (
-                  <text x={cx} y={baseY - h - 6} fontSize="12" fontWeight="700" textAnchor="middle" fill={color} fontFamily={SANS}>
-                    {d.score}
-                  </text>
-                )}
-              </>
-            )}
-            <line x1={cx - barW / 2} x2={cx + barW / 2} y1={baseY} y2={baseY} stroke={p.axis} strokeWidth="1" />
-            <text x={cx} y={baseY + 16} fontSize="11" fontWeight="600" textAnchor="middle" fill={d.outOfRange ? p.textMuted : color} fontFamily={SANS}>
-              {d.outOfRange ? '—' : d.level}
+            <rect x={cx - blockW / 2} y={blockY} width={blockW} height={blockH} rx="7" fill={color} opacity={d.outOfRange ? 0.16 : 0.9} />
+            <text
+              x={cx}
+              y={blockY + 28}
+              fontSize="15"
+              fontWeight="700"
+              textAnchor="middle"
+              fill={d.outOfRange ? p.textMuted : p.surface1}
+              fontFamily={SANS}
+            >
+              {label}
             </text>
-            <text x={cx} y={baseY + 31} fontSize="9.5" textAnchor="middle" fill={p.textSecondary} fontFamily={SANS}>
-              {d.outOfRange ? '' : (d.dominant?.label ?? '')}
-            </text>
-            {!d.outOfRange && d.bestActivity && (
-              <text x={cx} y={baseY + 45} fontSize="9" textAnchor="middle" fill={p.textMuted} fontFamily={SANS}>
-                {/* "最佳 自由潛水 0" reads as a recommendation; zero means nothing works. */}
-                {d.bestActivity.score > 0 ? `最佳 ${d.bestActivity.name} ${d.bestActivity.score}` : '無可行活動'}
+            {wrap(verdict, Math.floor(blockW / 11.5), 3).map((line, li) => (
+              <text key={li} x={cx} y={blockY + blockH + 20 + li * 15} fontSize="11" textAnchor="middle" fill={p.textSecondary} fontFamily={SANS}>
+                {line}
               </text>
+            ))}
+            {!d.outOfRange && d.stillWorks && (
+              wrap(`仍可行：${d.stillWorks}`, Math.floor(blockW / 10.5), 2).map((line, li) => (
+                <text key={`w${li}`} x={cx} y={blockY + blockH + 74 + li * 13} fontSize="9.5" textAnchor="middle" fill={p.textMuted} fontFamily={SANS}>
+                  {line}
+                </text>
+              ))
             )}
           </g>
         )
       })}
-      <text x={padL} y={H - 4} fontSize="9" fill={p.textMuted} fontFamily={SANS}>
-        風險分數 0–100，越高代表行程越可能受影響
-      </text>
     </svg>
   )
 }
