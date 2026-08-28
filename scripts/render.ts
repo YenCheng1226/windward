@@ -282,4 +282,26 @@ const page = renderPage({
 })
 
 writeFileSync('report/index.html', page)
-console.error(`已產生 report/index.html（${(page.length / 1024).toFixed(0)} KB）`)
+
+/**
+ * The artifact host wraps the fragment above in its own document skeleton, so
+ * `index.html` deliberately has no <!doctype>/<html>/<head>. Anywhere else — a static
+ * host, an email attachment, a file opened straight from disk — that fragment renders
+ * unstyled or not at all, so a complete document is emitted alongside it.
+ */
+const standalone = `<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="${data.place} ${data.from}–${data.to} 水上活動適宜度、日照與降雨、船班停航風險與預報不確定性分析。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E🤿%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+${page}
+</body>
+</html>`
+writeFileSync('report/standalone.html', standalone)
+
+console.error(`已產生 report/index.html（Artifact 用片段，${(page.length / 1024).toFixed(0)} KB）`)
+console.error(`已產生 report/standalone.html（完整文件，可直接開啟或放上任何靜態主機，${(standalone.length / 1024).toFixed(0)} KB）`)

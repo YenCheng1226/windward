@@ -4,8 +4,8 @@
   "lon": 121.489,
   "marineLat": 22.75,
   "marineLon": 121.5,
-  "generatedAt": "2026-08-27T06:28:40.658Z",
-  "leadDays": 13,
+  "generatedAt": "2026-08-28T03:30:19.630Z",
+  "leadDays": 12,
   "from": "9/9",
   "to": "9/12",
   "days": [
@@ -15,14 +15,14 @@
       "outOfRange": false,
       "entersRange": null,
       "ferry": {
-        "level": "低",
-        "tone": "good",
-        "reason": "浪高 1.0 m，海況平穩"
+        "level": "高",
+        "tone": "critical",
+        "reason": "浪高 1.2 m、陣風 18 m/s，接近停航門檻，暈船機率也高"
       },
-      "waveMax": 0.96,
-      "gustMax": 5.8,
-      "sunHours": 9.185427777777779,
-      "sunFrac": 0.7395886266201931,
+      "waveMax": 1.2,
+      "gustMax": 17.7,
+      "sunHours": 9,
+      "sunFrac": 0.7246584264355393,
       "sunLabel": "陽光充足",
       "sunTone": "good",
       "cells": [
@@ -31,152 +31,152 @@
           "hours": "6:00–11:00",
           "scores": {
             "freedive": {
-              "score": 93,
-              "limiting": "浪高",
-              "limitValue": "0.9 m",
-              "why": "水面湧浪讓平靜呼吸與繩索定位變困難",
+              "score": 0,
+              "limiting": "風速",
+              "limitValue": "12.9 m/s",
+              "why": "風生浪打亂水面，也讓船隻定位不穩",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": 0.9,
+                  "value": 0.94,
                   "unit": "m",
-                  "score": 0.84
+                  "score": 0.808
                 },
                 {
                   "label": "風速",
-                  "value": 1.7,
+                  "value": 12.89,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0
                 },
                 {
                   "label": "水下能見度",
-                  "value": 1.8500000000000005,
+                  "value": 29.900000000000006,
                   "unit": "mm/48h",
-                  "score": 1
+                  "score": 0.6755555555555555
                 }
               ]
             },
             "scuba": {
-              "score": 100,
-              "limiting": "浪高",
-              "limitValue": "0.9 m",
-              "why": "上下船與水面集合的風險隨浪高快速上升",
+              "score": 0,
+              "limiting": "風速",
+              "limitValue": "12.9 m/s",
+              "why": "風大時船隻難以在潛點上方保持位置",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": 0.9,
+                  "value": 0.94,
                   "unit": "m",
                   "score": 1
                 },
                 {
                   "label": "風速",
-                  "value": 1.7,
+                  "value": 12.89,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0
                 },
                 {
                   "label": "水下能見度",
-                  "value": 1.8500000000000005,
+                  "value": 29.900000000000006,
                   "unit": "mm/48h",
-                  "score": 1
+                  "score": 0.6755555555555555
                 }
               ]
             },
             "snorkel": {
-              "score": 90,
-              "limiting": "浪高",
-              "limitValue": "0.9 m",
-              "why": "岸邊礁石區的湧浪會讓入水與回岸變危險",
+              "score": 0,
+              "limiting": "風速",
+              "limitValue": "12.9 m/s",
+              "why": "風浪讓呼吸管容易嗆水",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": 0.9,
+                  "value": 0.94,
                   "unit": "m",
-                  "score": 0.76
+                  "score": 0.728
                 },
                 {
                   "label": "風速",
-                  "value": 1.7,
+                  "value": 12.89,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0
                 },
                 {
                   "label": "水下能見度",
-                  "value": 1.8500000000000005,
+                  "value": 29.900000000000006,
                   "unit": "mm/48h",
-                  "score": 1
+                  "score": 0.6755555555555555
                 }
               ]
             },
             "sup": {
-              "score": 80,
-              "limiting": "浪高",
-              "limitValue": "0.9 m",
-              "why": "板身短時湧浪會讓站立平衡難以維持",
+              "score": 0,
+              "limiting": "風速",
+              "limitValue": "12.9 m/s",
+              "why": "站姿受風面積大，離岸風會把人吹向外海",
               "parts": [
                 {
                   "label": "風速",
-                  "value": 1.7,
+                  "value": 12.89,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0
                 },
                 {
                   "label": "浪高",
-                  "value": 0.9,
+                  "value": 0.94,
                   "unit": "m",
-                  "score": 0.48
+                  "score": 0.4320000000000001
                 },
                 {
                   "label": "陣風",
-                  "value": 4.4,
+                  "value": 16.9,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0
                 }
               ]
             },
             "surf": {
-              "score": 84,
-              "limiting": "浪高",
-              "limitValue": "0.9 m",
-              "why": "浪太小推不動板，太大超出一般旅遊等級",
+              "score": 0,
+              "limiting": "風速",
+              "limitValue": "12.9 m/s",
+              "why": "強風把浪面吹亂，離岸風以外都會破壞浪型",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": 0.9,
+                  "value": 0.94,
                   "unit": "m",
-                  "score": 0.7
+                  "score": 0.7399999999999999
                 },
                 {
                   "label": "週期",
-                  "value": 7.824999999999999,
+                  "value": 7.925000000000001,
                   "unit": "s",
-                  "score": 0.9649999999999999
+                  "score": 0.9850000000000001
                 },
                 {
                   "label": "風速",
-                  "value": 1.7,
+                  "value": 12.89,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0
                 }
               ]
             }
           },
           "windProb": {
-            "freedive": 64.51612903225806,
-            "scuba": 80.64516129032258,
+            "freedive": 61.29032258064516,
+            "scuba": 77.41935483870968,
             "snorkel": 70.96774193548387,
-            "sup": 45.16129032258064,
+            "sup": 48.38709677419355,
             "surf": 70.96774193548387
           },
-          "wave": 0.9,
-          "wind": 1.7,
-          "rainSum": 0.6,
-          "rainProbMax": 41,
+          "wave": 0.94,
+          "wind": 12.89,
+          "rainSum": 0,
+          "rainProbMax": 40,
           "rainHours": 0,
-          "cloudMean": 20.333333333333332,
-          "comfortScore": 100,
+          "cloudMean": 95,
+          "comfortScore": 74,
           "comfortNotes": [
-            "零星短暫降雨，帶件薄雨衣",
+            "此時段平均雲量 95%，幾乎全陰，水下光線會偏暗",
             "UV 指數 9，屬過量級，防曬要補",
             "海溫 29 °C，3 mm 防寒衣即可"
           ]
@@ -186,10 +186,10 @@
           "hours": "12:00–17:00",
           "scores": {
             "freedive": {
-              "score": 96,
-              "limiting": "浪高",
-              "limitValue": "0.8 m",
-              "why": "水面湧浪讓平靜呼吸與繩索定位變困難",
+              "score": 0,
+              "limiting": "風速",
+              "limitValue": "10.7 m/s",
+              "why": "風生浪打亂水面，也讓船隻定位不穩",
               "parts": [
                 {
                   "label": "浪高",
@@ -199,23 +199,23 @@
                 },
                 {
                   "label": "風速",
-                  "value": 4.05,
+                  "value": 10.66,
                   "unit": "m/s",
-                  "score": 0.992
+                  "score": 0
                 },
                 {
                   "label": "水下能見度",
-                  "value": 2.500000000000001,
+                  "value": 28.35,
                   "unit": "mm/48h",
-                  "score": 1
+                  "score": 0.6985185185185185
                 }
               ]
             },
             "scuba": {
-              "score": 100,
-              "limiting": "浪高",
-              "limitValue": "0.8 m",
-              "why": "上下船與水面集合的風險隨浪高快速上升",
+              "score": 40,
+              "limiting": "風速",
+              "limitValue": "10.7 m/s",
+              "why": "風大時船隻難以在潛點上方保持位置",
               "parts": [
                 {
                   "label": "浪高",
@@ -225,23 +225,23 @@
                 },
                 {
                   "label": "風速",
-                  "value": 4.05,
+                  "value": 10.66,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0.06799999999999996
                 },
                 {
                   "label": "水下能見度",
-                  "value": 2.500000000000001,
+                  "value": 28.35,
                   "unit": "mm/48h",
-                  "score": 1
+                  "score": 0.6985185185185185
                 }
               ]
             },
             "snorkel": {
-              "score": 93,
-              "limiting": "浪高",
-              "limitValue": "0.8 m",
-              "why": "岸邊礁石區的湧浪會讓入水與回岸變危險",
+              "score": 0,
+              "limiting": "風速",
+              "limitValue": "10.7 m/s",
+              "why": "風浪讓呼吸管容易嗆水",
               "parts": [
                 {
                   "label": "浪高",
@@ -251,29 +251,29 @@
                 },
                 {
                   "label": "風速",
-                  "value": 4.05,
+                  "value": 10.66,
                   "unit": "m/s",
-                  "score": 0.9933333333333334
+                  "score": 0
                 },
                 {
                   "label": "水下能見度",
-                  "value": 2.500000000000001,
+                  "value": 28.35,
                   "unit": "mm/48h",
-                  "score": 1
+                  "score": 0.6985185185185185
                 }
               ]
             },
             "sup": {
-              "score": 75,
-              "limiting": "浪高",
-              "limitValue": "0.8 m",
-              "why": "板身短時湧浪會讓站立平衡難以維持",
+              "score": 0,
+              "limiting": "風速",
+              "limitValue": "10.7 m/s",
+              "why": "站姿受風面積大，離岸風會把人吹向外海",
               "parts": [
                 {
                   "label": "風速",
-                  "value": 4.05,
+                  "value": 10.66,
                   "unit": "m/s",
-                  "score": 0.79
+                  "score": 0
                 },
                 {
                   "label": "浪高",
@@ -283,17 +283,17 @@
                 },
                 {
                   "label": "陣風",
-                  "value": 5.5,
+                  "value": 17.4,
                   "unit": "m/s",
-                  "score": 0.9333333333333333
+                  "score": 0
                 }
               ]
             },
             "surf": {
-              "score": 77,
-              "limiting": "浪高",
-              "limitValue": "0.8 m",
-              "why": "浪太小推不動板，太大超出一般旅遊等級",
+              "score": 37,
+              "limiting": "風速",
+              "limitValue": "10.7 m/s",
+              "why": "強風把浪面吹亂，離岸風以外都會破壞浪型",
               "parts": [
                 {
                   "label": "浪高",
@@ -303,35 +303,35 @@
                 },
                 {
                   "label": "週期",
-                  "value": 7.574999999999999,
+                  "value": 7.6,
                   "unit": "s",
-                  "score": 0.9149999999999998
+                  "score": 0.9199999999999999
                 },
                 {
                   "label": "風速",
-                  "value": 4.05,
+                  "value": 10.66,
                   "unit": "m/s",
-                  "score": 0.9933333333333334
+                  "score": 0.050999999999999976
                 }
               ]
             }
           },
           "windProb": {
-            "freedive": 74.19354838709677,
-            "scuba": 80.64516129032258,
-            "snorkel": 74.19354838709677,
-            "sup": 58.06451612903226,
-            "surf": 74.19354838709677
+            "freedive": 61.29032258064516,
+            "scuba": 77.41935483870968,
+            "snorkel": 64.51612903225806,
+            "sup": 54.83870967741935,
+            "surf": 64.51612903225806
           },
           "wave": 0.8,
-          "wind": 4.05,
-          "rainSum": 0.8999999999999999,
-          "rainProbMax": 33,
-          "rainHours": 3,
-          "cloudMean": 41.5,
-          "comfortScore": 99,
+          "wind": 10.66,
+          "rainSum": 0,
+          "rainProbMax": 39,
+          "rainHours": 0,
+          "cloudMean": 98.33333333333333,
+          "comfortScore": 70,
           "comfortNotes": [
-            "零星短暫降雨，帶件薄雨衣",
+            "此時段平均雲量 98%，幾乎全陰，水下光線會偏暗",
             "UV 指數 9，屬過量級，防曬要補",
             "海溫 29 °C，3 mm 防寒衣即可"
           ]
@@ -344,14 +344,14 @@
       "outOfRange": false,
       "entersRange": null,
       "ferry": {
-        "level": "低",
-        "tone": "good",
-        "reason": "浪高 0.7 m，海況平穩"
+        "level": "中",
+        "tone": "warning",
+        "reason": "浪高 1.7 m，船會晃，容易暈船但通常照開"
       },
-      "waveMax": 0.7,
-      "gustMax": 5.8,
-      "sunHours": 9.305955555555556,
-      "sunFrac": 0.7505974835228529,
+      "waveMax": 1.72,
+      "gustMax": 14.4,
+      "sunHours": 9.243641666666667,
+      "sunFrac": 0.7455713851378677,
       "sunLabel": "陽光充足",
       "sunTone": "good",
       "cells": [
@@ -360,151 +360,152 @@
           "hours": "6:00–11:00",
           "scores": {
             "freedive": {
-              "score": 100,
-              "limiting": "浪高",
-              "limitValue": "0.6 m",
-              "why": "水面湧浪讓平靜呼吸與繩索定位變困難",
+              "score": 0,
+              "limiting": "風速",
+              "limitValue": "9.0 m/s",
+              "why": "風生浪打亂水面，也讓船隻定位不穩",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": 0.62,
+                  "value": 1.18,
                   "unit": "m",
-                  "score": 1
+                  "score": 0.616
                 },
                 {
                   "label": "風速",
-                  "value": 2.02,
+                  "value": 9.04,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0
                 },
                 {
                   "label": "水下能見度",
-                  "value": 3.600000000000002,
+                  "value": 14.5,
                   "unit": "mm/48h",
-                  "score": 1
+                  "score": 0.9037037037037037
                 }
               ]
             },
             "scuba": {
-              "score": 100,
-              "limiting": "浪高",
-              "limitValue": "0.6 m",
-              "why": "上下船與水面集合的風險隨浪高快速上升",
+              "score": 69,
+              "limiting": "風速",
+              "limitValue": "9.0 m/s",
+              "why": "風大時船隻難以在潛點上方保持位置",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": 0.62,
+                  "value": 1.18,
                   "unit": "m",
-                  "score": 1
+                  "score": 0.8560000000000001
                 },
                 {
                   "label": "風速",
-                  "value": 2.02,
+                  "value": 9.04,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0.3920000000000001
                 },
                 {
                   "label": "水下能見度",
-                  "value": 3.600000000000002,
+                  "value": 14.5,
                   "unit": "mm/48h",
-                  "score": 1
+                  "score": 0.9037037037037037
                 }
               ]
             },
             "snorkel": {
-              "score": 99,
-              "limiting": "浪高",
-              "limitValue": "0.6 m",
-              "why": "岸邊礁石區的湧浪會讓入水與回岸變危險",
+              "score": 49,
+              "limiting": "風速",
+              "limitValue": "9.0 m/s",
+              "why": "風浪讓呼吸管容易嗆水",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": 0.62,
+                  "value": 1.18,
                   "unit": "m",
-                  "score": 0.984
+                  "score": 0.5040000000000001
                 },
                 {
                   "label": "風速",
-                  "value": 2.02,
+                  "value": 9.04,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0.19200000000000017
                 },
                 {
                   "label": "水下能見度",
-                  "value": 3.600000000000002,
+                  "value": 14.5,
                   "unit": "mm/48h",
-                  "score": 1
+                  "score": 0.9037037037037037
                 }
               ]
             },
             "sup": {
-              "score": 93,
-              "limiting": "浪高",
-              "limitValue": "0.6 m",
-              "why": "板身短時湧浪會讓站立平衡難以維持",
+              "score": 0,
+              "limiting": "風速",
+              "limitValue": "9.0 m/s",
+              "why": "站姿受風面積大，離岸風會把人吹向外海",
               "parts": [
                 {
                   "label": "風速",
-                  "value": 2.02,
+                  "value": 9.04,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0
                 },
                 {
                   "label": "浪高",
-                  "value": 0.62,
+                  "value": 1.18,
                   "unit": "m",
-                  "score": 0.78
+                  "score": 0.14400000000000013
                 },
                 {
                   "label": "陣風",
-                  "value": 4.2,
+                  "value": 13.7,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0
                 }
               ]
             },
             "surf": {
-              "score": 49,
-              "limiting": "浪高",
-              "limitValue": "0.6 m",
-              "why": "浪太小推不動板，太大超出一般旅遊等級",
+              "score": 63,
+              "limiting": "風速",
+              "limitValue": "9.0 m/s",
+              "why": "強風把浪面吹亂，離岸風以外都會破壞浪型",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": 0.62,
+                  "value": 1.18,
                   "unit": "m",
-                  "score": 0.23999999999999994
+                  "score": 0.98
                 },
                 {
                   "label": "週期",
-                  "value": 7.025,
+                  "value": 6.05,
                   "unit": "s",
-                  "score": 0.805
+                  "score": 0.61
                 },
                 {
                   "label": "風速",
-                  "value": 2.02,
+                  "value": 9.04,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0.2940000000000001
                 }
               ]
             }
           },
           "windProb": {
-            "freedive": 64.51612903225806,
-            "scuba": 67.74193548387096,
-            "snorkel": 67.74193548387096,
-            "sup": 54.83870967741935,
-            "surf": 67.74193548387096
+            "freedive": 70.96774193548387,
+            "scuba": 80.64516129032258,
+            "snorkel": 70.96774193548387,
+            "sup": 45.16129032258064,
+            "surf": 70.96774193548387
           },
-          "wave": 0.62,
-          "wind": 2.02,
+          "wave": 1.18,
+          "wind": 9.04,
           "rainSum": 0,
-          "rainProbMax": 44,
+          "rainProbMax": 35,
           "rainHours": 0,
-          "cloudMean": 22.5,
+          "cloudMean": 19.333333333333332,
           "comfortScore": 100,
           "comfortNotes": [
+            "此時段平均雲量僅 19%，曬得很徹底",
             "UV 指數 9，屬過量級，防曬要補",
             "海溫 29 °C，3 mm 防寒衣即可"
           ]
@@ -514,151 +515,152 @@
           "hours": "12:00–17:00",
           "scores": {
             "freedive": {
-              "score": 100,
-              "limiting": "浪高",
-              "limitValue": "0.6 m",
-              "why": "水面湧浪讓平靜呼吸與繩索定位變困難",
+              "score": 27,
+              "limiting": "風速",
+              "limitValue": "8.8 m/s",
+              "why": "風生浪打亂水面，也讓船隻定位不穩",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": 0.58,
+                  "value": 1.36,
                   "unit": "m",
-                  "score": 1
+                  "score": 0.4399999999999999
                 },
                 {
                   "label": "風速",
-                  "value": 1.08,
+                  "value": 8.84,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0.03840000000000003
                 },
                 {
                   "label": "水下能見度",
-                  "value": 3.600000000000002,
+                  "value": 8.549999999999997,
                   "unit": "mm/48h",
-                  "score": 1
+                  "score": 0.9918518518518519
                 }
               ]
             },
             "scuba": {
-              "score": 100,
-              "limiting": "浪高",
-              "limitValue": "0.6 m",
-              "why": "上下船與水面集合的風險隨浪高快速上升",
+              "score": 68,
+              "limiting": "風速",
+              "limitValue": "8.8 m/s",
+              "why": "風大時船隻難以在潛點上方保持位置",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": 0.58,
+                  "value": 1.36,
                   "unit": "m",
-                  "score": 1
+                  "score": 0.712
                 },
                 {
                   "label": "風速",
-                  "value": 1.08,
+                  "value": 8.84,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0.432
                 },
                 {
                   "label": "水下能見度",
-                  "value": 3.600000000000002,
+                  "value": 8.549999999999997,
                   "unit": "mm/48h",
-                  "score": 1
+                  "score": 0.9918518518518519
                 }
               ]
             },
             "snorkel": {
-              "score": 100,
-              "limiting": "浪高",
-              "limitValue": "0.6 m",
-              "why": "岸邊礁石區的湧浪會讓入水與回岸變危險",
+              "score": 42,
+              "limiting": "風速",
+              "limitValue": "8.8 m/s",
+              "why": "風浪讓呼吸管容易嗆水",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": 0.58,
+                  "value": 1.36,
                   "unit": "m",
-                  "score": 1
+                  "score": 0.288
                 },
                 {
                   "label": "風速",
-                  "value": 1.08,
+                  "value": 8.84,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0.232
                 },
                 {
                   "label": "水下能見度",
-                  "value": 3.600000000000002,
+                  "value": 8.549999999999997,
                   "unit": "mm/48h",
-                  "score": 1
+                  "score": 0.9918518518518519
                 }
               ]
             },
             "sup": {
-              "score": 94,
-              "limiting": "浪高",
-              "limitValue": "0.6 m",
-              "why": "板身短時湧浪會讓站立平衡難以維持",
+              "score": 0,
+              "limiting": "風速",
+              "limitValue": "8.8 m/s",
+              "why": "站姿受風面積大，離岸風會把人吹向外海",
               "parts": [
                 {
                   "label": "風速",
-                  "value": 1.08,
+                  "value": 8.84,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0
                 },
                 {
                   "label": "浪高",
-                  "value": 0.58,
+                  "value": 1.36,
                   "unit": "m",
-                  "score": 0.8200000000000001
+                  "score": 0
                 },
                 {
                   "label": "陣風",
-                  "value": 3.3,
+                  "value": 12.1,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0
                 }
               ]
             },
             "surf": {
-              "score": 42,
-              "limiting": "浪高",
-              "limitValue": "0.6 m",
-              "why": "浪太小推不動板，太大超出一般旅遊等級",
+              "score": 69,
+              "limiting": "風速",
+              "limitValue": "8.8 m/s",
+              "why": "強風把浪面吹亂，離岸風以外都會破壞浪型",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": 0.58,
+                  "value": 1.36,
                   "unit": "m",
-                  "score": 0.1599999999999999
+                  "score": 1
                 },
                 {
                   "label": "週期",
-                  "value": 7.25,
+                  "value": 6.75,
                   "unit": "s",
-                  "score": 0.85
+                  "score": 0.75
                 },
                 {
                   "label": "風速",
-                  "value": 1.08,
+                  "value": 8.84,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0.324
                 }
               ]
             }
           },
           "windProb": {
-            "freedive": 64.51612903225806,
-            "scuba": 67.74193548387096,
-            "snorkel": 67.74193548387096,
-            "sup": 51.61290322580645,
-            "surf": 67.74193548387096
+            "freedive": 51.61290322580645,
+            "scuba": 83.87096774193549,
+            "snorkel": 61.29032258064516,
+            "sup": 45.16129032258064,
+            "surf": 61.29032258064516
           },
-          "wave": 0.58,
-          "wind": 1.08,
+          "wave": 1.36,
+          "wind": 8.84,
           "rainSum": 0,
-          "rainProbMax": 44,
+          "rainProbMax": 36,
           "rainHours": 0,
-          "cloudMean": 23.833333333333332,
-          "comfortScore": 95,
+          "cloudMean": 86.66666666666667,
+          "comfortScore": 85,
           "comfortNotes": [
+            "此時段平均雲量 87%，幾乎全陰，水下光線會偏暗",
             "UV 指數 9，屬過量級，防曬要補",
             "海溫 29 °C，3 mm 防寒衣即可"
           ]
@@ -671,14 +673,14 @@
       "outOfRange": false,
       "entersRange": null,
       "ferry": {
-        "level": "低",
-        "tone": "good",
-        "reason": "浪高 0.6 m，海況平穩"
+        "level": "高",
+        "tone": "critical",
+        "reason": "浪高 2.8 m、陣風 17 m/s，接近停航門檻，暈船機率也高"
       },
-      "waveMax": 0.64,
-      "gustMax": 5.4,
-      "sunHours": 11.966819444444445,
-      "sunFrac": 0.9669026360778011,
+      "waveMax": 2.84,
+      "gustMax": 16.6,
+      "sunHours": 9.30188888888889,
+      "sunFrac": 0.7515798937991764,
       "sunLabel": "陽光充足",
       "sunTone": "good",
       "cells": [
@@ -687,152 +689,152 @@
           "hours": "6:00–11:00",
           "scores": {
             "freedive": {
-              "score": 100,
-              "limiting": "浪高",
-              "limitValue": "0.5 m",
-              "why": "水面湧浪讓平靜呼吸與繩索定位變困難",
+              "score": 0,
+              "limiting": "風速",
+              "limitValue": "10.2 m/s",
+              "why": "風生浪打亂水面，也讓船隻定位不穩",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": 0.5,
+                  "value": 1.76,
                   "unit": "m",
-                  "score": 1
+                  "score": 0.040000000000000056
                 },
                 {
                   "label": "風速",
-                  "value": 2.2,
+                  "value": 10.18,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0
                 },
                 {
                   "label": "水下能見度",
-                  "value": 1.7499999999999998,
+                  "value": 0.05,
                   "unit": "mm/48h",
                   "score": 1
                 }
               ]
             },
             "scuba": {
-              "score": 100,
-              "limiting": "浪高",
-              "limitValue": "0.5 m",
-              "why": "上下船與水面集合的風險隨浪高快速上升",
+              "score": 39,
+              "limiting": "風速",
+              "limitValue": "10.2 m/s",
+              "why": "風大時船隻難以在潛點上方保持位置",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": 0.5,
+                  "value": 1.76,
                   "unit": "m",
-                  "score": 1
+                  "score": 0.37714285714285717
                 },
                 {
                   "label": "風速",
-                  "value": 2.2,
+                  "value": 10.18,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0.16400000000000006
                 },
                 {
                   "label": "水下能見度",
-                  "value": 1.7499999999999998,
+                  "value": 0.05,
                   "unit": "mm/48h",
                   "score": 1
                 }
               ]
             },
             "snorkel": {
-              "score": 100,
+              "score": 0,
               "limiting": "浪高",
-              "limitValue": "0.5 m",
+              "limitValue": "1.8 m",
               "why": "岸邊礁石區的湧浪會讓入水與回岸變危險",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": 0.5,
+                  "value": 1.76,
                   "unit": "m",
-                  "score": 1
+                  "score": 0
                 },
                 {
                   "label": "風速",
-                  "value": 2.2,
+                  "value": 10.18,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0
                 },
                 {
                   "label": "水下能見度",
-                  "value": 1.7499999999999998,
+                  "value": 0.05,
                   "unit": "mm/48h",
                   "score": 1
                 }
               ]
             },
             "sup": {
-              "score": 96,
-              "limiting": "浪高",
-              "limitValue": "0.5 m",
-              "why": "板身短時湧浪會讓站立平衡難以維持",
+              "score": 0,
+              "limiting": "風速",
+              "limitValue": "10.2 m/s",
+              "why": "站姿受風面積大，離岸風會把人吹向外海",
               "parts": [
                 {
                   "label": "風速",
-                  "value": 2.2,
+                  "value": 10.18,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0
                 },
                 {
                   "label": "浪高",
-                  "value": 0.5,
-                  "unit": "m",
-                  "score": 0.9
-                },
-                {
-                  "label": "陣風",
-                  "value": 5.4,
-                  "unit": "m/s",
-                  "score": 0.9466666666666667
-                }
-              ]
-            },
-            "surf": {
-              "score": 0,
-              "limiting": "浪高",
-              "limitValue": "0.5 m",
-              "why": "浪太小推不動板，太大超出一般旅遊等級",
-              "parts": [
-                {
-                  "label": "浪高",
-                  "value": 0.5,
+                  "value": 1.76,
                   "unit": "m",
                   "score": 0
                 },
                 {
+                  "label": "陣風",
+                  "value": 14.3,
+                  "unit": "m/s",
+                  "score": 0
+                }
+              ]
+            },
+            "surf": {
+              "score": 58,
+              "limiting": "風速",
+              "limitValue": "10.2 m/s",
+              "why": "強風把浪面吹亂，離岸風以外都會破壞浪型",
+              "parts": [
+                {
+                  "label": "浪高",
+                  "value": 1.76,
+                  "unit": "m",
+                  "score": 1
+                },
+                {
                   "label": "週期",
-                  "value": 7.95,
+                  "value": 7.575,
                   "unit": "s",
-                  "score": 0.99
+                  "score": 0.915
                 },
                 {
                   "label": "風速",
-                  "value": 2.2,
+                  "value": 10.18,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0.12300000000000004
                 }
               ]
             }
           },
           "windProb": {
-            "freedive": 54.83870967741935,
-            "scuba": 67.74193548387096,
+            "freedive": 61.29032258064516,
+            "scuba": 80.64516129032258,
             "snorkel": 61.29032258064516,
-            "sup": 45.16129032258064,
+            "sup": 32.25806451612903,
             "surf": 61.29032258064516
           },
-          "wave": 0.5,
-          "wind": 2.2,
-          "rainSum": 0.6000000000000001,
-          "rainProbMax": 46,
-          "rainHours": 3,
-          "cloudMean": 29,
-          "comfortScore": 99,
+          "wave": 1.76,
+          "wind": 10.18,
+          "rainSum": 0.30000000000000004,
+          "rainProbMax": 35,
+          "rainHours": 0,
+          "cloudMean": 36.333333333333336,
+          "comfortScore": 100,
           "comfortNotes": [
-            "零星短暫降雨，帶件薄雨衣",
+            "僅微量降雨，影響不大",
             "UV 指數 9，屬過量級，防曬要補",
             "海溫 29 °C，3 mm 防寒衣即可"
           ]
@@ -842,152 +844,152 @@
           "hours": "12:00–17:00",
           "scores": {
             "freedive": {
-              "score": 97,
-              "limiting": "風速",
-              "limitValue": "4.7 m/s",
-              "why": "風生浪打亂水面，也讓船隻定位不穩",
+              "score": 0,
+              "limiting": "浪高",
+              "limitValue": "2.0 m",
+              "why": "水面湧浪讓平靜呼吸與繩索定位變困難",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": 0.5,
+                  "value": 2.02,
                   "unit": "m",
-                  "score": 1
+                  "score": 0
                 },
                 {
                   "label": "風速",
-                  "value": 4.69,
+                  "value": 12.36,
                   "unit": "m/s",
-                  "score": 0.8896
+                  "score": 0
                 },
                 {
                   "label": "水下能見度",
-                  "value": 1.1,
+                  "value": 0.6499999999999999,
                   "unit": "mm/48h",
                   "score": 1
                 }
               ]
             },
             "scuba": {
-              "score": 100,
-              "limiting": "浪高",
-              "limitValue": "0.5 m",
-              "why": "上下船與水面集合的風險隨浪高快速上升",
+              "score": 0,
+              "limiting": "風速",
+              "limitValue": "12.4 m/s",
+              "why": "風大時船隻難以在潛點上方保持位置",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": 0.5,
+                  "value": 2.02,
                   "unit": "m",
-                  "score": 1
+                  "score": 0.1542857142857144
                 },
                 {
                   "label": "風速",
-                  "value": 4.69,
+                  "value": 12.36,
                   "unit": "m/s",
-                  "score": 1
+                  "score": 0
                 },
                 {
                   "label": "水下能見度",
-                  "value": 1.1,
+                  "value": 0.6499999999999999,
                   "unit": "mm/48h",
                   "score": 1
                 }
               ]
             },
             "snorkel": {
-              "score": 98,
-              "limiting": "風速",
-              "limitValue": "4.7 m/s",
-              "why": "風浪讓呼吸管容易嗆水",
+              "score": 0,
+              "limiting": "浪高",
+              "limitValue": "2.0 m",
+              "why": "岸邊礁石區的湧浪會讓入水與回岸變危險",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": 0.5,
+                  "value": 2.02,
                   "unit": "m",
-                  "score": 1
+                  "score": 0
                 },
                 {
                   "label": "風速",
-                  "value": 4.69,
+                  "value": 12.36,
                   "unit": "m/s",
-                  "score": 0.9079999999999999
+                  "score": 0
                 },
                 {
                   "label": "水下能見度",
-                  "value": 1.1,
+                  "value": 0.6499999999999999,
                   "unit": "mm/48h",
                   "score": 1
                 }
               ]
             },
             "sup": {
-              "score": 77,
+              "score": 0,
               "limiting": "風速",
-              "limitValue": "4.7 m/s",
+              "limitValue": "12.4 m/s",
               "why": "站姿受風面積大，離岸風會把人吹向外海",
               "parts": [
                 {
                   "label": "風速",
-                  "value": 4.69,
+                  "value": 12.36,
                   "unit": "m/s",
-                  "score": 0.6619999999999999
+                  "score": 0
                 },
                 {
                   "label": "浪高",
-                  "value": 0.5,
+                  "value": 2.02,
                   "unit": "m",
-                  "score": 0.9
+                  "score": 0
                 },
                 {
                   "label": "陣風",
-                  "value": 5.2,
+                  "value": 16.1,
                   "unit": "m/s",
-                  "score": 0.9733333333333333
+                  "score": 0
                 }
               ]
             },
             "surf": {
               "score": 0,
-              "limiting": "浪高",
-              "limitValue": "0.5 m",
-              "why": "浪太小推不動板，太大超出一般旅遊等級",
+              "limiting": "風速",
+              "limitValue": "12.4 m/s",
+              "why": "強風把浪面吹亂，離岸風以外都會破壞浪型",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": 0.5,
+                  "value": 2.02,
                   "unit": "m",
-                  "score": 0
+                  "score": 1
                 },
                 {
                   "label": "週期",
-                  "value": 9.475,
+                  "value": 8.275,
                   "unit": "s",
                   "score": 1
                 },
                 {
                   "label": "風速",
-                  "value": 4.69,
+                  "value": 12.36,
                   "unit": "m/s",
-                  "score": 0.9079999999999999
+                  "score": 0
                 }
               ]
             }
           },
           "windProb": {
-            "freedive": 41.935483870967744,
-            "scuba": 51.61290322580645,
-            "snorkel": 45.16129032258064,
-            "sup": 19.35483870967742,
-            "surf": 45.16129032258064
+            "freedive": 45.16129032258064,
+            "scuba": 58.06451612903226,
+            "snorkel": 48.38709677419355,
+            "sup": 22.58064516129032,
+            "surf": 48.38709677419355
           },
-          "wave": 0.5,
-          "wind": 4.69,
-          "rainSum": 0,
-          "rainProbMax": 48,
+          "wave": 2.02,
+          "wind": 12.36,
+          "rainSum": 0.6,
+          "rainProbMax": 30,
           "rainHours": 0,
-          "cloudMean": 13,
-          "comfortScore": 100,
+          "cloudMean": 84.16666666666667,
+          "comfortScore": 87,
           "comfortNotes": [
-            "此時段平均雲量僅 13%，曬得很徹底",
+            "零星短暫降雨，帶件薄雨衣",
             "UV 指數 9，屬過量級，防曬要補",
             "海溫 29 °C，3 mm 防寒衣即可"
           ]
@@ -997,321 +999,328 @@
     {
       "date": "9/12",
       "weekday": "六",
-      "outOfRange": true,
-      "entersRange": "8/28",
+      "outOfRange": false,
+      "entersRange": null,
       "ferry": {
-        "level": "無預報",
-        "tone": "muted",
-        "reason": "此日期尚未進入預報範圍"
+        "level": "高",
+        "tone": "critical",
+        "reason": "浪高 3.1 m、陣風 9 m/s，接近停航門檻，暈船機率也高"
       },
-      "waveMax": null,
-      "gustMax": null,
-      "sunHours": null,
-      "sunFrac": null,
-      "sunLabel": "無資料",
-      "sunTone": "muted",
+      "waveMax": 3.12,
+      "gustMax": 9,
+      "sunHours": 11.288172222222222,
+      "sunFrac": 0.9136659057546844,
+      "sunLabel": "陽光充足",
+      "sunTone": "good",
       "cells": [
         {
           "part": "上午",
           "hours": "6:00–11:00",
           "scores": {
             "freedive": {
-              "score": null,
-              "limiting": null,
-              "limitValue": null,
-              "why": null,
+              "score": 0,
+              "limiting": "浪高",
+              "limitValue": "2.7 m",
+              "why": "水面湧浪讓平靜呼吸與繩索定位變困難",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": null,
+                  "value": 2.7,
                   "unit": "m",
-                  "score": -1
+                  "score": 0
                 },
                 {
                   "label": "風速",
-                  "value": null,
+                  "value": 3.55,
                   "unit": "m/s",
-                  "score": -1
+                  "score": 1
                 },
                 {
                   "label": "水下能見度",
-                  "value": null,
+                  "value": 1.2,
                   "unit": "mm/48h",
-                  "score": -1
+                  "score": 1
                 }
               ]
             },
             "scuba": {
-              "score": null,
-              "limiting": null,
-              "limitValue": null,
-              "why": null,
+              "score": 0,
+              "limiting": "浪高",
+              "limitValue": "2.7 m",
+              "why": "上下船與水面集合的風險隨浪高快速上升",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": null,
+                  "value": 2.7,
                   "unit": "m",
-                  "score": -1
+                  "score": 0
                 },
                 {
                   "label": "風速",
-                  "value": null,
+                  "value": 3.55,
                   "unit": "m/s",
-                  "score": -1
+                  "score": 1
                 },
                 {
                   "label": "水下能見度",
-                  "value": null,
+                  "value": 1.2,
                   "unit": "mm/48h",
-                  "score": -1
+                  "score": 1
                 }
               ]
             },
             "snorkel": {
-              "score": null,
-              "limiting": null,
-              "limitValue": null,
-              "why": null,
+              "score": 0,
+              "limiting": "浪高",
+              "limitValue": "2.7 m",
+              "why": "岸邊礁石區的湧浪會讓入水與回岸變危險",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": null,
+                  "value": 2.7,
                   "unit": "m",
-                  "score": -1
+                  "score": 0
                 },
                 {
                   "label": "風速",
-                  "value": null,
+                  "value": 3.55,
                   "unit": "m/s",
-                  "score": -1
+                  "score": 1
                 },
                 {
                   "label": "水下能見度",
-                  "value": null,
+                  "value": 1.2,
                   "unit": "mm/48h",
-                  "score": -1
+                  "score": 1
                 }
               ]
             },
             "sup": {
-              "score": null,
-              "limiting": null,
-              "limitValue": null,
-              "why": null,
+              "score": 0,
+              "limiting": "浪高",
+              "limitValue": "2.7 m",
+              "why": "板身短時湧浪會讓站立平衡難以維持",
               "parts": [
                 {
                   "label": "風速",
-                  "value": null,
+                  "value": 3.55,
                   "unit": "m/s",
-                  "score": -1
+                  "score": 0.89
                 },
                 {
                   "label": "浪高",
-                  "value": null,
+                  "value": 2.7,
                   "unit": "m",
-                  "score": -1
+                  "score": 0
                 },
                 {
                   "label": "陣風",
-                  "value": null,
+                  "value": 2.7,
                   "unit": "m/s",
-                  "score": -1
+                  "score": 1
                 }
               ]
             },
             "surf": {
-              "score": null,
-              "limiting": null,
-              "limitValue": null,
-              "why": null,
+              "score": 95,
+              "limiting": "浪高",
+              "limitValue": "2.7 m",
+              "why": "浪太小推不動板，太大超出一般旅遊等級",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": null,
+                  "value": 2.7,
                   "unit": "m",
-                  "score": -1
+                  "score": 0.8857142857142857
                 },
                 {
                   "label": "週期",
-                  "value": null,
+                  "value": 9.275,
                   "unit": "s",
-                  "score": -1
+                  "score": 1
                 },
                 {
                   "label": "風速",
-                  "value": null,
+                  "value": 3.55,
                   "unit": "m/s",
-                  "score": -1
+                  "score": 1
                 }
               ]
             }
           },
           "windProb": {
-            "freedive": 58.06451612903226,
-            "scuba": 67.74193548387096,
-            "snorkel": 64.51612903225806,
-            "sup": 51.61290322580645,
-            "surf": 64.51612903225806
+            "freedive": 38.70967741935484,
+            "scuba": 54.83870967741935,
+            "snorkel": 48.38709677419355,
+            "sup": 32.25806451612903,
+            "surf": 48.38709677419355
           },
-          "wave": null,
-          "wind": null,
-          "rainSum": null,
-          "rainProbMax": null,
-          "rainHours": null,
-          "cloudMean": null,
-          "comfortScore": null,
-          "comfortNotes": []
+          "wave": 2.7,
+          "wind": 3.55,
+          "rainSum": 0,
+          "rainProbMax": 26,
+          "rainHours": 0,
+          "cloudMean": 74,
+          "comfortScore": 92,
+          "comfortNotes": [
+            "UV 指數 9，屬過量級，防曬要補",
+            "海溫 29 °C，3 mm 防寒衣即可"
+          ]
         },
         {
           "part": "下午",
           "hours": "12:00–17:00",
           "scores": {
             "freedive": {
-              "score": null,
-              "limiting": null,
-              "limitValue": null,
-              "why": null,
+              "score": 0,
+              "limiting": "浪高",
+              "limitValue": "2.8 m",
+              "why": "水面湧浪讓平靜呼吸與繩索定位變困難",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": null,
+                  "value": 2.82,
                   "unit": "m",
-                  "score": -1
+                  "score": 0
                 },
                 {
                   "label": "風速",
-                  "value": null,
+                  "value": 9.46,
                   "unit": "m/s",
-                  "score": -1
+                  "score": 0
                 },
                 {
                   "label": "水下能見度",
-                  "value": null,
+                  "value": 1.2,
                   "unit": "mm/48h",
-                  "score": -1
+                  "score": 1
                 }
               ]
             },
             "scuba": {
-              "score": null,
-              "limiting": null,
-              "limitValue": null,
-              "why": null,
+              "score": 0,
+              "limiting": "浪高",
+              "limitValue": "2.8 m",
+              "why": "上下船與水面集合的風險隨浪高快速上升",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": null,
+                  "value": 2.82,
                   "unit": "m",
-                  "score": -1
+                  "score": 0
                 },
                 {
                   "label": "風速",
-                  "value": null,
+                  "value": 9.46,
                   "unit": "m/s",
-                  "score": -1
+                  "score": 0.3079999999999998
                 },
                 {
                   "label": "水下能見度",
-                  "value": null,
+                  "value": 1.2,
                   "unit": "mm/48h",
-                  "score": -1
+                  "score": 1
                 }
               ]
             },
             "snorkel": {
-              "score": null,
-              "limiting": null,
-              "limitValue": null,
-              "why": null,
+              "score": 0,
+              "limiting": "浪高",
+              "limitValue": "2.8 m",
+              "why": "岸邊礁石區的湧浪會讓入水與回岸變危險",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": null,
+                  "value": 2.82,
                   "unit": "m",
-                  "score": -1
+                  "score": 0
                 },
                 {
                   "label": "風速",
-                  "value": null,
+                  "value": 9.46,
                   "unit": "m/s",
-                  "score": -1
+                  "score": 0.10799999999999983
                 },
                 {
                   "label": "水下能見度",
-                  "value": null,
+                  "value": 1.2,
                   "unit": "mm/48h",
-                  "score": -1
+                  "score": 1
                 }
               ]
             },
             "sup": {
-              "score": null,
-              "limiting": null,
-              "limitValue": null,
-              "why": null,
+              "score": 0,
+              "limiting": "風速",
+              "limitValue": "9.5 m/s",
+              "why": "站姿受風面積大，離岸風會把人吹向外海",
               "parts": [
                 {
                   "label": "風速",
-                  "value": null,
+                  "value": 9.46,
                   "unit": "m/s",
-                  "score": -1
+                  "score": 0
                 },
                 {
                   "label": "浪高",
-                  "value": null,
+                  "value": 2.82,
                   "unit": "m",
-                  "score": -1
+                  "score": 0
                 },
                 {
                   "label": "陣風",
-                  "value": null,
+                  "value": 5.8,
                   "unit": "m/s",
-                  "score": -1
+                  "score": 0.8933333333333333
                 }
               ]
             },
             "surf": {
-              "score": null,
-              "limiting": null,
-              "limitValue": null,
-              "why": null,
+              "score": 63,
+              "limiting": "風速",
+              "limitValue": "9.5 m/s",
+              "why": "強風把浪面吹亂，離岸風以外都會破壞浪型",
               "parts": [
                 {
                   "label": "浪高",
-                  "value": null,
+                  "value": 2.82,
                   "unit": "m",
-                  "score": -1
+                  "score": 0.8171428571428573
                 },
                 {
                   "label": "週期",
-                  "value": null,
+                  "value": 9.25,
                   "unit": "s",
-                  "score": -1
+                  "score": 1
                 },
                 {
                   "label": "風速",
-                  "value": null,
+                  "value": 9.46,
                   "unit": "m/s",
-                  "score": -1
+                  "score": 0.23099999999999987
                 }
               ]
             }
           },
           "windProb": {
-            "freedive": 45.16129032258064,
-            "scuba": 58.06451612903226,
-            "snorkel": 54.83870967741935,
-            "sup": 32.25806451612903,
-            "surf": 54.83870967741935
+            "freedive": 38.70967741935484,
+            "scuba": 48.38709677419355,
+            "snorkel": 38.70967741935484,
+            "sup": 25.806451612903224,
+            "surf": 38.70967741935484
           },
-          "wave": null,
-          "wind": null,
-          "rainSum": null,
-          "rainProbMax": null,
-          "rainHours": null,
-          "cloudMean": null,
-          "comfortScore": null,
-          "comfortNotes": []
+          "wave": 2.82,
+          "wind": 9.46,
+          "rainSum": 0,
+          "rainProbMax": 29,
+          "rainHours": 0,
+          "cloudMean": 94.33333333333333,
+          "comfortScore": 75,
+          "comfortNotes": [
+            "此時段平均雲量 94%，幾乎全陰，水下光線會偏暗",
+            "UV 指數 9，屬過量級，防曬要補",
+            "海溫 29 °C，3 mm 防寒衣即可"
+          ]
         }
       ]
     }
@@ -1353,8 +1362,8 @@
       "windLimit": 7
     }
   ],
-  "waveSpreadMax": 0.26,
-  "waveConfidence": "高",
+  "waveSpreadMax": 1.82,
+  "waveConfidence": "低",
   "recheck": "9/5",
   "ensembleName": "GEFS 0.5°",
   "ensembleMembers": 31,
@@ -1370,51 +1379,51 @@
       "points": [
         [
           1788912000000,
-          0.96
+          1.12
         ],
         [
           1788915600000,
-          0.96
+          1.08
         ],
         [
           1788919200000,
-          0.94
+          1.06
         ],
         [
           1788922800000,
-          0.94
+          1.02
         ],
         [
           1788926400000,
-          0.92
+          1
         ],
         [
           1788930000000,
-          0.92
+          0.96
         ],
         [
           1788933600000,
-          0.9
+          0.94
         ],
         [
           1788937200000,
-          0.88
+          0.9
         ],
         [
           1788940800000,
-          0.86
+          0.88
         ],
         [
           1788944400000,
-          0.84
+          0.86
         ],
         [
           1788948000000,
-          0.84
+          0.82
         ],
         [
           1788951600000,
-          0.82
+          0.8
         ],
         [
           1788955200000,
@@ -1422,7 +1431,7 @@
         ],
         [
           1788958800000,
-          0.8
+          0.78
         ],
         [
           1788962400000,
@@ -1430,231 +1439,327 @@
         ],
         [
           1788966000000,
-          0.76
+          0.78
         ],
         [
           1788969600000,
-          0.76
+          0.8
         ],
         [
           1788973200000,
-          0.74
+          0.8
         ],
         [
           1788976800000,
-          0.74
+          0.86
         ],
         [
           1788980400000,
-          0.74
+          0.94
         ],
         [
           1788984000000,
-          0.74
+          1
         ],
         [
           1788987600000,
-          0.74
+          1.06
         ],
         [
           1788991200000,
-          0.72
+          1.14
         ],
         [
           1788994800000,
-          0.72
+          1.2
         ],
         [
           1788998400000,
-          0.7
+          1.2
         ],
         [
           1789002000000,
-          0.68
+          1.18
         ],
         [
           1789005600000,
-          0.66
+          1.18
         ],
         [
           1789009200000,
-          0.66
+          1.18
         ],
         [
           1789012800000,
-          0.64
+          1.16
         ],
         [
           1789016400000,
-          0.64
+          1.16
         ],
         [
           1789020000000,
-          0.62
+          1.16
         ],
         [
           1789023600000,
-          0.62
+          1.16
         ],
         [
           1789027200000,
-          0.6
+          1.16
         ],
         [
           1789030800000,
-          0.6
+          1.16
         ],
         [
           1789034400000,
-          0.58
+          1.18
         ],
         [
           1789038000000,
-          0.58
+          1.18
         ],
         [
           1789041600000,
-          0.58
+          1.2
         ],
         [
           1789045200000,
-          0.56
+          1.22
         ],
         [
           1789048800000,
-          0.56
+          1.24
         ],
         [
           1789052400000,
-          0.56
+          1.28
         ],
         [
           1789056000000,
-          0.56
+          1.32
         ],
         [
           1789059600000,
-          0.56
+          1.36
         ],
         [
           1789063200000,
-          0.56
+          1.44
         ],
         [
           1789066800000,
-          0.58
+          1.5
         ],
         [
           1789070400000,
-          0.58
+          1.58
         ],
         [
           1789074000000,
-          0.6
+          1.62
         ],
         [
           1789077600000,
-          0.62
+          1.68
         ],
         [
           1789081200000,
-          0.64
+          1.72
         ],
         [
           1789084800000,
-          0.62
+          1.72
         ],
         [
           1789088400000,
-          0.6
+          1.74
         ],
         [
           1789092000000,
-          0.58
+          1.74
         ],
         [
           1789095600000,
-          0.56
+          1.72
         ],
         [
           1789099200000,
-          0.54
+          1.72
         ],
         [
           1789102800000,
-          0.52
+          1.7
         ],
         [
           1789106400000,
-          0.5
+          1.7
         ],
         [
           1789110000000,
-          0.5
+          1.72
         ],
         [
           1789113600000,
-          0.48
+          1.72
         ],
         [
           1789117200000,
-          0.48
+          1.74
         ],
         [
           1789120800000,
-          0.48
+          1.74
         ],
         [
           1789124400000,
-          0.48
+          1.76
         ],
         [
           1789128000000,
-          0.48
+          1.76
         ],
         [
           1789131600000,
-          0.48
+          1.78
         ],
         [
           1789135200000,
-          0.48
+          1.78
         ],
         [
           1789138800000,
-          0.48
+          1.86
         ],
         [
           1789142400000,
-          0.5
+          1.94
         ],
         [
           1789146000000,
-          0.5
+          2.02
         ],
         [
           1789149600000,
-          0.52
+          2.18
         ],
         [
           1789153200000,
-          0.54
+          2.32
         ],
         [
           1789156800000,
-          0.56
+          2.48
         ],
         [
           1789160400000,
-          0.58
+          2.6
         ],
         [
           1789164000000,
-          0.62
+          2.72
         ],
         [
           1789167600000,
-          0.64
+          2.84
+        ],
+        [
+          1789171200000,
+          2.9
+        ],
+        [
+          1789174800000,
+          2.98
+        ],
+        [
+          1789178400000,
+          3.04
+        ],
+        [
+          1789182000000,
+          2.96
+        ],
+        [
+          1789185600000,
+          2.86
+        ],
+        [
+          1789189200000,
+          2.78
+        ],
+        [
+          1789192800000,
+          2.7
+        ],
+        [
+          1789196400000,
+          2.64
+        ],
+        [
+          1789200000000,
+          2.56
+        ],
+        [
+          1789203600000,
+          2.56
+        ],
+        [
+          1789207200000,
+          2.54
+        ],
+        [
+          1789210800000,
+          2.54
+        ],
+        [
+          1789214400000,
+          2.54
+        ],
+        [
+          1789218000000,
+          2.56
+        ],
+        [
+          1789221600000,
+          2.56
+        ],
+        [
+          1789225200000,
+          2.64
+        ],
+        [
+          1789228800000,
+          2.74
+        ],
+        [
+          1789232400000,
+          2.82
+        ],
+        [
+          1789236000000,
+          2.9
+        ],
+        [
+          1789239600000,
+          2.98
+        ],
+        [
+          1789243200000,
+          3.06
+        ],
+        [
+          1789246800000,
+          3.08
+        ],
+        [
+          1789250400000,
+          3.1
+        ],
+        [
+          1789254000000,
+          3.12
         ]
       ]
     },
@@ -1663,275 +1768,275 @@
       "points": [
         [
           1788912000000,
-          1
+          2.52
         ],
         [
           1788915600000,
-          1
+          2.5
         ],
         [
           1788919200000,
-          0.98
+          2.48
         ],
         [
           1788922800000,
-          0.98
+          2.5
         ],
         [
           1788926400000,
-          0.96
+          2.52
         ],
         [
           1788930000000,
-          0.96
+          2.54
         ],
         [
           1788933600000,
-          0.94
+          2.56
         ],
         [
           1788937200000,
-          0.94
+          2.56
         ],
         [
           1788940800000,
-          0.92
+          2.58
         ],
         [
           1788944400000,
-          0.9
+          2.58
         ],
         [
           1788948000000,
-          0.9
+          2.6
         ],
         [
           1788951600000,
-          0.88
+          2.6
         ],
         [
           1788955200000,
-          0.86
+          2.6
         ],
         [
           1788958800000,
-          0.84
+          2.6
         ],
         [
           1788962400000,
-          0.82
+          2.6
         ],
         [
           1788966000000,
-          0.82
+          2.56
         ],
         [
           1788969600000,
-          0.82
+          2.54
         ],
         [
           1788973200000,
-          0.82
+          2.5
         ],
         [
           1788976800000,
-          0.82
+          2.46
         ],
         [
           1788980400000,
-          0.82
+          2.42
         ],
         [
           1788984000000,
-          0.82
+          2.38
         ],
         [
           1788987600000,
-          0.84
+          2.34
         ],
         [
           1788991200000,
-          0.84
+          2.28
         ],
         [
           1788994800000,
-          0.86
+          2.24
         ],
         [
           1788998400000,
-          0.88
+          2.18
         ],
         [
           1789002000000,
-          0.88
+          2.14
         ],
         [
           1789005600000,
-          0.9
+          2.08
         ],
         [
           1789009200000,
-          0.9
+          2.08
         ],
         [
           1789012800000,
-          0.88
+          2.08
         ],
         [
           1789016400000,
-          0.88
+          2.08
         ],
         [
           1789020000000,
-          0.88
+          2.08
         ],
         [
           1789023600000,
-          0.86
+          2.06
         ],
         [
           1789027200000,
-          0.86
+          2.06
         ],
         [
           1789030800000,
-          0.86
+          2.04
         ],
         [
           1789034400000,
-          0.84
+          2.02
         ],
         [
           1789038000000,
-          0.84
+          2
         ],
         [
           1789041600000,
-          0.84
+          1.98
         ],
         [
           1789045200000,
-          0.82
+          1.96
         ],
         [
           1789048800000,
-          0.82
+          1.94
         ],
         [
           1789052400000,
-          0.82
+          1.92
         ],
         [
           1789056000000,
-          0.8
+          1.92
         ],
         [
           1789059600000,
-          0.8
+          1.9
         ],
         [
           1789063200000,
-          0.8
+          1.88
         ],
         [
           1789066800000,
-          0.78
+          1.86
         ],
         [
           1789070400000,
-          null
+          1.84
         ],
         [
           1789074000000,
-          null
+          1.84
         ],
         [
           1789077600000,
-          null
+          1.86
         ],
         [
           1789081200000,
-          null
+          1.86
         ],
         [
           1789084800000,
-          null
+          1.86
         ],
         [
           1789088400000,
-          null
+          1.88
         ],
         [
           1789092000000,
-          null
+          1.88
         ],
         [
           1789095600000,
-          null
+          1.92
         ],
         [
           1789099200000,
-          null
+          1.94
         ],
         [
           1789102800000,
-          null
+          1.98
         ],
         [
           1789106400000,
-          null
+          2
         ],
         [
           1789110000000,
-          null
+          2.04
         ],
         [
           1789113600000,
-          null
+          2.06
         ],
         [
           1789117200000,
-          null
+          2.16
         ],
         [
           1789120800000,
-          null
+          2.26
         ],
         [
           1789124400000,
-          null
+          2.36
         ],
         [
           1789128000000,
-          null
+          2.46
         ],
         [
           1789131600000,
-          null
+          2.58
         ],
         [
           1789135200000,
-          null
+          2.68
         ],
         [
           1789138800000,
-          null
+          2.78
         ],
         [
           1789142400000,
-          null
+          2.86
         ],
         [
           1789146000000,
-          null
+          2.96
         ],
         [
           1789149600000,
-          null
+          3.04
         ],
         [
           1789153200000,
-          null
+          3.14
         ],
         [
           1789156800000,
@@ -1948,6 +2053,102 @@
         [
           1789167600000,
           null
+        ],
+        [
+          1789171200000,
+          null
+        ],
+        [
+          1789174800000,
+          null
+        ],
+        [
+          1789178400000,
+          null
+        ],
+        [
+          1789182000000,
+          null
+        ],
+        [
+          1789185600000,
+          null
+        ],
+        [
+          1789189200000,
+          null
+        ],
+        [
+          1789192800000,
+          null
+        ],
+        [
+          1789196400000,
+          null
+        ],
+        [
+          1789200000000,
+          null
+        ],
+        [
+          1789203600000,
+          null
+        ],
+        [
+          1789207200000,
+          null
+        ],
+        [
+          1789210800000,
+          null
+        ],
+        [
+          1789214400000,
+          null
+        ],
+        [
+          1789218000000,
+          null
+        ],
+        [
+          1789221600000,
+          null
+        ],
+        [
+          1789225200000,
+          null
+        ],
+        [
+          1789228800000,
+          null
+        ],
+        [
+          1789232400000,
+          null
+        ],
+        [
+          1789236000000,
+          null
+        ],
+        [
+          1789239600000,
+          null
+        ],
+        [
+          1789243200000,
+          null
+        ],
+        [
+          1789246800000,
+          null
+        ],
+        [
+          1789250400000,
+          null
+        ],
+        [
+          1789254000000,
+          null
         ]
       ]
     }
@@ -1955,579 +2156,579 @@
   "windFan": [
     {
       "time": 1788912000000,
-      "p10": 1.53,
-      "p50": 5.43,
-      "p90": 9.75
+      "p10": 1.64,
+      "p50": 4.56,
+      "p90": 13.45
     },
     {
       "time": 1788915600000,
-      "p10": 1.5,
-      "p50": 5.1,
-      "p90": 9.63
+      "p10": 2.15,
+      "p50": 4.72,
+      "p90": 13.41
     },
     {
       "time": 1788919200000,
-      "p10": 1.78,
-      "p50": 5.43,
-      "p90": 9.36
+      "p10": 2.05,
+      "p50": 5.11,
+      "p90": 13.37
     },
     {
       "time": 1788922800000,
-      "p10": 1.81,
-      "p50": 5.59,
-      "p90": 9.09
+      "p10": 1.97,
+      "p50": 5.1,
+      "p90": 13.33
     },
     {
       "time": 1788926400000,
-      "p10": 1.75,
-      "p50": 5.5,
-      "p90": 9.08
+      "p10": 1.8,
+      "p50": 4.74,
+      "p90": 13.33
     },
     {
       "time": 1788930000000,
-      "p10": 1.84,
-      "p50": 5.44,
-      "p90": 9.41
+      "p10": 1.75,
+      "p50": 4.77,
+      "p90": 13.33
     },
     {
       "time": 1788933600000,
-      "p10": 1.84,
-      "p50": 5.03,
-      "p90": 9.6
+      "p10": 1.58,
+      "p50": 4.83,
+      "p90": 13.33
     },
     {
       "time": 1788937200000,
-      "p10": 1.66,
-      "p50": 4.72,
-      "p90": 9.1
+      "p10": 1.42,
+      "p50": 4.84,
+      "p90": 13.08
     },
     {
       "time": 1788940800000,
-      "p10": 1.44,
-      "p50": 4.75,
-      "p90": 9.1
+      "p10": 1.24,
+      "p50": 4.66,
+      "p90": 12.85
     },
     {
       "time": 1788944400000,
-      "p10": 1.03,
-      "p50": 4.75,
-      "p90": 9.43
+      "p10": 1.36,
+      "p50": 4.22,
+      "p90": 12.91
     },
     {
       "time": 1788948000000,
-      "p10": 1.7,
-      "p50": 4.56,
-      "p90": 9.84
+      "p10": 1.2,
+      "p50": 3.96,
+      "p90": 13.18
     },
     {
       "time": 1788951600000,
-      "p10": 1.52,
-      "p50": 4.39,
-      "p90": 9.75
+      "p10": 1.2,
+      "p50": 3.45,
+      "p90": 13.69
     },
     {
       "time": 1788955200000,
-      "p10": 1.53,
-      "p50": 4.18,
-      "p90": 9.66
+      "p10": 1.1,
+      "p50": 3.61,
+      "p90": 13.93
     },
     {
       "time": 1788958800000,
-      "p10": 1.28,
-      "p50": 4.02,
-      "p90": 9.45
+      "p10": 1,
+      "p50": 3.61,
+      "p90": 14.06
     },
     {
       "time": 1788962400000,
-      "p10": 0.81,
-      "p50": 3.69,
-      "p90": 9.88
+      "p10": 1.04,
+      "p50": 3.2,
+      "p90": 14.15
     },
     {
       "time": 1788966000000,
-      "p10": 0.63,
-      "p50": 3.75,
-      "p90": 10.48
+      "p10": 0.91,
+      "p50": 2.73,
+      "p90": 14.12
     },
     {
       "time": 1788969600000,
-      "p10": 1,
-      "p50": 3.16,
-      "p90": 10.91
+      "p10": 0.82,
+      "p50": 3.4,
+      "p90": 13.47
     },
     {
       "time": 1788973200000,
-      "p10": 1.12,
-      "p50": 3.93,
-      "p90": 10.89
+      "p10": 1.26,
+      "p50": 3.55,
+      "p90": 12.7
     },
     {
       "time": 1788976800000,
-      "p10": 1.43,
-      "p50": 4.59,
-      "p90": 10.35
+      "p10": 1.8,
+      "p50": 3.42,
+      "p90": 12
     },
     {
       "time": 1788980400000,
-      "p10": 1.57,
-      "p50": 4.37,
-      "p90": 10.34
+      "p10": 1.7,
+      "p50": 4.85,
+      "p90": 13.5
     },
     {
       "time": 1788984000000,
-      "p10": 1.34,
-      "p50": 4.02,
-      "p90": 10.38
+      "p10": 1.71,
+      "p50": 6.07,
+      "p90": 13.92
     },
     {
       "time": 1788987600000,
-      "p10": 1.25,
-      "p50": 4.36,
-      "p90": 10.33
+      "p10": 1.65,
+      "p50": 6.61,
+      "p90": 13.58
     },
     {
       "time": 1788991200000,
-      "p10": 1.04,
-      "p50": 4.58,
-      "p90": 10.06
+      "p10": 1.46,
+      "p50": 5.96,
+      "p90": 12.78
     },
     {
       "time": 1788994800000,
-      "p10": 1.12,
-      "p50": 4.29,
-      "p90": 9.93
+      "p10": 1.14,
+      "p50": 4.75,
+      "p90": 12.43
     },
     {
       "time": 1788998400000,
-      "p10": 1.7,
-      "p50": 3.89,
-      "p90": 9.79
+      "p10": 1.17,
+      "p50": 5.02,
+      "p90": 11.99
     },
     {
       "time": 1789002000000,
-      "p10": 2.34,
-      "p50": 4.19,
-      "p90": 9.82
+      "p10": 1.4,
+      "p50": 5.51,
+      "p90": 11.49
     },
     {
       "time": 1789005600000,
-      "p10": 2.18,
-      "p50": 4.7,
-      "p90": 9.81
+      "p10": 1.55,
+      "p50": 5.78,
+      "p90": 11.37
     },
     {
       "time": 1789009200000,
-      "p10": 1.87,
-      "p50": 4.78,
-      "p90": 9.7
+      "p10": 1.43,
+      "p50": 5.7,
+      "p90": 11.68
     },
     {
       "time": 1789012800000,
-      "p10": 1.84,
-      "p50": 4.41,
-      "p90": 9.84
+      "p10": 1.39,
+      "p50": 4.62,
+      "p90": 12.18
     },
     {
       "time": 1789016400000,
-      "p10": 1.97,
-      "p50": 4.25,
-      "p90": 10.11
+      "p10": 1.26,
+      "p50": 4.62,
+      "p90": 11.54
     },
     {
       "time": 1789020000000,
-      "p10": 2.15,
-      "p50": 4.42,
-      "p90": 10.29
+      "p10": 0.94,
+      "p50": 4.27,
+      "p90": 10.91
     },
     {
       "time": 1789023600000,
-      "p10": 2.16,
-      "p50": 4.4,
-      "p90": 10.56
-    },
-    {
-      "time": 1789027200000,
-      "p10": 1.8,
-      "p50": 4.33,
-      "p90": 10.1
-    },
-    {
-      "time": 1789030800000,
-      "p10": 1.66,
-      "p50": 4.25,
-      "p90": 9.02
-    },
-    {
-      "time": 1789034400000,
-      "p10": 1.49,
-      "p50": 4.3,
-      "p90": 9.1
-    },
-    {
-      "time": 1789038000000,
-      "p10": 1.49,
-      "p50": 4.06,
-      "p90": 9.35
-    },
-    {
-      "time": 1789041600000,
-      "p10": 1.49,
-      "p50": 4.03,
-      "p90": 9.79
-    },
-    {
-      "time": 1789045200000,
-      "p10": 1.5,
-      "p50": 3.92,
-      "p90": 9.98
-    },
-    {
-      "time": 1789048800000,
-      "p10": 1.53,
-      "p50": 3.81,
-      "p90": 10.28
-    },
-    {
-      "time": 1789052400000,
-      "p10": 1.46,
-      "p50": 4.05,
-      "p90": 10.14
-    },
-    {
-      "time": 1789056000000,
-      "p10": 1.39,
+      "p10": 0.73,
       "p50": 4.44,
       "p90": 10.21
     },
     {
+      "time": 1789027200000,
+      "p10": 0.76,
+      "p50": 4.96,
+      "p90": 9.61
+    },
+    {
+      "time": 1789030800000,
+      "p10": 0.86,
+      "p50": 4.53,
+      "p90": 9.3
+    },
+    {
+      "time": 1789034400000,
+      "p10": 1.1,
+      "p50": 4.59,
+      "p90": 9.94
+    },
+    {
+      "time": 1789038000000,
+      "p10": 1.08,
+      "p50": 4.3,
+      "p90": 10.12
+    },
+    {
+      "time": 1789041600000,
+      "p10": 1,
+      "p50": 4.46,
+      "p90": 8.49
+    },
+    {
+      "time": 1789045200000,
+      "p10": 1.17,
+      "p50": 4.67,
+      "p90": 9.24
+    },
+    {
+      "time": 1789048800000,
+      "p10": 1.36,
+      "p50": 4.72,
+      "p90": 11.49
+    },
+    {
+      "time": 1789052400000,
+      "p10": 1.32,
+      "p50": 4.74,
+      "p90": 10.34
+    },
+    {
+      "time": 1789056000000,
+      "p10": 1.34,
+      "p50": 4.12,
+      "p90": 8.64
+    },
+    {
       "time": 1789059600000,
-      "p10": 1.24,
-      "p50": 4.52,
-      "p90": 10.04
+      "p10": 2.42,
+      "p50": 4.96,
+      "p90": 7.76
     },
     {
       "time": 1789063200000,
-      "p10": 1.46,
-      "p50": 4.61,
-      "p90": 10.07
+      "p10": 2.42,
+      "p50": 5.45,
+      "p90": 8.49
     },
     {
       "time": 1789066800000,
-      "p10": 1.52,
-      "p50": 4.55,
-      "p90": 10.16
+      "p10": 2.35,
+      "p50": 5.61,
+      "p90": 9.15
     },
     {
       "time": 1789070400000,
-      "p10": 1.3,
-      "p50": 4.68,
-      "p90": 10.11
+      "p10": 2.3,
+      "p50": 6.07,
+      "p90": 9.68
     },
     {
       "time": 1789074000000,
-      "p10": 0.95,
-      "p50": 4.54,
-      "p90": 9.93
-    },
-    {
-      "time": 1789077600000,
-      "p10": 1.08,
-      "p50": 3.94,
-      "p90": 9.85
-    },
-    {
-      "time": 1789081200000,
-      "p10": 0.81,
-      "p50": 4.25,
-      "p90": 9.97
-    },
-    {
-      "time": 1789084800000,
-      "p10": 0.82,
-      "p50": 3.97,
-      "p90": 10.25
-    },
-    {
-      "time": 1789088400000,
-      "p10": 0.98,
-      "p50": 4.49,
-      "p90": 10.44
-    },
-    {
-      "time": 1789092000000,
-      "p10": 1.14,
-      "p50": 4.33,
-      "p90": 10.14
-    },
-    {
-      "time": 1789095600000,
-      "p10": 1.14,
-      "p50": 4.4,
+      "p10": 2.06,
+      "p50": 5.92,
       "p90": 10
     },
     {
+      "time": 1789077600000,
+      "p10": 2.04,
+      "p50": 5.59,
+      "p90": 10.15
+    },
+    {
+      "time": 1789081200000,
+      "p10": 2.27,
+      "p50": 5.5,
+      "p90": 10.18
+    },
+    {
+      "time": 1789084800000,
+      "p10": 2.47,
+      "p50": 5.38,
+      "p90": 10.12
+    },
+    {
+      "time": 1789088400000,
+      "p10": 2.67,
+      "p50": 4.85,
+      "p90": 10.02
+    },
+    {
+      "time": 1789092000000,
+      "p10": 2.65,
+      "p50": 5.15,
+      "p90": 9.8
+    },
+    {
+      "time": 1789095600000,
+      "p10": 2.52,
+      "p50": 5.04,
+      "p90": 9.4
+    },
+    {
       "time": 1789099200000,
-      "p10": 1.34,
-      "p50": 4.46,
-      "p90": 9.84
+      "p10": 2.2,
+      "p50": 5.23,
+      "p90": 9.93
     },
     {
       "time": 1789102800000,
-      "p10": 1.53,
-      "p50": 4.56,
-      "p90": 9.79
+      "p10": 2,
+      "p50": 5.56,
+      "p90": 10.99
     },
     {
       "time": 1789106400000,
-      "p10": 1.8,
-      "p50": 5.16,
-      "p90": 9.67
+      "p10": 1.82,
+      "p50": 5.41,
+      "p90": 12.06
     },
     {
       "time": 1789110000000,
-      "p10": 2,
-      "p50": 5.73,
-      "p90": 9.92
-    },
-    {
-      "time": 1789113600000,
-      "p10": 2.25,
-      "p50": 5.48,
-      "p90": 10.26
-    },
-    {
-      "time": 1789117200000,
-      "p10": 2.06,
-      "p50": 4.84,
-      "p90": 10.85
-    },
-    {
-      "time": 1789120800000,
-      "p10": 2.01,
-      "p50": 4.95,
-      "p90": 11.38
-    },
-    {
-      "time": 1789124400000,
-      "p10": 1.8,
-      "p50": 4.46,
-      "p90": 10.84
-    },
-    {
-      "time": 1789128000000,
-      "p10": 1.28,
-      "p50": 3.69,
-      "p90": 7.94
-    },
-    {
-      "time": 1789131600000,
-      "p10": 1.88,
-      "p50": 4.34,
-      "p90": 7.92
-    },
-    {
-      "time": 1789135200000,
-      "p10": 1.68,
-      "p50": 4.75,
-      "p90": 11.03
-    },
-    {
-      "time": 1789138800000,
-      "p10": 1.68,
-      "p50": 4.33,
-      "p90": 8.29
-    },
-    {
-      "time": 1789142400000,
-      "p10": 1.48,
-      "p50": 4.7,
-      "p90": 9.05
-    },
-    {
-      "time": 1789146000000,
-      "p10": 1.71,
-      "p50": 5.89,
-      "p90": 11.71
-    },
-    {
-      "time": 1789149600000,
-      "p10": 1.78,
-      "p50": 4.2,
-      "p90": 9.29
-    },
-    {
-      "time": 1789153200000,
-      "p10": 1.84,
-      "p50": 4.41,
-      "p90": 7.55
-    },
-    {
-      "time": 1789156800000,
-      "p10": 1.8,
-      "p50": 4.88,
-      "p90": 12.16
-    },
-    {
-      "time": 1789160400000,
-      "p10": 2.15,
-      "p50": 5.19,
-      "p90": 13.82
-    },
-    {
-      "time": 1789164000000,
-      "p10": 1.79,
-      "p50": 4.97,
-      "p90": 12.61
-    },
-    {
-      "time": 1789167600000,
-      "p10": 1.7,
-      "p50": 4.66,
-      "p90": 11.36
-    },
-    {
-      "time": 1789171200000,
-      "p10": 1.48,
-      "p50": 4.52,
-      "p90": 11.05
-    },
-    {
-      "time": 1789174800000,
-      "p10": 1.39,
-      "p50": 4.13,
-      "p90": 10.78
-    },
-    {
-      "time": 1789178400000,
-      "p10": 1.39,
-      "p50": 4.14,
-      "p90": 10.65
-    },
-    {
-      "time": 1789182000000,
-      "p10": 1.34,
-      "p50": 4.27,
-      "p90": 10.78
-    },
-    {
-      "time": 1789185600000,
-      "p10": 1.39,
-      "p50": 4.11,
-      "p90": 11.02
-    },
-    {
-      "time": 1789189200000,
-      "p10": 1.36,
-      "p50": 4.23,
-      "p90": 11.25
-    },
-    {
-      "time": 1789192800000,
-      "p10": 1.36,
-      "p50": 4.47,
-      "p90": 11.38
-    },
-    {
-      "time": 1789196400000,
-      "p10": 1.4,
-      "p50": 4.71,
-      "p90": 11.68
-    },
-    {
-      "time": 1789200000000,
-      "p10": 1.58,
-      "p50": 4.59,
-      "p90": 11.81
-    },
-    {
-      "time": 1789203600000,
-      "p10": 1.84,
-      "p50": 4.56,
-      "p90": 11.61
-    },
-    {
-      "time": 1789207200000,
-      "p10": 2.08,
-      "p50": 4.65,
-      "p90": 11.58
-    },
-    {
-      "time": 1789210800000,
-      "p10": 1.94,
-      "p50": 4.88,
-      "p90": 11.72
-    },
-    {
-      "time": 1789214400000,
-      "p10": 2.08,
-      "p50": 5.09,
-      "p90": 11.86
-    },
-    {
-      "time": 1789218000000,
-      "p10": 2.28,
-      "p50": 5.04,
-      "p90": 11.87
-    },
-    {
-      "time": 1789221600000,
-      "p10": 2.48,
-      "p50": 5.28,
-      "p90": 11.73
-    },
-    {
-      "time": 1789225200000,
-      "p10": 2.51,
-      "p50": 5.4,
-      "p90": 11.82
-    },
-    {
-      "time": 1789228800000,
-      "p10": 2.61,
-      "p50": 6.05,
-      "p90": 11.94
-    },
-    {
-      "time": 1789232400000,
-      "p10": 2,
-      "p50": 6.71,
-      "p90": 12.04
-    },
-    {
-      "time": 1789236000000,
-      "p10": 1.28,
-      "p50": 7.43,
-      "p90": 12.17
-    },
-    {
-      "time": 1789239600000,
-      "p10": 1.63,
-      "p50": 7.48,
-      "p90": 12.25
-    },
-    {
-      "time": 1789243200000,
-      "p10": 2.25,
-      "p50": 7.56,
-      "p90": 12.17
-    },
-    {
-      "time": 1789246800000,
-      "p10": 2.27,
-      "p50": 7.47,
+      "p10": 2.02,
+      "p50": 5.63,
       "p90": 11.9
     },
     {
-      "time": 1789250400000,
-      "p10": 1.87,
+      "time": 1789113600000,
+      "p10": 2.12,
+      "p50": 5.61,
+      "p90": 11.65
+    },
+    {
+      "time": 1789117200000,
+      "p10": 2.42,
+      "p50": 5.39,
+      "p90": 11.35
+    },
+    {
+      "time": 1789120800000,
+      "p10": 2.72,
+      "p50": 5.5,
+      "p90": 11.06
+    },
+    {
+      "time": 1789124400000,
+      "p10": 2.45,
+      "p50": 5.76,
+      "p90": 10.61
+    },
+    {
+      "time": 1789128000000,
+      "p10": 2.82,
+      "p50": 5.66,
+      "p90": 10.06
+    },
+    {
+      "time": 1789131600000,
+      "p10": 2.56,
+      "p50": 6.41,
+      "p90": 10.78
+    },
+    {
+      "time": 1789135200000,
+      "p10": 2.47,
+      "p50": 6,
+      "p90": 11.56
+    },
+    {
+      "time": 1789138800000,
+      "p10": 2.69,
+      "p50": 6.33,
+      "p90": 12.14
+    },
+    {
+      "time": 1789142400000,
+      "p10": 3.01,
+      "p50": 6.27,
+      "p90": 12.67
+    },
+    {
+      "time": 1789146000000,
+      "p10": 2.34,
+      "p50": 6.41,
+      "p90": 13.11
+    },
+    {
+      "time": 1789149600000,
+      "p10": 2.6,
+      "p50": 6.6,
+      "p90": 12.78
+    },
+    {
+      "time": 1789153200000,
+      "p10": 2.24,
+      "p50": 6.99,
+      "p90": 12.15
+    },
+    {
+      "time": 1789156800000,
+      "p10": 2.12,
+      "p50": 7.25,
+      "p90": 11.67
+    },
+    {
+      "time": 1789160400000,
+      "p10": 2.28,
+      "p50": 6.89,
+      "p90": 11.4
+    },
+    {
+      "time": 1789164000000,
+      "p10": 2.33,
+      "p50": 6.63,
+      "p90": 11.28
+    },
+    {
+      "time": 1789167600000,
+      "p10": 2.39,
+      "p50": 6.93,
+      "p90": 11.08
+    },
+    {
+      "time": 1789171200000,
+      "p10": 2.39,
+      "p50": 7.13,
+      "p90": 10.9
+    },
+    {
+      "time": 1789174800000,
+      "p10": 2.36,
+      "p50": 7.22,
+      "p90": 10.75
+    },
+    {
+      "time": 1789178400000,
+      "p10": 2.3,
+      "p50": 7.2,
+      "p90": 10.92
+    },
+    {
+      "time": 1789182000000,
+      "p10": 2.06,
+      "p50": 7.07,
+      "p90": 11.27
+    },
+    {
+      "time": 1789185600000,
+      "p10": 2.05,
+      "p50": 7.1,
+      "p90": 11.66
+    },
+    {
+      "time": 1789189200000,
+      "p10": 2.15,
+      "p50": 7.52,
+      "p90": 11.96
+    },
+    {
+      "time": 1789192800000,
+      "p10": 2.38,
       "p50": 7.38,
-      "p90": 11.57
+      "p90": 12.31
+    },
+    {
+      "time": 1789196400000,
+      "p10": 2.61,
+      "p50": 7.57,
+      "p90": 15.63
+    },
+    {
+      "time": 1789200000000,
+      "p10": 2.5,
+      "p50": 7.63,
+      "p90": 15.89
+    },
+    {
+      "time": 1789203600000,
+      "p10": 2.09,
+      "p50": 7.52,
+      "p90": 16.17
+    },
+    {
+      "time": 1789207200000,
+      "p10": 1.64,
+      "p50": 7.28,
+      "p90": 12.71
+    },
+    {
+      "time": 1789210800000,
+      "p10": 1.57,
+      "p50": 7.11,
+      "p90": 12.67
+    },
+    {
+      "time": 1789214400000,
+      "p10": 1.8,
+      "p50": 6.94,
+      "p90": 12.63
+    },
+    {
+      "time": 1789218000000,
+      "p10": 2.19,
+      "p50": 7.24,
+      "p90": 12.45
+    },
+    {
+      "time": 1789221600000,
+      "p10": 2.42,
+      "p50": 7.43,
+      "p90": 12.37
+    },
+    {
+      "time": 1789225200000,
+      "p10": 2.44,
+      "p50": 7.82,
+      "p90": 12.32
+    },
+    {
+      "time": 1789228800000,
+      "p10": 2.44,
+      "p50": 8.15,
+      "p90": 12.26
+    },
+    {
+      "time": 1789232400000,
+      "p10": 2.5,
+      "p50": 8.45,
+      "p90": 12.25
+    },
+    {
+      "time": 1789236000000,
+      "p10": 2.51,
+      "p50": 8.77,
+      "p90": 12.31
+    },
+    {
+      "time": 1789239600000,
+      "p10": 2.37,
+      "p50": 9.08,
+      "p90": 12.57
+    },
+    {
+      "time": 1789243200000,
+      "p10": 2.5,
+      "p50": 9.53,
+      "p90": 12.75
+    },
+    {
+      "time": 1789246800000,
+      "p10": 2.69,
+      "p50": 9.44,
+      "p90": 12.52
+    },
+    {
+      "time": 1789250400000,
+      "p10": 2.44,
+      "p50": 8.97,
+      "p90": 12.07
     },
     {
       "time": 1789254000000,
-      "p10": 1.34,
-      "p50": 6.95,
-      "p90": 11.61
+      "p10": 2.25,
+      "p50": 8.86,
+      "p90": 12
     }
   ]
 }

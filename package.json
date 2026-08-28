@@ -10,7 +10,8 @@
     "typecheck": "tsc -b --noEmit",
     "snapshot": "esbuild scripts/snapshot.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/snapshot.mjs --log-level=error && node node_modules/.cache/snapshot.mjs",
     "render": "esbuild scripts/render.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/render.mjs --log-level=error && node node_modules/.cache/render.mjs",
-    "report": "npm run snapshot -- --name 綠島 --lat 22.66 --lon 121.489 --from 2026-09-09 --to 2026-09-12 --out report/data.json && npm run render"
+    "report": "npm run snapshot -- --name 綠島 --lat 22.66 --lon 121.489 --from 2026-09-09 --to 2026-09-12 --out report/data.json && npm run render",
+    "bundle": "npm run build && npm run report && mkdir -p dist/report && cp report/standalone.html dist/report/index.html"
   },
   "dependencies": {
     "react": "^19.2.0",
