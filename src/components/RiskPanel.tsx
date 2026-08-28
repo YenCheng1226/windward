@@ -6,7 +6,7 @@ import { STATUS_LABEL, STATUS_TONE, type Confidence, type DayAssessment, assessT
 import { useTripData, type TripWindow } from '../lib/useTrip'
 import { buildHtmlReport, downloadHtml, exportPng } from '../lib/exportReport'
 import { dayLabel, weekdayLabel } from '../lib/weather'
-import { RiskStrip, SituationPlot, statusColor } from './RiskDiagrams'
+import { DestinationPlot, RiskStrip, statusColor } from './RiskDiagrams'
 import { Card, ErrorBox, Segmented, Spinner } from './ui'
 import { TOLERANCE_LABEL, type Tolerance } from '../lib/activities'
 import LocationPicker from './LocationPicker'
@@ -45,7 +45,7 @@ export default function RiskPanel({
 
   const t = useTripData(place, forecast, windUnit, range, nowMs)
   const stripRef = useRef<SVGSVGElement>(null)
-  const situationRef = useRef<SVGSVGElement>(null)
+  const destRef = useRef<SVGSVGElement>(null)
   const [busy, setBusy] = useState<string | null>(null)
   const [note, setNote] = useState<string | null>(null)
 
@@ -69,7 +69,7 @@ export default function RiskPanel({
     return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
   }, [])
 
-  const svgNodes = () => [stripRef.current, situationRef.current].filter((n): n is SVGSVGElement => n != null)
+  const svgNodes = () => [stripRef.current, destRef.current].filter((n): n is SVGSVGElement => n != null)
 
   const savePng = async () => {
     setBusy('png')
@@ -241,12 +241,20 @@ export default function RiskPanel({
         </div>
       </Card>
 
-      <Card title="熱帶系統相對位置" subtitle="距離為對數尺度、方位為真方位，虛線是預報路徑。這是示意圖不是地圖，回答的是「有沒有東西靠近、有沒有朝這來」。">
-        {t.cyclones.data && t.cyclones.data.length === 0 ? (
-          <p className="hint">目前西北太平洋沒有活躍的熱帶氣旋。</p>
-        ) : (
-          <SituationPlot place={place.name} cyclones={t.cyclones.data ?? []} palette={palette} ref={situationRef} />
-        )}
+      <Card
+        title="目的地與活動示意"
+        subtitle="浪從哪一側打來、哪一側背風可以下水，以及每項活動在整段行程中最好的時段。島形為示意，不是實際海岸線。"
+      >
+        <DestinationPlot
+          place={place.name}
+          shore={a.shore}
+          waveOffshore={a.waveOffshore}
+          waveLee={a.waveLee}
+          sun={a.sun}
+          outlook={a.outlook}
+          palette={palette}
+          ref={destRef}
+        />
       </Card>
 
       <Card title="建議行動">

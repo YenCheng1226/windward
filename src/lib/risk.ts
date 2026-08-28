@@ -10,7 +10,7 @@
  * Severity still exists internally, to rank and order — it is simply never the answer.
  */
 import type { DaySummary } from './trip'
-import { ACTIVITIES, exposedShore } from './activities'
+import { ACTIVITIES, exposedShore, sunVerdict } from './activities'
 import type { Cyclone } from './tropical'
 
 /** Categorical, not numeric — the reader is meant to think in these terms. */
@@ -63,6 +63,17 @@ export interface UncertaintyFactor {
   weight: Confidence
 }
 
+export interface ActivityOutlook {
+  id: string
+  name: string
+  icon: string
+  /** Best score anywhere in the trip, and when. */
+  bestScore: number | null
+  bestDay: number | null
+  bestPart: string | null
+  status: 'ok' | 'marginal' | 'no'
+}
+
 export interface TripAssessment {
   /** One sentence a person can repeat to their travel companions. */
   conclusion: string
@@ -77,6 +88,15 @@ export interface TripAssessment {
   actions: string[]
   decisionPoint: string
   usableDays: number
+  /** How each activity fares across the trip as a whole. */
+  outlook: ActivityOutlook[]
+  /** Dominant swell direction and the shore it leaves sheltered. */
+  shore: { exposed: string; lee: string; waveFrom: number } | null
+  /** Representative offshore and lee-side wave heights for the trip. */
+  waveOffshore: number | null
+  waveLee: number | null
+  /** Best sunshine day, for the trip-quality read. */
+  sun: { hours: number; frac: number; day: number } | null
 }
 
 /** Thresholds quoted in the evidence, so the reader can disagree with them. */
@@ -214,14 +234,31 @@ function assessDay(d: DaySummary, cyclones: Cyclone[], outOfRange: boolean, ente
       basis: '降雨的空間變化大，島嶼尺度的實際落點模式抓不準',
     })
   }
-  if (d.sun.frac != null) {
+  if (d.sun.frac != null && d.sun.hours != null) {
     const spread = d.sun.min != null && d.sun.max != null ? d.sun.max - d.sun.min : 0
+    const pct = d.sun.frac * 100
+    const cloud = d.cells.map((c) => c.stats.cloudMean).filter((v): v is number => v != null)
+    const cloudMean = cloud.length ? cloud.reduce((x, y) => x + y, 0) / cloud.length : null
     if (spread >= 4) {
       reasons.push({
-        claim: '有沒有太陽現在說不準',
-        evidence: `${d.sun.models} 家模式給出 ${d.sun.min!.toFixed(1)}–${d.sun.max!.toFixed(1)} 小時日照，中位數 ${d.sun.hours!.toFixed(1)} 小時`,
+        claim: '曬不曬得到太陽現在說不準',
+        evidence: `${d.sun.models} 家模式給出 ${d.sun.min!.toFixed(1)}–${d.sun.max!.toFixed(1)} 小時日照，中位數 ${d.sun.hours.toFixed(1)} 小時（佔白天 ${pct.toFixed(0)}%）`,
         confidence: '低',
         basis: `差距 ${spread.toFixed(1)} 小時，等於「整天沒太陽」到「幾乎全晴」都在射程內`,
+      })
+    } else {
+      reasons.push({
+        claim: pct >= 60 ? '曬得到太陽' : pct >= 35 ? '陽光時有時無' : '幾乎曬不到太陽',
+        evidence:
+          `全日 ${d.sun.hours.toFixed(1)} 小時日照，佔白天 ${pct.toFixed(0)}%——${sunVerdict(d.sun.frac, spread).label}` +
+          (cloudMean != null ? `；日間平均雲量 ${cloudMean.toFixed(0)}%` : ''),
+        confidence: d.sun.models >= 2 ? '中' : '低',
+        basis:
+          cloudMean != null && cloudMean >= 80 && pct >= 50
+            ? '雲量高但日照仍多，代表以薄雲為主——直射陽光穿得過，天空看起來是白的但會曬傷'
+            : d.sun.models >= 2
+              ? `${d.sun.models} 家模式一致（差距僅 ${spread.toFixed(1)} 小時）；日照採 WMO 定義，只看直射輻射有沒有超過 120 W/m²`
+              : '這天只有一家模式有日照資料，沒有第二個意見可以對照',
       })
     }
   }
@@ -354,6 +391,13 @@ export function assessTrip(
   }
 
   // ---- the causal chain
+  const usableDaySummaries = days.filter((d) => !outOfRange(d.day))
+  let sunBest: { hours: number; frac: number; day: number } | null = null
+  for (const d of usableDaySummaries) {
+    if (d.sun.hours == null || d.sun.frac == null) continue
+    if (!sunBest || d.sun.hours > sunBest.hours) sunBest = { hours: d.sun.hours, frac: d.sun.frac, day: d.day }
+  }
+
   const reasoning: string[] = []
   if (usable.length) {
     const worstWave = Math.max(0, ...usable.flatMap((a) => a.reasons.map((r) => (r.evidence.match(/浪高 ([\d.]+) m/)?.[1] ? Number(r.evidence.match(/浪高 ([\d.]+) m/)![1]) : 0))))
@@ -368,6 +412,13 @@ export function assessTrip(
     }
     const anySurf = usable.some((a) => a.stillWorks?.includes('衝浪'))
     if (anySurf) reasoning.push('唯一逆勢的是衝浪——它需要浪，所以其他活動被擋掉的日子，反而是它的條件。')
+    if (sunBest) {
+      reasoning.push(
+        sunBest.frac >= 0.5
+          ? `曬太陽方面，最好的是 ${dayLabel(sunBest.day)}，全日 ${sunBest.hours.toFixed(1)} 小時日照、佔白天 ${(sunBest.frac * 100).toFixed(0)}%。`
+          : `曬太陽方面條件普通，最好的 ${dayLabel(sunBest.day)} 也只有 ${sunBest.hours.toFixed(1)} 小時日照。`,
+      )
+    }
     if (cyclones.length) {
       const near = cyclones[0]
       reasoning.push(
@@ -390,7 +441,51 @@ export function assessTrip(
   actions.push(`${recheck}（出發前 4 天）重看一次，屆時海象模式才進入可信範圍`)
   actions.push('出發前一天再看一次，並以中央氣象署警特報為準')
 
+  // Outlook per activity: the best window each one gets anywhere in the trip.
+  const outlook: ActivityOutlook[] = ACTIVITIES.map((act) => {
+    let bestScore: number | null = null
+    let bestDay: number | null = null
+    let bestPart: string | null = null
+    for (const d of days) {
+      if (outOfRange(d.day)) continue
+      for (const c of d.cells) {
+        const sc = c.scores[act.id]?.score
+        if (sc == null) continue
+        if (bestScore == null || sc > bestScore) {
+          bestScore = sc
+          bestDay = d.day
+          bestPart = String(c.part.label)
+        }
+      }
+    }
+    return {
+      id: act.id,
+      name: act.name,
+      icon: act.icon,
+      bestScore,
+      bestDay,
+      bestPart,
+      status: bestScore == null ? 'no' : bestScore >= 55 ? 'ok' : bestScore >= 35 ? 'marginal' : 'no',
+    }
+  })
+
+  const waveFrom = usableDaySummaries.flatMap((d) => d.cells.map((c) => c.conditions.waveFrom)).find((v) => v != null) ?? null
+  const shoreInfo = exposedShore(waveFrom)
+  const med = (xs: number[]): number | null => {
+    if (!xs.length) return null
+    const v = [...xs].sort((x, y) => x - y)
+    const m = v.length >> 1
+    return v.length % 2 ? v[m] : (v[m - 1] + v[m]) / 2
+  }
+  const offshoreVals = usableDaySummaries.flatMap((d) => d.cells.map((c) => c.conditions.waveHeight)).filter((v): v is number => v != null)
+  const leeVals = usableDaySummaries.flatMap((d) => d.cells.map((c) => c.conditions.waveLee)).filter((v): v is number => v != null)
+
   return {
+    outlook,
+    shore: shoreInfo && waveFrom != null ? { ...shoreInfo, waveFrom } : null,
+    waveOffshore: med(offshoreVals),
+    waveLee: med(leeVals),
+    sun: sunBest,
     conclusion,
     reasoning,
     days: assessments.sort((a, b) => a.day - b.day || severityOf(b.status) - severityOf(a.status)),

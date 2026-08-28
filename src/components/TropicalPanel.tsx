@@ -3,6 +3,7 @@ import { useCyclones, useDisturbances, useEnsemble } from '../lib/hooks'
 import type { Place } from '../lib/locations'
 import { alpha, type Palette } from '../lib/palette'
 import type { Cyclone } from '../lib/tropical'
+import { SituationPlot } from './RiskDiagrams'
 import TimeChart, { type ChartBand, type ChartSeries } from './TimeChart'
 import { Card, ErrorBox, Legend, Spinner, StatTile } from './ui'
 
@@ -200,6 +201,17 @@ export default function TropicalPanel({ place, palette, nowMs }: { place: Place;
           </Card>
         )
       })}
+
+      <Card
+        title="相對位置示意"
+        subtitle="距離為對數尺度、方位為真方位，虛線是預報路徑。這是示意圖不是地圖，回答的是「有沒有東西靠近、有沒有朝這來」。"
+      >
+        {cyclones.data && cyclones.data.length === 0 ? (
+          <p className="hint">目前西北太平洋沒有活躍的熱帶氣旋。</p>
+        ) : (
+          <SituationPlot place={place.name} cyclones={cyclones.data ?? []} palette={palette} />
+        )}
+      </Card>
 
       <Card title="醞釀中的擾動" subtitle="美軍聯合颱風警報中心（JTWC）每 6 小時發布的熱帶天氣報。這份文件會在系統被命名之前就列出可疑的擾動區，是「有沒有東西正在生成」最早的官方訊號。">
         {disturbances.loading && !disturbances.data && <Spinner label="讀取 JTWC 熱帶天氣報…" />}

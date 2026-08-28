@@ -8,7 +8,7 @@
  */
 import type { Ref } from 'react'
 import type { Palette } from '../lib/palette'
-import { STATUS_LABEL, type DayAssessment, type Status } from '../lib/risk'
+import { STATUS_LABEL, type ActivityOutlook, type DayAssessment, type Status } from '../lib/risk'
 import type { Cyclone } from '../lib/tropical'
 
 const SANS = 'system-ui, -apple-system, "Noto Sans TC", sans-serif'
@@ -97,7 +97,7 @@ export function RiskStrip({ days, palette: p, width = 780, ref }: StripProps) {
               </text>
             ))}
             {!d.outOfRange && d.stillWorks && (
-              wrap(`仍可行：${d.stillWorks}`, Math.floor(blockW / 10.5), 2).map((line, li) => (
+              wrap(`仍可行：${d.stillWorks}`, Math.floor(blockW / 9.2), 2).map((line, li) => (
                 <text key={`w${li}`} x={cx} y={blockY + blockH + 74 + li * 13} fontSize="9.5" textAnchor="middle" fill={p.textMuted} fontFamily={SANS}>
                   {line}
                 </text>
@@ -207,6 +207,175 @@ export function SituationPlot({ place, cyclones, palette: p, size = 420, ref }: 
       <text x="8" y={size - 8} fontSize="9" fill={p.textMuted} fontFamily={SANS}>
         距離為對數尺度・方位為真方位・虛線為預報路徑
       </text>
+    </svg>
+  )
+}
+
+
+// ------------------------------------------------------- destination plot
+
+export interface DestinationProps {
+  place: string
+  /** Dominant swell direction (degrees the waves come from) and the sheltered shore. */
+  shore: { exposed: string; lee: string; waveFrom: number } | null
+  waveOffshore: number | null
+  waveLee: number | null
+  sun: { hours: number; frac: number; day: number } | null
+  outlook: ActivityOutlook[]
+  palette: Palette
+  width?: number
+  ref?: Ref<SVGSVGElement>
+}
+
+const OUTLOOK_TEXT: Record<ActivityOutlook['status'], string> = { ok: '可行', marginal: '勉強', no: '不可行' }
+
+/**
+ * The destination, drawn as the trip actually works: which shore the swell hits,
+ * which shore is therefore sheltered, and what each activity can expect.
+ *
+ * This replaced a cyclone radar on the report. The radar answered "where are the
+ * typhoons", which is only interesting when there is one; this answers "which side of
+ * the island do I go to, and what can I do", which is the question every single time.
+ * It is a schematic — the island is a stylised shape, not a coastline.
+ */
+export function DestinationPlot({ place, shore, waveOffshore, waveLee, sun, outlook, palette: p, width = 780, ref }: DestinationProps) {
+  const H = 352
+  const cx = 190
+  const cy = 158
+  const rx = 74
+  const ry = 60
+  const ring = 118
+
+  // Screen angle for a compass bearing, with north up.
+  const ang = (deg: number) => (deg - 90) * (Math.PI / 180)
+  const from = shore?.waveFrom ?? null
+  const land = p.mode === 'dark' ? '#2c3a33' : '#e4e9e0'
+
+  const arrows = from == null ? [] : [-22, 0, 22].map((off) => {
+    const a = ang(from + off)
+    const x0 = cx + Math.cos(a) * (ring + 26)
+    const y0 = cy + Math.sin(a) * (ring + 26)
+    const x1 = cx + Math.cos(a) * (rx + 16)
+    const y1 = cy + Math.sin(a) * (ry + 16)
+    return { x0, y0, x1, y1 }
+  })
+
+  const leeAngle = from == null ? null : ang(from + 180)
+
+  return (
+    <svg ref={ref} viewBox={`0 0 ${width} ${H}`} width="100%" role="img" aria-label={`${place}的海況與活動示意圖`} style={{ display: 'block' }}>
+      <defs>
+        <marker id="swell" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0 0 L10 5 L0 10 z" fill={p.series[0]} />
+        </marker>
+      </defs>
+      <rect x="0" y="0" width={width} height={H} fill={p.surface1} />
+
+      <text x="16" y="24" fontSize="12" fontWeight="700" fill={p.textPrimary} fontFamily={SANS}>
+        海況與建議方位
+      </text>
+
+      {['北', '東', '南', '西'].map((d, i) => {
+        const a = ang(i * 90)
+        return (
+          <text key={d} x={cx + Math.cos(a) * (ring + 14)} y={cy + Math.sin(a) * (ring + 14) + 4} fontSize="10" textAnchor="middle" fill={p.textMuted} fontFamily={SANS}>
+            {d}
+          </text>
+        )
+      })}
+      <circle cx={cx} cy={cy} r={ring} fill="none" stroke={p.grid} strokeWidth="1" />
+
+      {arrows.map((a, i) => (
+        <line key={i} x1={a.x0} y1={a.y0} x2={a.x1} y2={a.y1} stroke={p.series[0]} strokeWidth="2" markerEnd="url(#swell)" opacity="0.85" />
+      ))}
+
+      <ellipse cx={cx} cy={cy} rx={rx} ry={ry} fill={land} stroke={p.axis} strokeWidth="1.5" />
+      <text x={cx} y={cy + 5} fontSize="14" fontWeight="700" textAnchor="middle" fill={p.textPrimary} fontFamily={SANS}>
+        {place}
+      </text>
+
+      {from != null && (
+        <>
+          {/* The exposed arc is drawn as a thick cap on the swell-facing side. */}
+          <path
+            d={`M ${cx + Math.cos(ang(from - 55)) * rx} ${cy + Math.sin(ang(from - 55)) * ry} A ${rx} ${ry} 0 0 1 ${cx + Math.cos(ang(from + 55)) * rx} ${cy + Math.sin(ang(from + 55)) * ry}`}
+            fill="none"
+            stroke={p.critical}
+            strokeWidth="5"
+            strokeLinecap="round"
+            opacity="0.75"
+            transform={`rotate(${from > 180 ? 0 : 0} ${cx} ${cy})`}
+          />
+          <text
+            x={cx + Math.cos(ang(from)) * (rx + 42)}
+            y={cy + Math.sin(ang(from)) * (ry + 42)}
+            fontSize="10.5"
+            fontWeight="600"
+            textAnchor="middle"
+            fill={p.critical}
+            fontFamily={SANS}
+          >
+            {shore!.exposed}岸迎浪
+          </text>
+          {leeAngle != null && (
+            <>
+              <circle cx={cx + Math.cos(leeAngle) * (rx * 0.72)} cy={cy + Math.sin(leeAngle) * (ry * 0.72)} r="5" fill={p.good} />
+              <text
+                x={cx + Math.cos(leeAngle) * (rx + 48)}
+                y={cy + Math.sin(leeAngle) * (ry + 48)}
+                fontSize="10.5"
+                fontWeight="600"
+                textAnchor="middle"
+                fill={p.good}
+                fontFamily={SANS}
+              >
+                {shore!.lee}岸背風・建議潛點
+              </text>
+            </>
+          )}
+        </>
+      )}
+
+      <text x="16" y={H - 30} fontSize="10.5" fill={p.textSecondary} fontFamily={SANS}>
+        {waveOffshore != null && waveLee != null
+          ? `行程期間中位數：外海浪高 ${waveOffshore.toFixed(1)} m → 背風側估計 ${waveLee.toFixed(1)} m`
+          : '浪高資料不足'}
+      </text>
+      <text x="16" y={H - 14} fontSize="10" fill={p.textMuted} fontFamily={SANS}>
+        島形為示意，非實際海岸線；背風遮蔽為依週期估算的概略值
+      </text>
+
+      {/* Activity outlook — icons carry recognition, the words carry the verdict. */}
+      <text x="400" y="24" fontSize="12" fontWeight="700" fill={p.textPrimary} fontFamily={SANS}>
+        活動可行性（全程最佳時段）
+      </text>
+      {outlook.map((o, i) => {
+        const y = 52 + i * 40
+        const color = o.status === 'ok' ? p.good : o.status === 'marginal' ? p.warning : p.critical
+        return (
+          <g key={o.id}>
+            <rect x="400" y={y - 16} width={width - 416} height="32" rx="7" fill={p.surface2} />
+            <text x="416" y={y + 6} fontSize="17" fontFamily={SANS}>
+              {o.icon}
+            </text>
+            <text x="446" y={y + 5} fontSize="12.5" fontWeight="600" fill={p.textPrimary} fontFamily={SANS}>
+              {o.name}
+            </text>
+            <text x="536" y={y + 5} fontSize="12" fontWeight="700" fill={color} fontFamily={SANS}>
+              {OUTLOOK_TEXT[o.status]}
+            </text>
+            <text x={width - 26} y={y + 5} fontSize="10.5" textAnchor="end" fill={p.textMuted} fontFamily={SANS}>
+              {/* A "best" of zero is not a recommendation — say there isn't one. */}
+              {o.bestScore == null ? '無可用資料' : o.bestScore > 0 && o.bestDay != null ? `最佳 ${dayLabel(o.bestDay)} ${o.bestPart}（${o.bestScore} 分）` : '全程無可行時段'}
+            </text>
+          </g>
+        )
+      })}
+      {sun && (
+        <text x="400" y={52 + outlook.length * 40 + 6} fontSize="10.5" fill={p.textSecondary} fontFamily={SANS}>
+          {`曬太陽最好的是 ${dayLabel(sun.day)}：${sun.hours.toFixed(1)} 小時日照，佔白天 ${(sun.frac * 100).toFixed(0)}%`}
+        </text>
+      )}
     </svg>
   )
 }
