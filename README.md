@@ -1,5 +1,8 @@
 # 長風 Windward
 
+**線上版：<https://yencheng1226.github.io/windward/>**
+（綠島行程報告：<https://yencheng1226.github.io/windward/report/>）
+
 Windy Premium 等級的**長期預報儀表板**：多模式比較、系集離散度、35 天次季節展望，台灣在地化。
 純前端，資料全部來自 [Open-Meteo](https://open-meteo.com/) 的免費 API，不需要金鑰、不需要後端。
 
@@ -7,7 +10,22 @@ Windy Premium 等級的**長期預報儀表板**：多模式比較、系集離�
 npm install
 npm run dev      # http://localhost:5273
 npm run build    # 產生 dist/
+npm run bundle   # dist/ + 最新的綠島報告，可直接發佈
 ```
+
+## 發佈
+
+網站是純靜態的，沒有後端。`npm run bundle` 產生的 `dist/` 可以放上任何靜態主機。
+目前發佈在 GitHub Pages 的 `gh-pages` 分支：
+
+```bash
+npm run bundle
+D=$(mktemp -d) && cp -R dist/. "$D"/ && git -C "$D" init -q -b gh-pages \
+  && git -C "$D" add -A && git -C "$D" commit -q -m 發佈 \
+  && git -C "$D" push -f https://github.com/YenCheng1226/windward.git gh-pages
+```
+
+`dist/.nojekyll` 必須保留，否則 GitHub Pages 會用 Jekyll 處理並忽略部分檔案。
 
 ## 六個分頁
 
