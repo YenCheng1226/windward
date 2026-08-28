@@ -121,3 +121,11 @@ export function useCyclones(lat: number | null, lon: number | null): Async<Cyclo
 export function useDisturbances(): Async<Disturbances> {
   return useAsync('jtwc-abpw', null, (_q, signal) => fetchDisturbances(signal))
 }
+
+/**
+ * Ensemble pressure at one upstream genesis point. Called once per point; the shared
+ * cache means switching tabs does not re-fetch.
+ */
+export function useGenesisPoint(lat: number, lon: number, days: number): Async<EnsembleData> {
+  return useEnsemble({ lat, lon, model: 'gfs05', variable: 'pressure_msl', days, windUnit: 'ms' })
+}

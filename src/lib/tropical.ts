@@ -237,3 +237,32 @@ export async function fetchDisturbances(signal?: AbortSignal): Promise<Disturban
 
   return { raw, issued, summary, none: /^none\.?$/i.test(summary) }
 }
+
+
+// ------------------------------------------------- upstream genesis watch
+
+/**
+ * Points upstream of Taiwan where Western North Pacific systems are born.
+ *
+ * Watching only the destination misses the thing that matters most: a typhoon
+ * 1,500 km east raises the swell at 綠島 days before its pressure signature reaches
+ * the island, and long before any agency names it. These are the basins that feed
+ * this coast, ordered by how directly they do so.
+ */
+export const GENESIS_POINTS: { name: string; lat: number; lon: number; note: string }[] = [
+  { name: '呂宋海峽東側', lat: 20.0, lon: 124.0, note: '最靠近的生成區，系統從這裡北上常直接影響台灣東部' },
+  { name: '菲律賓海', lat: 18.0, lon: 130.0, note: '主要生成海域，往西北行進約 2–3 天到台灣近海' },
+  { name: '關島西方', lat: 15.0, lon: 140.0, note: '遠源生成區；即使不登陸，長浪也會先抵達' },
+]
+
+export interface GenesisWatch {
+  name: string
+  note: string
+  /** Lowest pressure any member reaches in the window, hPa. */
+  lowest: number | null
+  lowestAt: number | null
+  /** Share of members below 1000 hPa at the worst step, %. */
+  peakShare: number | null
+  peakShareAt: number | null
+  members: number
+}

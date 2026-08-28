@@ -6,6 +6,7 @@ import type { Cyclone } from '../lib/tropical'
 import { SituationPlot } from './RiskDiagrams'
 import TimeChart, { type ChartBand, type ChartSeries } from './TimeChart'
 import { Card, ErrorBox, Legend, Spinner, StatTile } from './ui'
+import UpstreamWatch from './UpstreamWatch'
 
 const fmtUTC8 = (ms: number) => {
   const d = new Date(ms + 8 * 3600000)
@@ -229,8 +230,10 @@ export default function TropicalPanel({ place, palette, nowMs }: { place: Place;
         )}
       </Card>
 
+      <UpstreamWatch nowMs={nowMs} palette={palette} />
+
       <Card
-        title="系集生成訊號"
+        title="本地系集生成訊號"
         subtitle="在任何機構點名之前，模式就會先在氣壓場上表現出來。這裡看 GEFS 31 個成員在此地點算出的海平面氣壓。頭 48 小時刻意排除在指標之外——附近只要有已知系統，現在的氣壓本來就低，會把數字洗到 100% 而蓋掉真正要看的東西：還沒有人點名的系統。"
       >
         {pressure.loading && !genesis && <Spinner label="讀取系集氣壓…" />}
