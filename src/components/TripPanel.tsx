@@ -236,7 +236,12 @@ export default function TripPanel({
                       )
                     })}
                     <td className="num">{c.conditions.waveHeight != null ? `${c.conditions.waveHeight.toFixed(1)} m` : '—'}</td>
-                    <td className="num">{c.conditions.windSpeed != null ? `${c.conditions.windSpeed.toFixed(1)} m/s` : '—'}</td>
+                    <td className="num">
+                      {c.conditions.windSpeed != null ? `${c.conditions.windSpeed.toFixed(1)} m/s` : '—'}
+                      {c.windSpread != null && c.windSpread >= 3 && (
+                        <em className="sub" title={`${c.windModels} 家模式的最大值與最小值相差 ${c.windSpread.toFixed(1)} m/s`}>±{(c.windSpread / 2).toFixed(0)}</em>
+                      )}
+                    </td>
                     <td className="num">
                       {c.stats.rainSum != null ? `${c.stats.rainSum.toFixed(1)} mm` : '—'}
                       {c.stats.rainProbMax != null && <em className="sub"> {c.stats.rainProbMax.toFixed(0)}%</em>}

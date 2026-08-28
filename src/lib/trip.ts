@@ -20,14 +20,37 @@ export type DaypartId = (typeof DAYPARTS)[number]['id']
 const hourOf = (ms: number) => new Date(ms).getUTCHours()
 const dayOf = (ms: number) => Math.floor(ms / 86400000) * 86400000
 
-/** First model in `order` with a value at index `i`. */
-function firstOf(byModel: Record<string, (number | null)[]> | undefined, order: string[], i: number): number | null {
+/**
+ * Median across every model that has a value at index `i`.
+ *
+ * This used to take the first model with data, which quietly handed the entire
+ * assessment to one deterministic run. That is not a safe default at two weeks out:
+ * checked against its own 51-member ensemble for 2026-09-09 at 綠島, the ECMWF
+ * deterministic wind sat at 13.2 m/s while the ensemble median was 6.7 and only 35 %
+ * of members exceeded 8 — the single run shown was near the pessimistic tail, and the
+ * table reported it as though it were the forecast. GFS disagreed on the timing
+ * outright. A median across models cannot be dragged to an extreme by one outlier.
+ */
+function medianOf(byModel: Record<string, (number | null)[]> | undefined, order: string[], i: number): number | null {
   if (!byModel) return null
+  const v: number[] = []
   for (const m of order) {
-    const v = byModel[m]?.[i]
-    if (v != null && Number.isFinite(v)) return v
+    const x = byModel[m]?.[i]
+    if (x != null && Number.isFinite(x)) v.push(x)
   }
-  return null
+  if (!v.length) return null
+  v.sort((a, b) => a - b)
+  const mid = v.length >> 1
+  return v.length % 2 ? v[mid] : (v[mid - 1] + v[mid]) / 2
+}
+
+/** How many models actually contributed at index `i` — fewer means less to lean on. */
+function modelCount(byModel: Record<string, (number | null)[]> | undefined, order: string[], i: number): number {
+  if (!byModel) return 0
+  return order.filter((m) => {
+    const x = byModel[m]?.[i]
+    return x != null && Number.isFinite(x)
+  }).length
 }
 
 /** Rolling 48-hour precipitation total ending at each index — the turbidity proxy. */
@@ -53,6 +76,10 @@ export interface HourRow {
   conditions: Conditions
   /** Absolute spread between the two wave models at this hour, m. */
   waveSpread: number | null
+  /** Range across models for wind at this hour, m/s — the disagreement, in the open. */
+  windSpread: number | null
+  /** How many atmospheric models contributed to this hour's wind. */
+  windModels: number
 }
 
 export interface BuildInput {
@@ -75,7 +102,7 @@ export function buildHours({ hourly, models, marine, waveModels, daily }: BuildI
   marine?.sstTime.forEach((t, i) => sstIdx.set(t, i))
 
   const uvByDay = new Map<number, number | null>()
-  daily.time.forEach((t, i) => uvByDay.set(dayOf(t), firstOf(daily.vars.uv_index_max, models, i)))
+  daily.time.forEach((t, i) => uvByDay.set(dayOf(t), medianOf(daily.vars.uv_index_max, models, i)))
 
   // SST reaches only ~9 days; carry the last known value forward rather than dropping
   // the criterion entirely — it changes by a fraction of a degree per day.
@@ -83,8 +110,8 @@ export function buildHours({ hourly, models, marine, waveModels, daily }: BuildI
 
   return hourly.time.map((t, i) => {
     const mi = marineIdx.get(t)
-    const wave = mi != null ? firstOf(marine!.hourly.vars.wave_height, waveModels, mi) : null
-    const period = mi != null ? firstOf(marine!.hourly.vars.wave_period, waveModels, mi) : null
+    const wave = mi != null ? medianOf(marine!.hourly.vars.wave_height, waveModels, mi) : null
+    const period = mi != null ? medianOf(marine!.hourly.vars.wave_period, waveModels, mi) : null
 
     let spread: number | null = null
     if (mi != null && waveModels.length > 1) {
@@ -96,21 +123,25 @@ export function buildHours({ hourly, models, marine, waveModels, daily }: BuildI
     const sstNow = si != null ? marine!.sst[si] ?? null : null
     if (sstNow != null) lastSst = sstNow
 
+    const windVals = models.map((m) => hourly.vars.wind_speed_10m?.[m]?.[i]).filter((v): v is number => v != null && Number.isFinite(v))
+
     return {
       time: t,
       waveSpread: spread,
+      windSpread: windVals.length > 1 ? Math.max(...windVals) - Math.min(...windVals) : null,
+      windModels: modelCount(hourly.vars.wind_speed_10m, models, i),
       conditions: {
         waveHeight: wave,
         wavePeriod: period,
-        windSpeed: firstOf(hourly.vars.wind_speed_10m, models, i),
-        windGust: firstOf(hourly.vars.wind_gusts_10m, models, i),
+        windSpeed: medianOf(hourly.vars.wind_speed_10m, models, i),
+        windGust: medianOf(hourly.vars.wind_gusts_10m, models, i),
         rain48: rain48[i] ?? null,
         sst: sstNow ?? lastSst,
-        apparentTemp: firstOf(hourly.vars.apparent_temperature, models, i),
-        cloud: firstOf(hourly.vars.cloud_cover, models, i),
-        precip: firstOf(hourly.vars.precipitation, models, i),
+        apparentTemp: medianOf(hourly.vars.apparent_temperature, models, i),
+        cloud: medianOf(hourly.vars.cloud_cover, models, i),
+        precip: medianOf(hourly.vars.precipitation, models, i),
         uv: uvByDay.get(dayOf(t)) ?? null,
-        rainProb: firstOf(hourly.vars.precipitation_probability, models, i),
+        rainProb: medianOf(hourly.vars.precipitation_probability, models, i),
       },
     }
   })
@@ -130,7 +161,7 @@ const worst = (xs: (number | null)[]): number | null => {
 }
 
 /** Representative conditions for one daypart: medians, but the sea state at its worst. */
-export function aggregate(rows: HourRow[]): { conditions: Conditions; waveSpread: number | null; stats: WindowStats } {
+export function aggregate(rows: HourRow[]): { conditions: Conditions; waveSpread: number | null; windSpread: number | null; windModels: number; stats: WindowStats } {
   const col = (f: (c: Conditions) => number | null) => rows.map((r) => f(r.conditions))
 
   const sum = (xs: (number | null)[]): number | null => {
@@ -164,6 +195,8 @@ export function aggregate(rows: HourRow[]): { conditions: Conditions; waveSpread
       rainProb: worst(col((c) => c.rainProb)),
     },
     waveSpread: worst(rows.map((r) => r.waveSpread)),
+    windSpread: worst(rows.map((r) => r.windSpread)),
+    windModels: Math.max(0, ...rows.map((r) => r.windModels)),
   }
 }
 
@@ -173,6 +206,9 @@ export interface DaypartCell {
   conditions: Conditions
   stats: WindowStats
   waveSpread: number | null
+  /** Max−min across models for wind in this window, m/s. */
+  windSpread: number | null
+  windModels: number
   scores: Record<string, ActivityScore>
   comfort: Comfort
   /** Share of ensemble members whose wind stays under each activity's workable limit. */
@@ -227,8 +263,8 @@ export function windLimit(activityId: string): number {
 export function sunByDay(daily: Block, models: string[]): Map<number, SunDay> {
   const out = new Map<number, SunDay>()
   daily.time.forEach((t, i) => {
-    const sun = firstOf(daily.vars.sunshine_duration, models, i)
-    const light = firstOf(daily.vars.daylight_duration, models, i)
+    const sun = medianOf(daily.vars.sunshine_duration, models, i)
+    const light = medianOf(daily.vars.daylight_duration, models, i)
     out.set(dayOf(t), {
       hours: sun != null ? sun / 3600 : null,
       frac: sun != null && light ? Math.min(1, sun / light) : null,
@@ -249,7 +285,7 @@ export function summarise(rows: HourRow[], days: number[], ens: EnsembleData | n
     const dayRows = byDay.get(day) ?? []
     const cells: DaypartCell[] = DAYPARTS.map((part) => {
       const slice = dayRows.filter((r) => hourOf(r.time) >= part.from && hourOf(r.time) <= part.to)
-      const { conditions, waveSpread, stats } = aggregate(slice)
+      const { conditions, waveSpread, windSpread, windModels, stats } = aggregate(slice)
       const from = day + part.from * 3600000
       const to = day + part.to * 3600000
       const scores: Record<string, ActivityScore> = {}
@@ -258,7 +294,7 @@ export function summarise(rows: HourRow[], days: number[], ens: EnsembleData | n
         scores[a.id] = scoreActivity(a, conditions)
         windProb[a.id] = windProbability(ens, from, to, windLimit(a.id))
       }
-      return { day, part, conditions, waveSpread, stats, scores, comfort: comfort(conditions, stats), windProb }
+      return { day, part, conditions, waveSpread, windSpread, windModels, stats, scores, comfort: comfort(conditions, stats), windProb }
     })
 
     const waveMax = worst(dayRows.map((r) => r.conditions.waveHeight))
