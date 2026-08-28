@@ -6,6 +6,7 @@ import ModelPanel, { modelColor } from './components/ModelPanel'
 import EnsemblePanel from './components/EnsemblePanel'
 import LongRangePanel from './components/LongRangePanel'
 import TablePanel from './components/TablePanel'
+import RiskPanel from './components/RiskPanel'
 import TripPanel, { type TripRange } from './components/TripPanel'
 import TropicalPanel from './components/TropicalPanel'
 import { ErrorBox, Segmented, Spinner } from './components/ui'
@@ -17,12 +18,13 @@ import { decodeState, encodeState, type AppState } from './lib/urlState'
 import { ACTIVITIES } from './lib/activities'
 import './styles.css'
 
-type Tab = 'overview' | 'trip' | 'tropical' | 'hourly' | 'models' | 'ensemble' | 'long' | 'table'
+type Tab = 'risk' | 'trip' | 'tropical' | 'overview' | 'hourly' | 'models' | 'ensemble' | 'long' | 'table'
 
 const TABS: { value: Tab; label: string; hint: string }[] = [
-  { value: 'overview', label: '總覽', hint: '目前天氣與 16 天逐日預報' },
-  { value: 'trip', label: '行程評估', hint: '水上活動適宜度、船班風險與不確定性' },
+  { value: 'risk', label: '行程風險', hint: '一頁看完行程受影響風險，可輸出報告與示意圖' },
+  { value: 'trip', label: '逐時段評估', hint: '水上活動適宜度、船班風險與不確定性' },
   { value: 'tropical', label: '熱帶系統', hint: '颱風與熱低壓追蹤、擾動醞釀與系集生成訊號' },
+  { value: 'overview', label: '天氣總覽', hint: '目前天氣與 16 天逐日預報' },
   { value: 'hourly', label: '逐時', hint: '單一模式的逐時氣象圖' },
   { value: 'models', label: '多模式', hint: '各國模式疊圖與分歧分析' },
   { value: 'ensemble', label: '系集', hint: '成員分布與信心度' },
@@ -72,7 +74,7 @@ export default function App() {
   const initial = useMemo<AppState>(() => {
     const now = Date.now() + new Date().getTimezoneOffset() * -60000
     const base: AppState = {
-      tab: 'overview',
+      tab: 'risk',
       place: persisted('place', DEFAULT_PLACE, isPlace),
       models: persisted('models', DEFAULT_MODELS, isModelList),
       windUnit: persisted('windUnit', 'ms' as const, isWindUnit),
@@ -199,7 +201,7 @@ export default function App() {
         ))}
       </nav>
 
-      {tab !== 'ensemble' && tab !== 'long' && tab !== 'trip' && tab !== 'tropical' && (
+      {(tab === 'overview' || tab === 'hourly' || tab === 'models' || tab === 'table') && (
         <div className="modelbar">
           <span className="modelbar-label">納入的模式</span>
           {DETERMINISTIC.map((m) => {
@@ -226,6 +228,9 @@ export default function App() {
         {loading && !forecast && <Spinner label="向 Open-Meteo 取得多模式預報…" />}
 
         {forecast && tab === 'overview' && <OverviewPanel forecast={forecast} palette={palette} nowMs={nowMs} />}
+        {forecast && tab === 'risk' && (
+          <RiskPanel place={place} forecast={forecast} palette={palette} nowMs={nowMs} windUnit={windUnit} range={trip} onOpenDetail={() => setTab('trip')} />
+        )}
         {forecast && tab === 'trip' && (
           <TripPanel place={place} forecast={forecast} palette={palette} nowMs={nowMs} windUnit={windUnit} range={trip} onRangeChange={setTrip} />
         )}

@@ -33,6 +33,8 @@ export interface TrackPoint {
   circleKm: number | null
   /** Distance from the point of interest, km. */
   distanceKm: number
+  /** True bearing from the point of interest, degrees clockwise from north. */
+  bearingDeg: number
 }
 
 export interface Cyclone {
@@ -62,6 +64,8 @@ export interface Cyclone {
   history: [number, number][]
   distanceKm: number
   bearing: string
+  /** True bearing from the point of interest, degrees clockwise from north. */
+  bearingDeg: number
   /** Closest approach across the forecast track. */
   closest: { km: number; at: number; hours: number } | null
 }
@@ -79,12 +83,16 @@ export function haversine(lat1: number, lon1: number, lat2: number, lon2: number
 
 const COMPASS16 = ['北', '北北東', '東北', '東北偏東', '東', '東南偏東', '東南', '南南東', '南', '南南西', '西南', '西南偏西', '西', '西北偏西', '西北', '北北西']
 
-export function bearingOf(lat1: number, lon1: number, lat2: number, lon2: number): string {
+/** True bearing in degrees, clockwise from north. */
+export function bearingDegOf(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const rad = Math.PI / 180
   const y = Math.sin((lon2 - lon1) * rad) * Math.cos(lat2 * rad)
   const x = Math.cos(lat1 * rad) * Math.sin(lat2 * rad) - Math.sin(lat1 * rad) * Math.cos(lat2 * rad) * Math.cos((lon2 - lon1) * rad)
-  const deg = (Math.atan2(y, x) / rad + 360) % 360
-  return COMPASS16[Math.round(deg / 22.5) % 16]
+  return (Math.atan2(y, x) / rad + 360) % 360
+}
+
+export function bearingOf(lat1: number, lon1: number, lat2: number, lon2: number): string {
+  return COMPASS16[Math.round(bearingDegOf(lat1, lon1, lat2, lon2) / 22.5) % 16]
 }
 
 /**
@@ -154,6 +162,7 @@ export async function fetchCyclones(lat: number, lon: number, signal?: AbortSign
           validTime: part.validtime?.UTC ? Date.parse(part.validtime.UTC) : 0,
           circleKm: part.probabilityCircle?.radius != null ? part.probabilityCircle.radius / 1000 : null,
           distanceKm: haversine(lat, lon, pLat, pLon),
+          bearingDeg: bearingDegOf(lat, lon, pLat, pLon),
         })
       }
       track.sort((a, b) => a.hours - b.hours)
@@ -190,6 +199,7 @@ export async function fetchCyclones(lat: number, lon: number, signal?: AbortSign
         history,
         distanceKm: haversine(lat, lon, aLat, aLon),
         bearing: bearingOf(lat, lon, aLat, aLon),
+        bearingDeg: bearingDegOf(lat, lon, aLat, aLon),
         closest: closest ? { km: closest.distanceKm, at: closest.validTime, hours: closest.hours } : null,
       } as Cyclone
     }),
