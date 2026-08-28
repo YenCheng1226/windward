@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { fetchClimatology, fetchEnsemble, fetchForecast, fetchMarine, type Climatology, type EnsembleData, type EnsembleQuery, type Forecast, type ForecastQuery, type Marine } from './openmeteo'
 import { DARK, LIGHT, type Palette } from './palette'
+import { fetchCyclones, fetchDisturbances, type Cyclone, type Disturbances } from './tropical'
 
 export interface Async<T> {
   data: T | null
@@ -110,4 +111,13 @@ export function useClimatology(lat: number | null, lon: number | null): Async<Cl
 export function useMarine(lat: number | null, lon: number | null, models: string[], days: number): Async<Marine> {
   const key = lat != null && lon != null ? `m|${lat.toFixed(3)}|${lon.toFixed(3)}|${models.join(',')}|${days}` : null
   return useAsync(key, { lat: lat ?? 0, lon: lon ?? 0, models, days }, (q, signal) => fetchMarine(q.lat, q.lon, q.models, q.days, signal))
+}
+
+export function useCyclones(lat: number | null, lon: number | null): Async<Cyclone[]> {
+  const key = lat != null && lon != null ? `tc|${lat.toFixed(2)}|${lon.toFixed(2)}` : null
+  return useAsync(key, { lat: lat ?? 0, lon: lon ?? 0 }, (q, signal) => fetchCyclones(q.lat, q.lon, signal))
+}
+
+export function useDisturbances(): Async<Disturbances> {
+  return useAsync('jtwc-abpw', null, (_q, signal) => fetchDisturbances(signal))
 }
